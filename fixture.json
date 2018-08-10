@@ -1,0 +1,1 @@
+[{"model": "employee.employee", "pk": 1, "fields": {"email": "john@example.com", "password": "secret", "first_name": "John", "last_name": "Smith", "dob": "1978-02-11"}}]
