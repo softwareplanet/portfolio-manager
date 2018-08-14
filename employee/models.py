@@ -45,7 +45,7 @@ class Employee(models.Model):
     password = models.CharField(max_length=30)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    dob = models.CharField(max_length=30)
+    dob = models.DateField(max_length=30)
     skills = models.ManyToManyField(Skill, through='EmployeeSkill')
     projects = models.ManyToManyField(Project, through='EmployeeProject')
     school = models.ManyToManyField(School, through='EmployeeSchool')
