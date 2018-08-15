@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -40,11 +41,7 @@ class EmployeeSchool(models.Model):
     school_id = models.ForeignKey(School, on_delete=models.CASCADE)
 
 
-class Employee(models.Model):
-    email = models.EmailField(max_length=50)
-    password = models.CharField(max_length=30)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+class Employee(AbstractUser):
     dob = models.DateField(max_length=30)
     skills = models.ManyToManyField(Skill, through='EmployeeSkill')
     projects = models.ManyToManyField(Project, through='EmployeeProject')

@@ -70,7 +70,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pman.wsgi.application'
-
+AUTH_USER_MODEL = 'employee.Employee'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
