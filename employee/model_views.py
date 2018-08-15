@@ -1,15 +1,15 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from rest_framework import status, serializers
+from rest_framework import status, serializers, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from employee.utils import Utils
 
 
 class MultipleInstanceAPIView(APIView):
     serializer = serializers.Serializer
     model = models.Model
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
         models = self.model.objects.all()
@@ -26,6 +26,7 @@ class MultipleInstanceAPIView(APIView):
 class SingleInstanceAPIView(APIView):
     serializer = serializers.Serializer
     model = models.Model
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, model_id):
         try:
@@ -58,6 +59,7 @@ class SingleInstanceAPIView(APIView):
 class MultipleEmployeeRelatedInstanceAPIView(APIView):
     serializer = serializers.Serializer
     model = models.Model
+    permission_classes = (permissions.IsAuthenticated, )
 
     def get(self, request, employee_id):
         models = self.model.objects.filter(employee_id=employee_id)
@@ -76,6 +78,7 @@ class MultipleEmployeeRelatedInstanceAPIView(APIView):
 class SingleEmployeeRelatedInstanceAPIView(APIView):
     serializer = serializers.Serializer
     model = models.Model
+    permission_classes = (permissions.IsAuthenticated, )
 
     def get(self, request, employee_id, model_id):
         try:

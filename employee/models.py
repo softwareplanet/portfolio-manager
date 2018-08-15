@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
+from django.dispatch import receiver
 
 class Skill(models.Model):
     name = models.CharField(max_length=150)
@@ -46,3 +48,9 @@ class Employee(AbstractUser):
     skills = models.ManyToManyField(Skill, through='EmployeeSkill')
     projects = models.ManyToManyField(Project, through='EmployeeProject')
     school = models.ManyToManyField(School, through='EmployeeSchool')
+
+
+@receiver(post_save, sender=Employee)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
