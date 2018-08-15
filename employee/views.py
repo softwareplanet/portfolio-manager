@@ -1,8 +1,8 @@
-from employee.model_views import MultipleInstanceAPIView, SingleInstanceAPIView, MultipleEmployeeRelatedInstanceAPIView, \
-    SingleEmployeeRelatedInstanceAPIView
-from employee.models import Employee, Project, EmployeeProject, School, Skill
+from employee.model_views import MultipleInstanceAPIView, SingleInstanceAPIView, \
+    MultipleEmployeeRelatedInstanceAPIView, SingleEmployeeRelatedInstanceAPIView
+from employee.models import Employee, Project, EmployeeProject, School, Skill, EmployeeSkill, EmployeeSchool
 from employee.serializers import EmployeeSerializer, ProjectSerializer, EmployeeProjectSerializer, SchoolSerializer, \
-    SkillSerializer
+    SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer
 
 
 class ListEmployees(MultipleInstanceAPIView):
@@ -53,3 +53,23 @@ class ListEmployeeProjects(MultipleEmployeeRelatedInstanceAPIView):
 class ListEmployeeProject(SingleEmployeeRelatedInstanceAPIView):
     serializer = EmployeeProjectSerializer
     model = EmployeeProject
+
+
+class ListEmployeeSkills(MultipleEmployeeRelatedInstanceAPIView):
+    serializer = EmployeeSkillSerializer
+    model = EmployeeSkill
+
+
+class ListEmployeeSkill(SingleEmployeeRelatedInstanceAPIView):
+    serializer = EmployeeSkillSerializer
+    model = EmployeeSkill
+
+
+class ListEmployeeSchools(MultipleEmployeeRelatedInstanceAPIView):
+    serializer = EmployeeSchoolSerializer
+    model = EmployeeSchool
+
+
+class ListEmployeeSchool(SingleEmployeeRelatedInstanceAPIView):
+    serializer = EmployeeSchoolSerializer
+    model = EmployeeSchool

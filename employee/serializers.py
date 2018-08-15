@@ -1,4 +1,4 @@
-from employee.models import Employee, Project, EmployeeProject, Skill, School
+from employee.models import Employee, Project, EmployeeProject, Skill, School, EmployeeSkill, EmployeeSchool
 from rest_framework import serializers
 
 
@@ -40,14 +40,58 @@ class EmployeeProjectSerializer(serializers.HyperlinkedModelSerializer):
     employeeId = serializers.PrimaryKeyRelatedField(
         write_only=True,
         queryset=Employee.objects.all(),
-        source='employee_id'
+        source='employee_id',
+        required=True
     )
     projectId = serializers.PrimaryKeyRelatedField(
         write_only=True,
         queryset=Project.objects.all(),
-        source='project_id'
+        source='project_id',
+        required=True
     )
 
     class Meta:
         model = EmployeeProject
         fields = ('id', 'startDate', 'durationMonths', 'project', 'employeeId', 'projectId')
+
+
+class EmployeeSkillSerializer(serializers.HyperlinkedModelSerializer):
+    skill = SkillSerializer(read_only=True, source='skill_id')
+    employeeId = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=Employee.objects.all(),
+        source='employee_id',
+        required=True
+    )
+    skillId = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=Skill.objects.all(),
+        source='skill_id',
+        required=True
+    )
+
+    class Meta:
+        model = EmployeeSkill
+        fields = ('id', 'description', 'level', 'skill', 'employeeId', 'skillId')
+
+
+class EmployeeSchoolSerializer(serializers.HyperlinkedModelSerializer):
+    durationYears = serializers.IntegerField(source='duration_years', min_value=0)
+    startDate = serializers.DateField(source='start_date')
+    school = SchoolSerializer(read_only=True, source='school_id')
+    employeeId = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=Employee.objects.all(),
+        source='employee_id',
+        required=True
+    )
+    schoolId = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=School.objects.all(),
+        source='school_id',
+        required=True
+    )
+
+    class Meta:
+        model = EmployeeSchool
+        fields = ('id', 'startDate', 'durationYears', 'school', 'employeeId', 'schoolId')
