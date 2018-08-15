@@ -1,4 +1,4 @@
-from employee.models import Employee, Project, EmployeeProject
+from employee.models import Employee, Project, EmployeeProject, Skill, School
 from rest_framework import serializers
 
 
@@ -19,6 +19,18 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Project
         fields = ('id', 'startDate', 'durationMonths', 'name', 'description', 'url')
+
+
+class SkillSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Skill
+        fields = ('id', 'name', 'url')
+
+
+class SchoolSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = School
+        fields = ('id', 'name', 'description')
 
 
 class EmployeeProjectSerializer(serializers.HyperlinkedModelSerializer):
