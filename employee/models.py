@@ -4,9 +4,13 @@ from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 from django.dispatch import receiver
 
+
 class Skill(models.Model):
     name = models.CharField(max_length=150)
     url = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'skills'
 
 
 class EmployeeSkill(models.Model):
@@ -14,6 +18,9 @@ class EmployeeSkill(models.Model):
     skill_id = models.ForeignKey(Skill, on_delete=models.CASCADE)
     level = models.PositiveIntegerField()
     description = models.TextField()
+
+    class Meta:
+        db_table = 'employee_skills'
 
 
 class Project(models.Model):
@@ -23,6 +30,9 @@ class Project(models.Model):
     description = models.TextField()
     url = models.CharField(max_length=30)
 
+    class Meta:
+        db_table = 'projects'
+
 
 class EmployeeProject(models.Model):
     start_date = models.DateField()
@@ -30,10 +40,16 @@ class EmployeeProject(models.Model):
     employee_id = models.ForeignKey('Employee', on_delete=models.CASCADE)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = 'employee_projects'
+
 
 class School(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
+
+    class Meta:
+        db_table = 'schools'
 
 
 class EmployeeSchool(models.Model):
@@ -42,12 +58,18 @@ class EmployeeSchool(models.Model):
     employee_id = models.ForeignKey('Employee', on_delete=models.CASCADE)
     school_id = models.ForeignKey(School, on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = 'employee_schools'
+
 
 class Employee(AbstractUser):
     dob = models.DateField(max_length=30)
     skills = models.ManyToManyField(Skill, through='EmployeeSkill')
     projects = models.ManyToManyField(Project, through='EmployeeProject')
     school = models.ManyToManyField(School, through='EmployeeSchool')
+
+    class Meta:
+        db_table = 'employees'
 
 
 @receiver(post_save, sender=Employee)
