@@ -1,8 +1,10 @@
 from django.urls import path
 
+from employee import form_views
 from . import views
 
 urlpatterns = [
+    path('register/', form_views.create_user),
     path('employee/', views.ListEmployees.as_view()),
     path('employee/<int:model_id>/', views.ListEmployee.as_view()),
     path('project/', views.ListProjects.as_view()),

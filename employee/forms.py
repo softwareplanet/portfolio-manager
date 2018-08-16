@@ -4,7 +4,7 @@ from django.forms import ModelForm
 from employee.models import Employee
 
 
-class EmployeeForm(ModelForm):
+class EmployeeForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Employee
         fields = UserCreationForm.Meta.fields + ('dob',)
