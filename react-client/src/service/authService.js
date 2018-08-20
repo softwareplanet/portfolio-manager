@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {Router} from "react-router-dom";
 
 export class AuthService {
   static logIn(username, password) {

@@ -8,6 +8,7 @@ from employee.serializers import EmployeeSerializer, ProjectSerializer, Employee
 class ListEmployees(MultipleInstanceAPIView):
     serializer = EmployeeSerializer
     model = Employee
+    permission_classes = ()
 
 
 class ListEmployee(SingleInstanceAPIView):

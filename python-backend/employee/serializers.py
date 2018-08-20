@@ -3,9 +3,9 @@ from rest_framework import serializers
 
 
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
-    firstName = serializers.CharField(source='first_name')
-    lastName = serializers.CharField(source='last_name')
-    password = serializers.CharField(write_only=True)
+    firstName = serializers.CharField(source='first_name', required=True)
+    lastName = serializers.CharField(source='last_name', required=True)
+    password = serializers.CharField(write_only=True, required=True)
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)

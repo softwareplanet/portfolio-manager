@@ -20,16 +20,21 @@ export class Login extends Component {
         this.props.history.push('/');
       })
       .catch(errors => {
-      this.setState({loading: false});
-        this.setState({errors: errors.response.data || [errors.message]});
+        this.setState({loading: false});
+        this.setState({errors: errors.response.data || {non_field_errors: [errors.message]}});
       })
   }
+
+  redirectToRegister = () => this.props.history.push('/register');
 
   render() {
     const {username, password, errors, loading} = this.state;
     return (
       <div className={'centered'}>
         <div className={'login-container'}>
+          <div className={'logo-container'}>
+            <img src={'/logo.svg'} width={200} className={'logo'} alt="logo"/>
+          </div>
           <form onSubmit={(e) => {
             e.preventDefault();
             this.handleAuthentication(username, password);
@@ -45,12 +50,13 @@ export class Login extends Component {
             />
             <div className={'button-group-right'}>
               <div>
-                <ActionButton iconProps={{iconName: 'AddFriend'}} className={'register-button'}>
+                <ActionButton iconProps={{iconName: 'AddFriend'}} className={'register-button'}
+                              onClick={this.redirectToRegister}>
                   Register
                 </ActionButton>
               </div>
               <PrimaryButton type="submit">
-                {loading ? <Spinner size={SpinnerSize.medium} ariaLive="assertive" /> : 'Login'}
+                {loading ? <Spinner size={SpinnerSize.medium} ariaLive="assertive"/> : 'Login'}
               </PrimaryButton>
             </div>
           </form>

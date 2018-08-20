@@ -10,7 +10,7 @@ import axios from 'axios';
 initializeIcons();
 
 
-axios.defaults.baseURL = 'http://localhost:8000/';
+axios.defaults.baseURL = 'http://10.0.1.142:8000/';
 
 ReactDOM.render((
   <BrowserRouter>
