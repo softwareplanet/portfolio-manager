@@ -8,6 +8,6 @@ schema_view = get_swagger_view(title='Portfolio Manager API')
 urlpatterns = [
     path('api/v1/', include('employee.urls')),
     path('admin/', admin.site.urls),
-    path('login/', obtain_auth_token),
+    path('login', obtain_auth_token),
     path('api/', schema_view)
 ]

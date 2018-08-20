@@ -81,6 +81,10 @@ class MultipleEmployeeRelatedInstanceAPIView(APIView):
         else:
             return Utils.error_response("Permission denied", status.HTTP_403_FORBIDDEN)
 
+    @staticmethod
+    def __owner_or_admin(request, employee_id):
+        return employee_id == request.user or request.user.is_staff
+
 
 class SingleEmployeeRelatedInstanceAPIView(APIView):
     serializer = serializers.Serializer

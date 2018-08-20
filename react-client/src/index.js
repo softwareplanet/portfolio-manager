@@ -1,8 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom'
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import { initializeIcons } from '@uifabric/icons';
+import axios from 'axios';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+initializeIcons();
+
+
+axios.defaults.baseURL = 'http://localhost:8000/';
+
+ReactDOM.render((
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+), document.getElementById('root'));
 registerServiceWorker();
