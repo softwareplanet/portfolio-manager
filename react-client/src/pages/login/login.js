@@ -1,34 +1,25 @@
 import React, {Component} from 'react';
 import './login.css';
 import {ActionButton, PrimaryButton, Spinner, SpinnerSize, TextField} from 'office-ui-fabric-react';
-import {AuthService} from "../../service/authService";
+import {connect} from "react-redux";
+import {logIn} from "../../actions/login";
 
-export class Login extends Component {
+class LoginPage extends Component {
 
   state = {
     username: '',
     password: '',
-    errors: {},
-    loading: false
   };
 
   handleAuthentication(username, password) {
-    this.setState({loading: true});
-    AuthService.logIn(username, password)
-      .then(res => {
-        this.setState({loading: false, errors: {}});
-        this.props.history.push('/');
-      })
-      .catch(errors => {
-        this.setState({loading: false});
-        this.setState({errors: errors.response.data || {non_field_errors: [errors.message]}});
-      })
+    this.props.logIn(username, password);
   }
 
   redirectToRegister = () => this.props.history.push('/register');
 
   render() {
-    const {username, password, errors, loading} = this.state;
+    const {username, password} = this.state;
+    const {errors, loading} = this.props;
     return (
       <div className={'centered'}>
         <div className={'login-container'}>
@@ -41,12 +32,14 @@ export class Login extends Component {
           }}>
             <TextField label="Username:" value={username}
                        onChange={(e) => this.setState({username: e.target.value})}
-                       errorMessage={(errors.username || []).join('<br>')}
+                       errorMessage={(errors.username || []).join('<br/>')}
+                       placeholder="Username"
             />
             <TextField label="Password:" value={password}
                        onChange={(e) => this.setState({password: e.target.value})}
                        type="password"
-                       errorMessage={(errors.password || errors.non_field_errors || []).join('<br>')}
+                       errorMessage={(errors.password || errors.non_field_errors || []).join('<br/>')}
+                       placeholder="Password"
             />
             <div className={'button-group-right'}>
               <div>
@@ -65,3 +58,18 @@ export class Login extends Component {
     );
   }
 }
+
+const mapStateToProps = ({isAuthenticated, loginErrors, loginLoading}) => {
+  return {
+    errors: loginErrors,
+    loading: loginLoading
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logIn: (username, password) => dispatch(logIn(username, password))
+  };
+};
+
+export const Login = connect(mapStateToProps, mapDispatchToProps)(LoginPage);

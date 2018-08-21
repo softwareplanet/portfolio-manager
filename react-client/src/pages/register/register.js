@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import './register.css';
 import {ActionButton, DatePicker, PrimaryButton, Spinner, SpinnerSize, TextField} from 'office-ui-fabric-react';
-import axios from "axios";
+import {register} from "../../actions/register";
+import connect from "react-redux/es/connect/connect";
 
-export class Register extends Component {
+class RegisterPage extends Component {
 
   state = {
     username: '',
@@ -11,43 +12,38 @@ export class Register extends Component {
     birthday: new Date(),
     firstName: '',
     lastName: '',
-    email: '',
-    errors: {},
-    loading: false
+    email: ''
   };
-  redirectToLogin = () => this.props.history.push('/');
+  redirectToHome = () => this.props.history.push('/');
 
   handleRegistration() {
-    this.setState({loading: true});
-    const {username, email, password, firstName, lastName, birthday} = this.state;
-    axios.post('/api/v1/employee', {
-      username, email, password, firstName, lastName, dob: birthday.toISOString().split('T')[0]
-    }).then(res => {
-    }).catch(errors => {
-      this.setState({loading: false});
-      this.setState({errors: errors.response.data.errors || {non_field_errors: [errors.message]}});
-      console.log(this.state.errors);
-    })
+    this.props.register(this.state);
   }
 
   render() {
-    const {username, email, password, errors, loading, firstName, lastName, birthday} = this.state;
+    const {username, email, password, firstName, lastName, birthday} = this.state;
+    const {errors, loading} = this.props;
     return (
       <div className={'centered'}>
         <div className={'login-container'}>
+          <div className={'logo-container'}>
+            <img src={'/logo.svg'} width={200} className={'logo'} alt="logo"/>
+          </div>
           <form onSubmit={(e) => {
             e.preventDefault();
             this.handleRegistration(username, password);
           }}>
             <TextField label="First name:" value={firstName}
                        onChange={(e) => this.setState({firstName: e.target.value})}
-                       errorMessage={(errors.firstName || []).join('<br>')}
+                       errorMessage={(errors.firstName || []).join('<br/>')}
                        required
+                       placeholder="First name"
             />
             <TextField label="Last Name:" value={lastName}
                        onChange={(e) => this.setState({lastName: e.target.value})}
-                       errorMessage={(errors.lastName || []).join('<br>')}
+                       errorMessage={(errors.lastName || []).join('<br/>')}
                        required
+                       placeholder="Last name"
             />
             <DatePicker
               value={birthday}
@@ -60,23 +56,26 @@ export class Register extends Component {
             />
             <TextField label="Username:" value={username}
                        onChange={(e) => this.setState({username: e.target.value})}
-                       errorMessage={(errors.username || []).join('<br>')}
+                       errorMessage={(errors.username || []).join('<br/>')}
                        required
+                       placeholder="Username"
             />
             <TextField label="E-Mail:" value={email}
                        onChange={(e) => this.setState({email: e.target.value})}
-                       errorMessage={(errors.email || []).join('<br>')}
+                       errorMessage={(errors.email || []).join('<br/>')}
                        type="email"
+                       placeholder="example@mail.com"
             />
             <TextField label="Password:" value={password}
                        onChange={(e) => this.setState({password: e.target.value})}
                        type="password"
-                       errorMessage={(errors.password || errors.non_field_errors || []).join('<br>')}
+                       errorMessage={(errors.password || errors.non_field_errors || []).join('<br/>')}
                        required
+                       placeholder="Password"
             />
             <div className={'button-group-right'}>
               <div>
-                <ActionButton className={'register-button'} onClick={this.redirectToLogin}>
+                <ActionButton className={'register-button'} onClick={this.redirectToHome}>
                   Cancel
                 </ActionButton>
               </div>
@@ -90,3 +89,18 @@ export class Register extends Component {
     );
   }
 }
+
+const mapStateToProps = ({registerErrors, registerLoading}) => {
+  return {
+    errors: registerErrors,
+    loading: registerLoading
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    register: (user) => dispatch(register(user))
+  };
+};
+
+export const Register = connect(mapStateToProps, mapDispatchToProps)(RegisterPage);

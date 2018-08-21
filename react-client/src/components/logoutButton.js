@@ -1,25 +1,21 @@
-import React, {Component} from "react";
+import React from "react";
 import {AuthService} from "../service/authService";
 import {DefaultButton} from "office-ui-fabric-react";
 import {Redirect} from "react-router-dom";
+import {connect} from "react-redux";
 
-export class LogoutButton extends Component {
+const LogoutButtonComponent = (props) => {
+  const {isAuthenticated} = props;
+  return (
+    <div>
+      {isAuthenticated ? <DefaultButton onClick={() => AuthService.logOut()} {...props}>Log out</DefaultButton> :
+        <Redirect to="/"/>}
+    </div>
+  );
+};
 
-  state = {
-    isAuthenticated: AuthService.isAuthenticated()
-  };
+const mapStateToProps = ({isAuthenticated}) => {
+  return {isAuthenticated};
+};
 
-  logOut() {
-    AuthService.logOut();
-    this.setState({isAuthenticated: false});
-  }
-
-  render() {
-    const {isAuthenticated} = this.state;
-    return (
-      <div>
-        {isAuthenticated ? <DefaultButton onClick={this.logOut.bind(this)}>Log out</DefaultButton> : <Redirect to="/"/>}
-      </div>
-    );
-  }
-}
+export const LogoutButton = connect(mapStateToProps)(LogoutButtonComponent);

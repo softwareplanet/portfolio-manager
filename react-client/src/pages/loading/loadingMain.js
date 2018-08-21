@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './loading.css';
 import {Spinner, SpinnerSize} from 'office-ui-fabric-react';
 import {AuthService} from "../../service/authService";
@@ -12,7 +12,8 @@ export class Loading extends Component {
   render() {
     return (
       <div className={'centered-loading'}>
-        <Spinner size={SpinnerSize.large} label="Wait a bit, we're loading all information about you..." ariaLive="assertive" />
+        <Spinner size={SpinnerSize.large} label="Wait a bit, we're loading all information about you..."
+                 ariaLive="assertive"/>
       </div>
     );
   }
