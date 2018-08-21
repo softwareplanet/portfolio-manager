@@ -6,6 +6,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     firstName = serializers.CharField(source='first_name', required=True)
     lastName = serializers.CharField(source='last_name', required=True)
     password = serializers.CharField(write_only=True, required=True)
+    isStaff = serializers.BooleanField(read_only=True, source='is_staff')
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -26,7 +27,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'username', 'email', 'password', 'firstName', 'lastName', 'dob')
+        fields = ('id', 'username', 'email', 'password', 'firstName', 'lastName', 'dob', 'isStaff')
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):

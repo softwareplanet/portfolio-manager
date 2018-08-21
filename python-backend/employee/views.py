@@ -1,3 +1,6 @@
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from employee.model_views import MultipleInstanceAPIView, SingleInstanceAPIView, \
     MultipleEmployeeRelatedInstanceAPIView, SingleEmployeeRelatedInstanceAPIView
 from employee.models import Employee, Project, EmployeeProject, School, Skill, EmployeeSkill, EmployeeSchool
@@ -74,3 +77,9 @@ class ListEmployeeSchools(MultipleEmployeeRelatedInstanceAPIView):
 class ListEmployeeSchool(SingleEmployeeRelatedInstanceAPIView):
     serializer = EmployeeSchoolSerializer
     model = EmployeeSchool
+
+
+class ListMe(APIView):
+
+    def get(self, request):
+        return Response(EmployeeSerializer(request.user).data)
