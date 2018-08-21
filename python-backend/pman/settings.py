@@ -25,7 +25,7 @@ SECRET_KEY = 'uekbir2#_1g6=36_fb9(9na9+%fr4&79gn*zpa)wi&m-8xn5jz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.0.1.142']
+ALLOWED_HOSTS = ['10.0.1.142', 'localhost']
 
 
 # Application definition
