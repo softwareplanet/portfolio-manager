@@ -1,8 +1,10 @@
+$header-size: 3rem;
+
 .header {
   width: 100%;
   background-color: #000;
   display: flex;
-  height: 3rem;
+  height: $header-size;
   align-items: center;
   justify-content: space-between;
 
@@ -13,16 +15,16 @@
 
     .header-logo {
       height: 100%;
-      width: 3rem;
+      width: $header-size;
       background: #0178d4 url("/menu.svg") no-repeat center;
       background-size: 30%;
     }
 
     .title {
       padding-left: 1rem;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       color: #fff;
-      line-height: 3rem;
+      line-height: $header-size;
       font-weight: 200;
     }
   }
