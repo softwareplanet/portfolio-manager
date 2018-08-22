@@ -19,5 +19,12 @@
       font-size: 1.3rem;
       color: #fff;
       line-height: 3rem; }
-  .header .logout-button {
-    margin-right: 1rem; }
+  .header .header-right-container {
+    display: flex; }
+    .header .header-right-container .user-name {
+      font-size: 0.9rem;
+      color: #fff;
+      text-align: right; }
+    .header .header-right-container .logout-button {
+      margin-right: 1rem;
+      margin-left: 1rem; }

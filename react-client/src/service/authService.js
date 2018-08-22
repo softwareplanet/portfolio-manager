@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {history, store} from '../store'
 import {isAuthenticated} from "../actions/login";
+import {setUser} from "../actions/user";
 
 export class AuthService {
   static logIn(username, password) {
@@ -24,6 +25,7 @@ export class AuthService {
     localStorage.removeItem('token');
     axios.defaults.headers.common['Authorization'] = '';
     store.dispatch(isAuthenticated(false));
+    store.dispatch(setUser())
   }
 
   static isAuthenticated() {

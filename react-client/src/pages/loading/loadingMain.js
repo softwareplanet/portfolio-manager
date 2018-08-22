@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
 import './loading.css';
 import {Spinner, SpinnerSize} from 'office-ui-fabric-react';
-import {AuthService} from "../../service/authService";
+import {connect} from "react-redux";
+import {getUser} from "../../actions/user";
 
-export class Loading extends Component {
+class LoadingPage extends Component {
 
   componentDidMount() {
-    AuthService.isAuthenticated() ? this.props.history.push('/home') : this.props.history.push('/login')
+    const {isAuthenticated, user, getUser} = this.props;
+    !isAuthenticated ? this.props.history.push('/login') : user ? this.props.history.push('/home') : getUser();
+  }
+
+  componentDidUpdate() {
+    const {isAuthenticated, user} = this.props;
+    if (user && isAuthenticated) this.props.history.push('/home');
   }
 
   render() {
@@ -18,3 +25,15 @@ export class Loading extends Component {
     );
   }
 }
+
+const mapStateToProps = ({isAuthenticated, user}) => {
+  return {isAuthenticated, user};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUser: () => dispatch(getUser())
+  };
+};
+
+export const Loading = connect(mapStateToProps, mapDispatchToProps)(LoadingPage);

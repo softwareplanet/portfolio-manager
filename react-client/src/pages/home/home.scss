@@ -25,7 +25,22 @@
       line-height: 3rem;
     }
   }
-  .logout-button {
-    margin-right: 1rem;
+
+
+  .header-right-container {
+    display: flex;
+
+    .user-name {
+      font-size: 0.9rem;
+      color: #fff;
+      text-align: right;
+    }
+
+    .logout-button {
+      margin-right: 1rem;
+      margin-left: 1rem;
+    }
   }
+
 }
+
