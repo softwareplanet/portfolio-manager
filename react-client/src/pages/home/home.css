@@ -18,9 +18,11 @@
       padding-left: 1rem;
       font-size: 1.3rem;
       color: #fff;
-      line-height: 3rem; }
+      line-height: 3rem;
+      font-weight: 200; }
   .header .header-right-container {
-    display: flex; }
+    display: flex;
+    align-items: center; }
     .header .header-right-container .user-name {
       font-size: 0.9rem;
       color: #fff;
@@ -28,3 +30,34 @@
     .header .header-right-container .logout-button {
       margin-right: 1rem;
       margin-left: 1rem; }
+
+.flex {
+  display: flex; }
+  .flex .content-container {
+    width: 80%; }
+  .flex .nav-bar {
+    width: 20%;
+    padding: 0.5rem;
+    border-right: 2px solid #f1f1f1;
+    height: calc(100vh - 4rem); }
+    .flex .nav-bar .navbar-content {
+      margin: 1rem 2.5rem; }
+    .flex .nav-bar .list-title {
+      font-size: 1.5rem;
+      font-weight: lighter;
+      margin: 1rem 0; }
+    .flex .nav-bar .links-container {
+      list-style-type: none;
+      padding: 0; }
+      .flex .nav-bar .links-container .link-item {
+        margin-bottom: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        float: left;
+        clear: both; }
+        .flex .nav-bar .links-container .link-item:hover {
+          color: #606060; }
+        .flex .nav-bar .links-container .link-item.active {
+          color: #0178d4; }
+          .flex .nav-bar .links-container .link-item.active:hover {
+            color: #0198ff; }

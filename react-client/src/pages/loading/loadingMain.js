@@ -18,9 +18,11 @@ class LoadingPage extends Component {
 
   render() {
     return (
-      <div className={'centered-loading'}>
-        <Spinner size={SpinnerSize.large} label="Wait a bit, we're loading all information about you..."
-                 ariaLive="assertive"/>
+      <div className={'full-frame'}>
+        <div className={'centered-loading'}>
+          <Spinner size={SpinnerSize.large} label="Wait a bit, we're loading all information about you..."
+                   ariaLive="assertive"/>
+        </div>
       </div>
     );
   }

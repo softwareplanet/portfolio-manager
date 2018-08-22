@@ -23,13 +23,13 @@
       font-size: 1.3rem;
       color: #fff;
       line-height: 3rem;
+      font-weight: 200;
     }
   }
 
-
   .header-right-container {
     display: flex;
-
+    align-items: center;
     .user-name {
       font-size: 0.9rem;
       color: #fff;
@@ -44,3 +44,53 @@
 
 }
 
+.flex {
+
+  display: flex;
+
+  .content-container {
+    width: 80%;
+  }
+
+  .nav-bar {
+    width: 20%;
+    padding: 0.5rem;
+    border-right: 2px solid #f1f1f1;
+    height: calc(100vh - 4rem);
+
+    .navbar-content {
+      margin: 1rem 2.5rem;
+    }
+
+    .list-title {
+      font-size: 1.5rem;
+      font-weight: lighter;
+      margin: 1rem 0;
+    }
+
+    .links-container {
+      list-style-type: none;
+      padding: 0;
+
+      .link-item {
+        margin-bottom: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        float: left;
+        clear: both;
+
+        &:hover {
+          color: #606060;
+        }
+
+        &.active {
+          color: #0178d4;
+
+          &:hover {
+            color: #0198ff;
+          }
+        }
+      }
+    }
+  }
+}
