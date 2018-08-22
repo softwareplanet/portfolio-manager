@@ -23,6 +23,7 @@ export const register = (user) => {
     axios.post('/api/v1/employee', {
       username, email, password, firstName, lastName, dob: birthday.toISOString().split('T')[0]
     }).then(res => {
+      dispatch(registerLoading(false));
       AuthService.logIn(username, password);
     }).catch(errors => {
       dispatch(registerLoading(false));
