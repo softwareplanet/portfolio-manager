@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
-import {Spinner, SpinnerSize} from 'office-ui-fabric-react';
+import './projects.css'
 import {connect} from "react-redux";
+import {Loader} from "../../components";
 
 class ProjectsPage extends Component {
   render() {
     return (
-      <div className={'centered-loading'}>
-        <Spinner size={SpinnerSize.large} label="Projects"
-                 ariaLive="assertive"/>
-      </div>
+      <Loader title="Projects"/>
     );
   }
 }

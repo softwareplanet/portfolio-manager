@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
-import {Spinner, SpinnerSize} from 'office-ui-fabric-react';
 import {connect} from "react-redux";
+import {Loader} from "../../components";
 
 class ProfilePage extends Component {
   render() {
     return (
-      <div className={'centered-loading'}>
-        <Spinner size={SpinnerSize.large} label="Profile"
-                 ariaLive="assertive"/>
-      </div>
+      <Loader title="Loading profile information..."/>
     );
   }
 }
