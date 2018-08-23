@@ -7,7 +7,7 @@ from django.dispatch import receiver
 
 class Skill(models.Model):
     name = models.CharField(max_length=150)
-    url = models.CharField(max_length=255)
+    url = models.CharField(max_length=255, blank=True)
 
     class Meta:
         db_table = 'skills'
@@ -39,6 +39,7 @@ class EmployeeProject(models.Model):
     duration_months = models.PositiveIntegerField()
     employee_id = models.ForeignKey('Employee', on_delete=models.CASCADE)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
+    skills = models.ManyToManyField(Skill)
 
     class Meta:
         db_table = 'employee_projects'

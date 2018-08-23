@@ -51,28 +51,6 @@ class SchoolSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'description')
 
 
-class EmployeeProjectSerializer(serializers.HyperlinkedModelSerializer):
-    durationMonths = serializers.IntegerField(source='duration_months', min_value=0)
-    startDate = serializers.DateField(source='start_date')
-    project = ProjectSerializer(read_only=True, source='project_id')
-    employeeId = serializers.PrimaryKeyRelatedField(
-        write_only=True,
-        queryset=Employee.objects.all(),
-        source='employee_id',
-        required=True
-    )
-    projectId = serializers.PrimaryKeyRelatedField(
-        write_only=True,
-        queryset=Project.objects.all(),
-        source='project_id',
-        required=True
-    )
-
-    class Meta:
-        model = EmployeeProject
-        fields = ('id', 'startDate', 'durationMonths', 'project', 'employeeId', 'projectId')
-
-
 class EmployeeSkillSerializer(serializers.HyperlinkedModelSerializer):
     skill = SkillSerializer(read_only=True, source='skill_id')
     employeeId = serializers.PrimaryKeyRelatedField(
@@ -91,6 +69,36 @@ class EmployeeSkillSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = EmployeeSkill
         fields = ('id', 'description', 'level', 'skill', 'employeeId', 'skillId')
+
+
+class EmployeeProjectSerializer(serializers.ModelSerializer):
+    durationMonths = serializers.IntegerField(source='duration_months', min_value=0)
+    startDate = serializers.DateField(source='start_date')
+    project = ProjectSerializer(read_only=True, source='project_id')
+    skills = SkillSerializer(many=True, read_only=True)
+    skillIds = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        many=True,
+        source='skills',
+        queryset=Skill.objects.all(),
+        required=True
+    )
+    employeeId = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=Employee.objects.all(),
+        source='employee_id',
+        required=True
+    )
+    projectId = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=Project.objects.all(),
+        source='project_id',
+        required=True
+    )
+
+    class Meta:
+        model = EmployeeProject
+        fields = ('id', 'startDate', 'durationMonths', 'project', 'skills', 'employeeId', 'projectId', 'skillIds')
 
 
 class EmployeeSchoolSerializer(serializers.HyperlinkedModelSerializer):
