@@ -3,11 +3,23 @@ import {LogoutButton} from "./logoutButton";
 import connect from "react-redux/es/connect/connect";
 import {getUser} from "../actions/user";
 import {history} from "../store";
+import {toggleSideBar} from "../actions/sidebar";
 
 export class HeaderComponent extends Component {
 
   componentWillMount() {
-    if(!this.props.user) history.push('/');
+    if (!this.props.user) {
+      HeaderComponent.rememberLocation();
+      history.push('/');
+    }
+  }
+
+  static rememberLocation() {
+    localStorage.setItem('location', history.location.pathname)
+  }
+
+  toggleSideBar() {
+    this.props.dispatch(toggleSideBar());
   }
 
   render() {
@@ -39,7 +51,8 @@ const mapStateToProps = ({user}) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUser: () => dispatch(getUser())
+    getUser: () => dispatch(getUser()),
+    dispatch
   };
 };
 

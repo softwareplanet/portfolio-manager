@@ -51,11 +51,11 @@ $header-size: 3rem;
   display: flex;
 
   .content-container {
-    width: 80%;
+    flex: 4;
   }
 
   .nav-bar {
-    width: 20%;
+    flex: 1;
     padding: 0.5rem;
     border-right: 2px solid #f1f1f1;
     height: calc(100vh - 4rem);
@@ -94,5 +94,42 @@ $header-size: 3rem;
         }
       }
     }
+  }
+}
+
+.page-container {
+  height: calc(100% - 4rem);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+
+  .add-button {
+    width: 10rem;
+    margin-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    font-weight: 200;
+    margin-bottom: 2rem;
+  }
+}
+
+$selected-item-height: 2rem;
+
+.selected-item {
+  display: inline-flex;
+  height: $selected-item-height;
+  background-color: #dadada;
+  padding: 0 0 0 0.5rem;
+  margin: 1rem 1rem 0 0;
+
+  .title {
+    line-height: $selected-item-height;
+    font-weight: 600;
+  }
+
+  .delete-button {
+    height: $selected-item-height;
   }
 }

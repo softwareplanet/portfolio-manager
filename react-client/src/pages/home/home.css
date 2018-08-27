@@ -34,9 +34,9 @@
 .flex {
   display: flex; }
   .flex .content-container {
-    width: 80%; }
+    flex: 4; }
   .flex .nav-bar {
-    width: 20%;
+    flex: 1;
     padding: 0.5rem;
     border-right: 2px solid #f1f1f1;
     height: calc(100vh - 4rem); }
@@ -61,3 +61,28 @@
           color: #0178d4; }
           .flex .nav-bar .links-container .link-item.active:hover {
             color: #0198ff; }
+
+.page-container {
+  height: calc(100% - 4rem);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem; }
+  .page-container .add-button {
+    width: 10rem;
+    margin-bottom: 2rem; }
+  .page-container .page-title {
+    font-size: 2rem;
+    font-weight: 200;
+    margin-bottom: 2rem; }
+
+.selected-item {
+  display: inline-flex;
+  height: 2rem;
+  background-color: #dadada;
+  padding: 0 0 0 0.5rem;
+  margin: 1rem 1rem 0 0; }
+  .selected-item .title {
+    line-height: 2rem;
+    font-weight: 600; }
+  .selected-item .delete-button {
+    height: 2rem; }
