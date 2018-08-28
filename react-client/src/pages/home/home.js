@@ -8,9 +8,10 @@ import {connect} from "react-redux";
 class HomePage extends Component {
   componentDidMount() {
     const {history} = this.props;
-    if (history.location.pathname === '/home') {
+    const currentLocation = history.location.pathname;
+    if (currentLocation === '/home' || currentLocation === '/home/') {
       const lastLocation = localStorage.getItem('location');
-      lastLocation ? history.push(lastLocation) : history.push('/home/profile');
+      lastLocation && !(lastLocation === '/home' || lastLocation === '/home/') ? history.push(lastLocation) : history.push('/home/projects');
     }
   }
 

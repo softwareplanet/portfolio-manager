@@ -5,7 +5,7 @@ import {Loader} from "../../components";
 class ProfilePage extends Component {
   render() {
     return (
-      <Loader title="Loading profile information..."/>
+      <Loader title="Profile page is in development..."/>
     );
   }
 }

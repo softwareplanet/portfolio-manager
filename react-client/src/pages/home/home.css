@@ -40,7 +40,7 @@
     .flex .content-container.full {
       width: 100%; }
   .flex .nav-bar {
-    flex: 1;
+    flex: 1 2;
     width: 20%;
     padding: 0.5rem;
     border-right: 2px solid #f1f1f1; }

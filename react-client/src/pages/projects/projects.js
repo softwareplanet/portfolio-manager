@@ -148,7 +148,7 @@ class ProjectsPage extends Component {
             onClick={this._setShowPanel(true)}
           />
           <Panel
-            isBlocking={false}
+            isBlocking={true}
             isOpen={this.state.showPanel}
             onDismiss={this._setShowPanel(false)}
             type={PanelType.smallFixedFar}
