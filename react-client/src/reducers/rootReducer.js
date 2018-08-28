@@ -5,7 +5,8 @@ import {user} from "./user";
 import {userProjects} from "./userProjects";
 import {sideBarOpened} from "./sidebar";
 import {projects} from "./projects";
-import {skills} from "./skills";
+import {newSkillLoading, skills} from "./skills";
+import {projectModal, skillModal} from "./modals";
 
 export default combineReducers({
   isAuthenticated,
@@ -18,4 +19,7 @@ export default combineReducers({
   sideBarOpened,
   projects,
   skills,
+  skillModal,
+  projectModal,
+  newSkillLoading
 });

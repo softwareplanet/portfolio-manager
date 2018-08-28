@@ -9,9 +9,9 @@ const Link = ({url, history, title}) => {
   );
 };
 
-export const NavBar = ({history}) => {
+export const NavBar = ({history, sideBarOpened}) => {
   return (
-    <aside className={'nav-bar'}>
+    <aside className={`nav-bar ${sideBarOpened ? '' : 'none'}`}>
       <SearchBox
         placeholder="Search"
         underlined={true}

@@ -2,7 +2,7 @@ import React from "react";
 
 export const SuggestionsItem = (props) => {
   return (
-    <span>
+    <span className={'suggestion-item'}>
       {props.name}
     </span>
   );

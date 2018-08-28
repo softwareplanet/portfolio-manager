@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './home.css';
-import {Header, NavBar} from "../../components";
+import {CreateSkillModal, Header, NavBar} from "../../components";
 import {Route, Switch} from "react-router-dom";
 import {Schools, Skills, Profile, Projects} from "..";
 import {connect} from "react-redux";
@@ -18,10 +18,11 @@ class HomePage extends Component {
     const {sideBarOpened} = this.props;
     return (
       <div className={'full-frame'}>
+        <CreateSkillModal/>
         <Header/>
         <div className={'flex'}>
-          {sideBarOpened && <NavBar history={this.props.history}/>}
-          <div className={'content-container'}>
+          <NavBar history={this.props.history} sideBarOpened={sideBarOpened}/>
+          <div className={`content-container ${!sideBarOpened && 'full'}`}>
             <Switch>
               <Route path='/home/profile' component={Profile}/>
               <Route path='/home/projects' component={Projects}/>
@@ -35,7 +36,7 @@ class HomePage extends Component {
   }
 }
 
-const mapStateToProps = ({sideBarOpened}) => {
+const mapStateToProps = ({sideBarOpened, }) => {
   return {sideBarOpened};
 };
 

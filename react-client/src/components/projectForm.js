@@ -5,8 +5,12 @@ import {CreateNew} from "./createNewSuggestion";
 import {NumberTextField} from "./numberTextField";
 import {SelectedItem} from "./selectedItem";
 import {SuggestionsItem} from "./suggestionsItem";
+import {setProjectModal, setSkillModal} from "../actions/modals";
+import {PanelFooter} from "./panelFooter";
+import {createUserProject} from "../actions/userProjects";
 
-class DocumentPicker extends BasePickerListBelow {}
+class DocumentPicker extends BasePickerListBelow {
+}
 
 class ProjectFormComponent extends Component {
 
@@ -26,8 +30,15 @@ class ProjectFormComponent extends Component {
     }
   };
 
+  createProject = () => {
+    const {user, createUserProject} = this.props;
+    const project = this._generateProjectObject();
+    if (project)
+      createUserProject(user.id, project);
+  };
+
   render() {
-    const {projects, skills} = this.props;
+    const {projects, skills, createSkill, onClose} = this.props;
     const {duration, startDate, selectedSkills, selectedProject} = this.state;
     return (
       <div>
@@ -79,15 +90,27 @@ class ProjectFormComponent extends Component {
           pickerSuggestionsProps={{
             onRenderNoResultFound: () =>
               <CreateNew
-                onClick={() => console.log('new')}
+                onClick={() => createSkill()}
                 text={'No such skills yet...'}
               />
           }}
         />
+        <br/>
+        <PanelFooter onClose={onClose} onSave={this.createProject.bind(this)}/>
       </div>
     );
   }
 
+  _generateProjectObject() {
+    const {startDate, duration, selectedSkills, selectedProject} = this.state;
+    let valid = true;
+    let project = {};
+    project.startDate = startDate.toISOString().split('T')[0];
+    project.projectId = selectedProject[0] ? selectedProject[0].id : valid = false;
+    project.skillIds = selectedSkills.map(skill => skill.id);
+    project.durationMonths = duration ? duration : valid = false;
+    return valid ? project : null;
+  }
 
   _onChange(selectedItems, name) {
     return (items) => {
@@ -107,4 +130,12 @@ const mapStateToProps = ({user, skills, projects}) => {
   return {user, skills, projects};
 };
 
-export const ProjectsForm = connect(mapStateToProps)(ProjectFormComponent);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createSkill: () => dispatch(setSkillModal(true)),
+    createProject: () => dispatch(setProjectModal(true)),
+    createUserProject: (userId, project) => dispatch(createUserProject(userId, project)),
+  };
+};
+
+export const ProjectsForm = connect(mapStateToProps, mapDispatchToProps)(ProjectFormComponent);

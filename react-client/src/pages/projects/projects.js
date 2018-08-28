@@ -3,7 +3,7 @@ import './projects.css'
 import {connect} from "react-redux";
 import {Loader, ProjectsForm} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
-import {getUserProjects} from "../../actions/userProjects";
+import {deleteUserProject, getUserProjects} from "../../actions/userProjects";
 import {IconButton, Panel, PanelType, PrimaryButton, SelectionMode} from "office-ui-fabric-react";
 import {getProjects} from "../../actions/projects";
 import {getSkills} from "../../actions/skills";
@@ -15,7 +15,8 @@ class ProjectsPage extends Component {
   }
 
   deleteProject(projectId) {
-    console.log(projectId);
+    const {user, deleteProject} = this.props;
+    deleteProject(user.id, projectId);
   }
 
   _columns = [
@@ -91,7 +92,7 @@ class ProjectsPage extends Component {
                 key: 'delete',
                 text: 'Delete',
                 iconProps: {iconName: 'Delete'},
-                onClick: () => this.deleteProject(item.id)
+                onClick: () => this.deleteProject(item.project.id)
               }
 
             ],
@@ -137,7 +138,7 @@ class ProjectsPage extends Component {
             headerText="Add a Project"
             hasCloseButton={false}
           >
-            <ProjectsForm/>
+            <ProjectsForm onClose={this._setShowPanel(false)}/>
           </Panel>
         </div>
         {
@@ -169,7 +170,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getUserProjects: (userId) => dispatch(getUserProjects(userId)),
     getProjects: () => dispatch(getProjects()),
-    getSkills: () => dispatch(getSkills())
+    getSkills: () => dispatch(getSkills()),
+    deleteProject: (userId, projectId) => dispatch(deleteUserProject(userId, projectId))
   };
 };
 
