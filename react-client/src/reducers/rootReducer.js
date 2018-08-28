@@ -5,7 +5,7 @@ import {user} from "./user";
 import {userProjects} from "./userProjects";
 import {sideBarOpened} from "./sidebar";
 import {projects} from "./projects";
-import {newSkillLoading, skills} from "./skills";
+import {createSkillErrors, newSkillLoading, skills} from "./skills";
 import {projectModal, skillModal} from "./modals";
 
 export default combineReducers({
@@ -21,5 +21,6 @@ export default combineReducers({
   skills,
   skillModal,
   projectModal,
-  newSkillLoading
+  newSkillLoading,
+  createSkillErrors
 });

@@ -7,7 +7,6 @@ export const CreateNew = ({onClick, text}) => {
       <span>{text}</span>
       <ActionButton
         iconProps={{iconName: 'Add'}}
-
       />
     </div>
   );

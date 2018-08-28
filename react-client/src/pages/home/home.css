@@ -33,16 +33,17 @@
 
 .flex {
   width: 100%;
-  display: flex; }
+  display: flex;
+  flex: 1 1 0; }
   .flex .content-container {
     width: 80%; }
     .flex .content-container.full {
       width: 100%; }
   .flex .nav-bar {
+    flex: 1;
     width: 20%;
     padding: 0.5rem;
-    border-right: 2px solid #f1f1f1;
-    height: calc(100vh - 4rem); }
+    border-right: 2px solid #f1f1f1; }
     .flex .nav-bar .navbar-content {
       margin: 1rem 2.5rem; }
     .flex .nav-bar .list-title {

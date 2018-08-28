@@ -1,25 +1,27 @@
 import React, {Component} from "react";
-import {
-  ActionButton,
-  Modal,
-  PrimaryButton,
-  Spinner,
-  SpinnerSize,
-  TextField
-} from "office-ui-fabric-react";
+import {ActionButton, Modal, PrimaryButton, Spinner, SpinnerSize, TextField} from "office-ui-fabric-react";
 import {connect} from "react-redux";
 import {setSkillModal} from "../actions/modals";
 import {createSkill} from "../actions/skills";
 
-class CreateSkill extends Component{
+class CreateSkill extends Component {
 
   state = {
     name: '',
     url: ''
   };
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    if(!nextProps.opened) {
+      this.setState({
+        name: '',
+        url: ''
+      })
+    }
+  }
+
   render() {
-    const {opened, closeModal, loading, createSkill} = this.props;
+    const {opened, closeModal, loading, createSkill, errors} = this.props;
     const {name, url} = this.state;
     return (
       <Modal
@@ -36,11 +38,13 @@ class CreateSkill extends Component{
           <TextField label="Name:" value={name}
                      onChange={(e) => this.setState({name: e.target.value})}
                      isRequired={true}
+                     errorMessage={(errors.name || []).join('<br/>')}
                      placeholder="e.i. JavaScript"
           />
           <TextField label="Url:" value={url}
                      onChange={(e) => this.setState({url: e.target.value})}
                      placeholder="Link to technology page"
+                     errorMessage={(errors.url || errors.non_field_errors || []).join('<br/>')}
                      isRequired={true}
           />
           <div className={'button-group-right'}>
@@ -60,10 +64,11 @@ class CreateSkill extends Component{
   }
 }
 
-const mapStateToProps = ({skillModal, newSkillLoading}) => {
+const mapStateToProps = ({skillModal, newSkillLoading, createSkillErrors}) => {
   return {
     opened: skillModal,
-    loading: newSkillLoading
+    loading: newSkillLoading,
+    errors: createSkillErrors
   };
 };
 

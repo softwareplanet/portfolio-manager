@@ -4,7 +4,17 @@ import {connect} from "react-redux";
 import {Loader, ProjectsForm} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserProject, getUserProjects} from "../../actions/userProjects";
-import {IconButton, Panel, PanelType, PrimaryButton, SelectionMode} from "office-ui-fabric-react";
+import {
+  DefaultButton,
+  Dialog,
+  DialogFooter,
+  DialogType,
+  IconButton,
+  Panel,
+  PanelType,
+  PrimaryButton,
+  SelectionMode
+} from "office-ui-fabric-react";
 import {getProjects} from "../../actions/projects";
 import {getSkills} from "../../actions/skills";
 
@@ -17,6 +27,10 @@ class ProjectsPage extends Component {
   deleteProject(projectId) {
     const {user, deleteProject} = this.props;
     deleteProject(user.id, projectId);
+  }
+
+  _openDeleteDialog(project) {
+    this.setState({projectToDelete: project, hideDialog: false})
   }
 
   _columns = [
@@ -78,6 +92,7 @@ class ProjectsPage extends Component {
       maxWidth: 50,
       onRender: (item) => {
         return (<IconButton
+          style={{height: 'auto'}}
           allowDisabledFocus={true}
           menuIcon={{iconName: 'MoreVertical'}}
           menuProps={{
@@ -92,7 +107,7 @@ class ProjectsPage extends Component {
                 key: 'delete',
                 text: 'Delete',
                 iconProps: {iconName: 'Delete'},
-                onClick: () => this.deleteProject(item.project.id)
+                onClick: () => this._openDeleteDialog(item.project)
               }
 
             ],
@@ -106,7 +121,9 @@ class ProjectsPage extends Component {
   ];
 
   state = {
-    showPanel: false
+    showPanel: false,
+    hideDialog: true,
+    projectToDelete: null
   };
 
   componentDidMount() {
@@ -147,14 +164,42 @@ class ProjectsPage extends Component {
               items={this.props.userProjects}
               columns={this._columns}
               selectionMode={SelectionMode.none}
-              layoutMode={DetailsListLayoutMode.fixedColumns}
+              layoutMode={DetailsListLayoutMode.justified}
             /> :
             <Loader title="Loading your projects..."/>
         }
+        <Dialog
+          hidden={this.state.hideDialog}
+          onDismiss={this._closeDialog}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: `Delete project ${this.state.projectToDelete && this.state.projectToDelete.name}`,
+            subText:
+              'This can not be undone. Your skills from this project would not be affected.'
+          }}
+          modalProps={{
+            titleAriaId: 'myLabelId',
+            subtitleAriaId: 'mySubTextId',
+            isBlocking: false
+          }}
+        >
+          <DialogFooter>
+            <PrimaryButton
+              iconProps={{iconName: 'Delete'}}
+              onClick={() => {
+              this.deleteProject(this.state.projectToDelete.id);
+              this._closeDialog();
+            }} text="Delete"/>
+            <DefaultButton onClick={this._closeDialog} text="Cancel"/>
+          </DialogFooter>
+        </Dialog>
       </div>
     );
   }
 
+  _closeDialog = () => {
+    this.setState({hideDialog: true});
+  };
   _setShowPanel = (showPanel) => {
     return () => {
       this.setState({showPanel});
