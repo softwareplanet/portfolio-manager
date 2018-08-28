@@ -13,7 +13,7 @@ class MultipleInstanceAPIView(APIView):
     serializer = serializers.Serializer
     model = models.Model
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (permissions.IsAuthenticated, IsAdminOrReadOnly)
+    permission_classes = (permissions.IsAuthenticated, )
 
     def get(self, request):
         models = self.model.objects.all()
@@ -83,7 +83,7 @@ class MultipleEmployeeRelatedInstanceAPIView(APIView):
 
     @staticmethod
     def __owner_or_admin(request, employee_id):
-        return employee_id == request.user or request.user.is_staff
+        return employee_id == request.user.id or request.user.is_staff
 
 
 class SingleEmployeeRelatedInstanceAPIView(APIView):
@@ -115,7 +115,7 @@ class SingleEmployeeRelatedInstanceAPIView(APIView):
 
     def delete(self, request, employee_id, model_id):
         try:
-            model = self.model.objects.get(id=model_id, employee_id=employee_id)
+            model = self.model.objects.get(project_id=model_id, employee_id=employee_id)
             if self.__owner_or_admin(request, employee_id):
                 model.delete()
                 return Response({'id': model_id}, status.HTTP_200_OK)
@@ -126,4 +126,4 @@ class SingleEmployeeRelatedInstanceAPIView(APIView):
 
     @staticmethod
     def __owner_or_admin(request, employee_id):
-        return employee_id == request.user or request.user.is_staff
+        return employee_id == request.user.id or request.user.is_staff

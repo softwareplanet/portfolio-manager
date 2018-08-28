@@ -27,8 +27,8 @@ class Project(models.Model):
     start_date = models.DateField()
     duration_months = models.PositiveIntegerField()
     name = models.CharField(max_length=30)
-    description = models.TextField()
-    url = models.CharField(max_length=30)
+    description = models.TextField(blank=True)
+    url = models.CharField(max_length=40, blank=True)
 
     class Meta:
         db_table = 'projects'
