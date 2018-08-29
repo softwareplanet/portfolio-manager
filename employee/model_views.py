@@ -12,8 +12,8 @@ from employee.utils import Utils
 class MultipleInstanceAPIView(APIView):
     serializer = serializers.Serializer
     model = models.Model
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (permissions.IsAuthenticated, )
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
         models = self.model.objects.all()
@@ -63,14 +63,14 @@ class SingleInstanceAPIView(APIView):
 class MultipleEmployeeRelatedInstanceAPIView(APIView):
     serializer = serializers.Serializer
     model = models.Model
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, employee_id):
         models = self.model.objects.filter(employee_id=employee_id)
         return Response(self.serializer(models, many=True).data)
 
     def post(self, request, employee_id):
-        if self.__owner_or_admin(request, employee_id):
+        if self._owner_or_admin(request, employee_id):
             data = request.data
             data['employeeId'] = employee_id
             serializer = self.serializer(data=data)
@@ -82,14 +82,14 @@ class MultipleEmployeeRelatedInstanceAPIView(APIView):
             return Utils.error_response("Permission denied", status.HTTP_403_FORBIDDEN)
 
     @staticmethod
-    def __owner_or_admin(request, employee_id):
+    def _owner_or_admin(request, employee_id):
         return employee_id == request.user.id or request.user.is_staff
 
 
 class SingleEmployeeRelatedInstanceAPIView(APIView):
     serializer = serializers.Serializer
     model = models.Model
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, employee_id, model_id):
         try:
@@ -101,7 +101,7 @@ class SingleEmployeeRelatedInstanceAPIView(APIView):
     def patch(self, request, employee_id, model_id):
         try:
             model = self.model.objects.get(id=model_id, employee_id=employee_id)
-            if self.__owner_or_admin(request, employee_id):
+            if self._owner_or_admin(request, employee_id):
                 serializer = self.serializer(model, data=request.data, partial=True)
                 if serializer.is_valid():
                     serializer.save()
@@ -115,8 +115,8 @@ class SingleEmployeeRelatedInstanceAPIView(APIView):
 
     def delete(self, request, employee_id, model_id):
         try:
-            model = self.model.objects.get(project_id=model_id, employee_id=employee_id)
-            if self.__owner_or_admin(request, employee_id):
+            model = self.model.objects.get(id=model_id, employee_id=employee_id)
+            if self._owner_or_admin(request, employee_id):
                 model.delete()
                 return Response({'id': model_id}, status.HTTP_200_OK)
             else:
@@ -125,5 +125,5 @@ class SingleEmployeeRelatedInstanceAPIView(APIView):
             return Utils.error_response(e.args, status.HTTP_404_NOT_FOUND)
 
     @staticmethod
-    def __owner_or_admin(request, employee_id):
+    def _owner_or_admin(request, employee_id):
         return employee_id == request.user.id or request.user.is_staff

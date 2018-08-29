@@ -17,7 +17,7 @@ class EmployeeSkill(models.Model):
     employee_id = models.ForeignKey('Employee', on_delete=models.CASCADE)
     skill_id = models.ForeignKey(Skill, on_delete=models.CASCADE)
     level = models.PositiveIntegerField()
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     class Meta:
         db_table = 'employee_skills'
