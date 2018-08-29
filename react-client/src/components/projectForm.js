@@ -126,7 +126,8 @@ class ProjectFormComponent extends Component {
         <ErrorLabel title={(errors.skills || []).join('<br/>')}/>
         <br/>
         <ErrorLabel title={(errors.non_field_errors || []).join('<br/>')}/>
-        <PanelFooter onClose={onClose} loading={loading} onSave={edit ? this.editProject.bind(this) : this.createProject.bind(this)}/>
+        <PanelFooter onClose={onClose} loading={loading}
+                     onSave={edit ? this.editProject.bind(this) : this.createProject.bind(this)}/>
       </div>
     );
   }

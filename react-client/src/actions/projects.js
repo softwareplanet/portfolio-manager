@@ -15,6 +15,9 @@ export const getProjects = () => {
       .then(res => {
         dispatch(setProjects(res.data));
       })
+      .catch(() => {
+        setTimeout(dispatch(getProjects()), 1000)
+      })
   }
 };
 

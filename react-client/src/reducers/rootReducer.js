@@ -7,7 +7,8 @@ import {sideBarOpened} from "./sidebar";
 import {createProjectErrors, newProjectLoading, projects} from "./projects";
 import {createSkillErrors, newSkillLoading, skills} from "./skills";
 import {projectModal, skillModal} from "./modals";
-import {editUserProjectState} from "./editUserProjectState";
+import {editUserProjectState, editUserSkillState} from "./editUserInstanceState";
+import {createUserSkillErrors, newUserSkillLoading, userSkills} from "./userSkills";
 
 export default combineReducers({
   sideBarOpened,
@@ -20,18 +21,22 @@ export default combineReducers({
   skills,
   projects,
   userProjects,
+  userSkills,
 
   loginLoading,
   registerLoading,
   newSkillLoading,
   newProjectLoading,
   newUserProjectLoading,
+  newUserSkillLoading,
 
   loginErrors,
   registerErrors,
   createSkillErrors,
   createProjectErrors,
   createUserProjectErrors,
+  createUserSkillErrors,
 
   editUserProjectState,
+  editUserSkillState,
 });

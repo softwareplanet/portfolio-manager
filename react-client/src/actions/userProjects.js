@@ -27,6 +27,9 @@ export const getUserProjects = (userId) => {
       .then(res => {
         dispatch(setUserProjects(res.data));
       })
+      .catch(() => {
+        setTimeout(dispatch(getUserProjects(userId)), 1000)
+      })
   }
 };
 

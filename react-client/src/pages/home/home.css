@@ -122,3 +122,20 @@
   color: #a80000;
   font-size: 12px;
   font-weight: 400; }
+
+.vertical-slider {
+  display: flex;
+  height: 15rem;
+  flex: 1;
+  margin-bottom: 2rem; }
+
+.skill-slider-container {
+  display: flex; }
+  .skill-slider-container .skill-level-description-container {
+    display: flex;
+    flex: 4;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 0 1.4rem; }
+    .skill-slider-container .skill-level-description-container .skill-level-description {
+      flex: 1; }

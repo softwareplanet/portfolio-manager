@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './projects.css'
 import {connect} from "react-redux";
 import {Loader, ProjectsForm} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
@@ -128,10 +127,9 @@ class ProjectsPage extends Component {
   };
 
   componentDidMount() {
-    const {user, userProjects, getUserProjects, projects, skills, getProjects, getSkills} = this.props;
+    const {user, getUserProjects, projects, skills, getProjects, getSkills} = this.props;
     if (user) {
-      if (!userProjects)
-        getUserProjects(user.id);
+      getUserProjects(user.id);
       if (projects.length === 0)
         getProjects();
       if (skills.length === 0)
@@ -141,12 +139,12 @@ class ProjectsPage extends Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     const {userProjects, editUserProjectState} = this.props;
-    if ((userProjects && (userProjects.length !== nextProps.userProjects.length)) ||
+    if ((userProjects && nextProps.userProjects && (userProjects.length !== nextProps.userProjects.length)) ||
       ((editUserProjectState && this.state.projectToEdit) &&
         (editUserProjectState === this.state.projectToEdit.id))) {
-          const {showPanel, hideDialog} = this.state;
-          !hideDialog && this._closeDialog();
-          showPanel && this._setShowPanel(false)();
+      const {showPanel, hideDialog} = this.state;
+      !hideDialog && this._closeDialog();
+      showPanel && this._setShowPanel(false)();
     }
   }
 
@@ -165,7 +163,7 @@ class ProjectsPage extends Component {
             isOpen={showPanel}
             onDismiss={this._setShowPanel(false)}
             type={PanelType.smallFixedFar}
-            headerText={projectToEdit ? 'Add a Project' : 'Edit a project'}
+            headerText={!projectToEdit ? 'Add a Project' : 'Edit a project'}
             hasCloseButton={false}
           >
             <ProjectsForm onClose={this._setShowPanel(false)} userProject={projectToEdit}/>

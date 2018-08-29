@@ -15,6 +15,9 @@ export const getSkills = () => {
       .then(res => {
         dispatch(setSkills(res.data));
       })
+      .catch(() => {
+        setTimeout(dispatch(getSkills()), 1000)
+      })
   }
 };
 

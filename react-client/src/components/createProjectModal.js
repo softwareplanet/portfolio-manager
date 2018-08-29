@@ -18,13 +18,13 @@ class CreateProject extends Component {
   state = {...this.initialState};
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if(!nextProps.opened) {
+    if (!nextProps.opened) {
       this.setState({...this.initialState})
     }
   }
 
   render() {
-    const {opened, closeModal, loading, createProject, errors} = this.props;
+    const {opened, closeModal, loading, errors} = this.props;
     const {name, url, description, durationMonths, startDate} = this.state;
     return (
       <Modal
