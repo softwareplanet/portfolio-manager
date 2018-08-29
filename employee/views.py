@@ -111,6 +111,22 @@ class ListEmployeeSkills(MultipleEmployeeRelatedInstanceAPIView):
     serializer = EmployeeSkillSerializer
     model = EmployeeSkill
 
+    def post(self, request, employee_id):
+        if self._owner_or_admin(request, employee_id):
+            data = request.data
+            data['employeeId'] = employee_id
+            try:
+                EmployeeSkill.objects.get(skill_id=data['skillId'])
+                return Utils.error_response({'non_field_errors': ['You already have such skill']}, status.HTTP_400_BAD_REQUEST)
+            except ObjectDoesNotExist:
+                serializer = self.serializer(data=data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Utils.error_response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        else:
+            return Utils.error_response("Permission denied", status.HTTP_403_FORBIDDEN)
+
 
 class ListEmployeeSkill(SingleEmployeeRelatedInstanceAPIView):
     serializer = EmployeeSkillSerializer
