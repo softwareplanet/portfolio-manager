@@ -82,6 +82,30 @@ class ListEmployeeProject(SingleEmployeeRelatedInstanceAPIView):
     serializer = EmployeeProjectSerializer
     model = EmployeeProject
 
+    def patch(self, request, employee_id, model_id):
+        try:
+            model = self.model.objects.get(id=model_id, employee_id=employee_id)
+            if self._owner_or_admin(request, employee_id):
+                serializer = self.serializer(model, data=request.data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    self.__process_skills(serializer.data['skills'], employee_id)
+                    return Response(serializer.data, status.HTTP_200_OK)
+                else:
+                    return Utils.error_response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+            else:
+                return Utils.error_response("Permission denied", status.HTTP_403_FORBIDDEN)
+        except ObjectDoesNotExist as e:
+            return Utils.error_response(e.args, status.HTTP_404_NOT_FOUND)
+
+    @staticmethod
+    def __process_skills(skills, user_id):
+        for skill in skills:
+            try:
+                EmployeeSkill.objects.get(skill_id_id=skill['id'], employee_id_id=user_id)
+            except ObjectDoesNotExist:
+                EmployeeSkill.objects.create(employee_id_id=user_id, skill_id_id=skill['id'], level=1)
+
 
 class ListEmployeeSkills(MultipleEmployeeRelatedInstanceAPIView):
     serializer = EmployeeSkillSerializer
