@@ -3,21 +3,25 @@
     src: url('/fonts/segoeui.ttf');
     font-weight: normal;
 }
+
 @font-face {
     font-family: 'segoe-ui';
     src: url('/fonts/segoeuil.ttf');
     font-weight: 200;
 }
+
 @font-face {
     font-family: 'segoe-ui';
     src: url('/fonts/segoeuib.ttf');
     font-weight: bold;
 }
+
 @font-face {
     font-family: 'segoe-ui';
     src: url('/fonts/segoeuisl.ttf');
     font-weight: 300;
 }
+
 @font-face {
     font-family: 'segoe-ui';
     src: url('/fonts/seguisb.ttf');

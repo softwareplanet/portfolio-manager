@@ -14,7 +14,7 @@ export const getUser = () => {
       .then(res => {
         dispatch(setUser(res.data));
       })
-      .catch(()=> {
+      .catch(() => {
         setTimeout(dispatch(getUser()), 1000)
       })
   }

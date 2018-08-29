@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './home.css';
 import {CreateProjectModal, CreateSkillModal, Header, NavBar} from "../../components";
 import {Route, Switch} from "react-router-dom";
-import {Schools, Skills, Profile, Projects} from "..";
+import {Profile, Projects, Schools, Skills} from "..";
 import {connect} from "react-redux";
 
 class HomePage extends Component {
@@ -38,7 +38,7 @@ class HomePage extends Component {
   }
 }
 
-const mapStateToProps = ({sideBarOpened, }) => {
+const mapStateToProps = ({sideBarOpened,}) => {
   return {sideBarOpened};
 };
 

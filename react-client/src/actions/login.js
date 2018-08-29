@@ -27,7 +27,7 @@ export const logIn = (username, password) => {
     dispatch(loginLoading(true));
 
     AuthService.logIn(username, password)
-      .then(res => {
+      .then(() => {
         dispatch(loginLoading(false));
       })
       .catch(errors => {

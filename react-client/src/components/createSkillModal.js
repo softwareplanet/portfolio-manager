@@ -12,7 +12,7 @@ class CreateSkill extends Component {
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if(!nextProps.opened) {
+    if (!nextProps.opened) {
       this.setState({
         name: '',
         url: ''

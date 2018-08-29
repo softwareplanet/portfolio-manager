@@ -1,4 +1,4 @@
-import {SET_SKILL_MODAL, SET_PROJECT_MODAL} from "../actions/actionTypes";
+import {SET_PROJECT_MODAL, SET_SKILL_MODAL} from "../actions/actionTypes";
 
 export const skillModal = (state = false, action) => {
   switch (action.type) {

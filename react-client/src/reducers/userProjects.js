@@ -1,5 +1,6 @@
 import {
-  ADD_USER_PROJECT, CHANGE_USER_PROJECT,
+  ADD_USER_PROJECT,
+  CHANGE_USER_PROJECT,
   CREATE_USER_PROJECT_ERRORS,
   DELETE_USER_PROJECT,
   NEW_USER_PROJECT_LOADING,
@@ -19,8 +20,8 @@ export const userProjects = (state = null, action) => {
     }
 
     case CHANGE_USER_PROJECT: {
-      const indexOfProject = state.findIndex( ({id}) => id === action.payload.id);
-      return [...state.slice(0, indexOfProject), action.payload, ...state.slice(indexOfProject+1)];
+      const indexOfProject = state.findIndex(({id}) => id === action.payload.id);
+      return [...state.slice(0, indexOfProject), action.payload, ...state.slice(indexOfProject + 1)];
     }
 
     default:

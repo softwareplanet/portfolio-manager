@@ -27,7 +27,7 @@ export class HeaderComponent extends Component {
     return (
       <header className={"header"}>
         <div className={"header-left-container"}>
-          <div className={"header-logo"} onClick={()=>this.toggleSideBar()}/>
+          <div className={"header-logo"} onClick={() => this.toggleSideBar()}/>
           <span className={"title"}>
             Portfolio Manager
           </span>

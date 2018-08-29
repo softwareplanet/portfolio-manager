@@ -1,9 +1,12 @@
 import {
-  ADD_USER_SKILL, CHANGE_USER_SKILL,
+  ADD_USER_SKILL,
+  CHANGE_USER_SKILL,
   CREATE_USER_SKILL_ERRORS,
   DELETE_USER_SKILL,
   NEW_USER_SKILL_LOADING,
-  SET_USER_SKILLS, SUCCESSFUL_EDIT_USER_SKILL
+  REMOVE_USER_SKILL_ERRORS,
+  SET_USER_SKILLS,
+  SUCCESSFUL_EDIT_USER_SKILL
 } from "./actionTypes";
 import axios from 'axios';
 
@@ -19,6 +22,12 @@ export const setUserSkills = (userSkills = null) => {
     type: SET_USER_SKILLS,
     payload: userSkills
   };
+};
+
+export const removeSkillErrors = () => {
+  return {
+    type: REMOVE_USER_SKILL_ERRORS
+  }
 };
 
 export const getUserSkills = (userId) => {

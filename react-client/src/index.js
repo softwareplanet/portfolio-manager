@@ -13,7 +13,7 @@ initializeIcons();
 
 
 axios.defaults.baseURL = 'http://10.0.1.142:8000/';
-if(localStorage.getItem('token'))
+if (localStorage.getItem('token'))
   axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
 
 ReactDOM.render((

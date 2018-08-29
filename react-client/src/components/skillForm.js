@@ -5,7 +5,7 @@ import {CreateNew} from "./createNewSuggestion";
 import {setSkillModal} from "../actions/modals";
 import {PanelFooter} from "./panelFooter";
 import {ErrorLabel} from "./errorLabel";
-import {createUserSkill, editUserSkill} from "../actions/userSkills";
+import {createUserSkill, editUserSkill, removeSkillErrors} from "../actions/userSkills";
 
 class SkillFormComponent extends Component {
 
@@ -56,7 +56,7 @@ class SkillFormComponent extends Component {
   );
 
   render() {
-    const {skills, createSkill, onClose, loading, errors} = this.props;
+    const {skills, createSkill, loading, errors} = this.props;
     const {selectedSkill, edit, description, level} = this.state;
     return (
       <div>
@@ -80,7 +80,7 @@ class SkillFormComponent extends Component {
           }}
           itemLimit={1}
         />
-        <ErrorLabel title={(errors.skill || []).join('<br/>')}/>
+        <ErrorLabel title={(this.state.errors.skill || errors.non_field_errors || []).join('<br/>')}/>
         <br/>
         <TextField
           value={description}
@@ -108,18 +108,22 @@ class SkillFormComponent extends Component {
         </div>
         <ErrorLabel title={(errors.level || []).join('<br/>')}/>
         <br/>
-        <ErrorLabel title={(errors.non_field_errors || []).join('<br/>')}/>
-        <PanelFooter onClose={onClose} loading={loading}
+        <PanelFooter onClose={this._onClose.bind(this)} loading={loading}
                      onSave={edit ? this.editSkill.bind(this) : this.createSkill.bind(this)}/>
       </div>
     );
+  }
+
+  _onClose() {
+    this.props.dispatch(removeSkillErrors());
+    this.props.onClose();
   }
 
   _generateSkillObject() {
     const {description, level, selectedSkill} = this.state;
     let valid = true, errors = {}, skill = {};
 
-    skill.skillId = selectedSkill.length !== 0 ? selectedSkill[0].id : (errors.skills = ['Choose skill']) && (valid = false);
+    skill.skillId = selectedSkill.length !== 0 ? selectedSkill[0].id : (errors.skill = ['Choose skill']) && (valid = false);
     skill.level = level;
     skill.description = description;
     this.setState({errors});
@@ -149,6 +153,7 @@ const mapDispatchToProps = (dispatch) => {
     createSkill: () => dispatch(setSkillModal(true)),
     createUserSkill: (userId, skill) => dispatch(createUserSkill(userId, skill)),
     editUserSkill: (userId, skill) => dispatch(editUserSkill(userId, skill)),
+    dispatch
   };
 };
 
