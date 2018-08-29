@@ -53,6 +53,7 @@ class SchoolSerializer(serializers.HyperlinkedModelSerializer):
 
 class EmployeeSkillSerializer(serializers.HyperlinkedModelSerializer):
     skill = SkillSerializer(read_only=True, source='skill_id')
+    level = serializers.IntegerField(min_value=1, max_value=5)
     employeeId = serializers.PrimaryKeyRelatedField(
         write_only=True,
         queryset=Employee.objects.all(),
