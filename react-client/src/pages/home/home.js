@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './home.css';
-import {CreateSkillModal, Header, NavBar} from "../../components";
+import {CreateProjectModal, CreateSkillModal, Header, NavBar} from "../../components";
 import {Route, Switch} from "react-router-dom";
 import {Schools, Skills, Profile, Projects} from "..";
 import {connect} from "react-redux";
@@ -20,6 +20,7 @@ class HomePage extends Component {
     return (
       <div className={'full-frame'}>
         <CreateSkillModal/>
+        <CreateProjectModal/>
         <Header/>
         <div className={'flex'}>
           <NavBar history={this.props.history} sideBarOpened={sideBarOpened}/>

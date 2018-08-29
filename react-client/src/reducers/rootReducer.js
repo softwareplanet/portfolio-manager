@@ -2,25 +2,36 @@ import {combineReducers} from 'redux';
 import {isAuthenticated, loginErrors, loginLoading} from "./login";
 import {registerErrors, registerLoading} from "./register";
 import {user} from "./user";
-import {userProjects} from "./userProjects";
+import {createUserProjectErrors, newUserProjectLoading, userProjects} from "./userProjects";
 import {sideBarOpened} from "./sidebar";
-import {projects} from "./projects";
+import {createProjectErrors, newProjectLoading, projects} from "./projects";
 import {createSkillErrors, newSkillLoading, skills} from "./skills";
 import {projectModal, skillModal} from "./modals";
+import {editUserProjectState} from "./editUserProjectState";
 
 export default combineReducers({
-  isAuthenticated,
-  loginLoading,
-  loginErrors,
-  registerErrors,
-  registerLoading,
-  user,
-  userProjects,
   sideBarOpened,
-  projects,
-  skills,
+  isAuthenticated,
+
   skillModal,
   projectModal,
+
+  user,
+  skills,
+  projects,
+  userProjects,
+
+  loginLoading,
+  registerLoading,
   newSkillLoading,
-  createSkillErrors
+  newProjectLoading,
+  newUserProjectLoading,
+
+  loginErrors,
+  registerErrors,
+  createSkillErrors,
+  createProjectErrors,
+  createUserProjectErrors,
+
+  editUserProjectState,
 });

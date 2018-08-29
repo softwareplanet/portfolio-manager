@@ -1,12 +1,12 @@
 import React from "react";
-import {DefaultButton, PrimaryButton} from "office-ui-fabric-react";
+import {DefaultButton, PrimaryButton, Spinner, SpinnerSize} from "office-ui-fabric-react";
 
-export const PanelFooter = ({onSave, onClose}) => {
+export const PanelFooter = ({onSave, onClose, loading}) => {
   return (
     <div className={'panel-footer'}>
       <DefaultButton onClick={onClose} className={'panel-footer-cancel'}>Cancel</DefaultButton>
       <PrimaryButton onClick={onSave}>
-        Save
+        {loading ? <Spinner size={SpinnerSize.medium} ariaLive="assertive"/> : 'Save'}
       </PrimaryButton>
     </div>
   );

@@ -2,10 +2,10 @@ import {ADD_SKILL, CREATE_SKILL_ERRORS, NEW_SKILL_LOADING, SET_SKILLS} from "./a
 import axios from "axios";
 import {setSkillModal} from "./modals";
 
-export const setSkills = (userProjects = null) => {
+export const setSkills = (skills = null) => {
   return {
     type: SET_SKILLS,
-    payload: userProjects
+    payload: skills
   };
 };
 
@@ -41,7 +41,6 @@ export const createSkillErrors = (errors = {}) => {
 
 export const createSkill = (skill) => {
   return (dispatch) => {
-    console.log(skill);
     dispatch(newSkillLoading(true));
     axios.post('/api/v1/skill', skill)
       .then(res => {

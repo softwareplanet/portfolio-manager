@@ -7,7 +7,8 @@ import {SelectedItem} from "./selectedItem";
 import {SuggestionsItem} from "./suggestionsItem";
 import {setProjectModal, setSkillModal} from "../actions/modals";
 import {PanelFooter} from "./panelFooter";
-import {createUserProject} from "../actions/userProjects";
+import {createUserProject, editUserProject} from "../actions/userProjects";
+import {ErrorLabel} from "./errorLabel";
 
 class DocumentPicker extends BasePickerListBelow {
 }
@@ -21,7 +22,9 @@ class ProjectFormComponent extends Component {
     startDate: new Date(),
     duration: '',
     selectedSkills: [],
-    selectedProject: []
+    selectedProject: [],
+    errors: {},
+    edit: false
   };
 
   _onFilterChange = (items) => {
@@ -37,9 +40,30 @@ class ProjectFormComponent extends Component {
       createUserProject(user.id, project);
   };
 
+  editProject = () => {
+    const {user, editUserProject, userProject} = this.props;
+    const project = this._generateProjectObject();
+    if (project)
+      editUserProject(user.id, {...project, id: userProject.id});
+  };
+
+  componentWillMount() {
+    const {userProject} = this.props;
+    if (userProject) {
+      const {startDate, durationMonths, skills, project} = userProject;
+      const projectToEdit = {
+        startDate: new Date(startDate),
+        duration: durationMonths,
+        selectedSkills: skills,
+        selectedProject: [project]
+      };
+      this.setState({...this.state, ...projectToEdit, edit: true})
+    }
+  }
+
   render() {
-    const {projects, skills, createSkill, onClose} = this.props;
-    const {duration, startDate, selectedSkills, selectedProject} = this.state;
+    const {projects, skills, createSkill, createProject, onClose, loading} = this.props;
+    const {duration, startDate, selectedSkills, selectedProject, errors, edit} = this.state;
     return (
       <div>
         <Label>Name</Label>
@@ -49,18 +73,20 @@ class ProjectFormComponent extends Component {
           items={projects}
           getTextFromItem={({name}) => name}
           onResolveSuggestions={this._onFilterChange(projects)}
+          selectedItems={selectedProject}
           inputProps={{
-            placeholder: 'Enter a project name'
+            placeholder: 'Enter a project name',
           }}
           pickerSuggestionsProps={{
             onRenderNoResultFound: () =>
               <CreateNew
-                onClick={() => console.log('new')}
+                onClick={() => createProject()}
                 text={'No such projects yet...'}
               />
           }}
           itemLimit={1}
         />
+        <ErrorLabel title={(errors.project || []).join('<br/>')}/>
         <br/>
         <DatePicker
           value={startDate}
@@ -69,12 +95,14 @@ class ProjectFormComponent extends Component {
           onSelectDate={(startDate) => {
             this.setState({startDate})
           }}
+          errorMessage={(errors.startDate || []).join('<br/>')}
         />
         <br/>
         <NumberTextField
           label="Duration, month"
           value={duration}
           onChange={(duration) => this.setState({duration})}
+          errorMessage={(errors.durationMonths || []).join('<br/>')}
         />
         <br/>
         <Label>Skills</Label>
@@ -95,20 +123,24 @@ class ProjectFormComponent extends Component {
               />
           }}
         />
+        <ErrorLabel title={(errors.skills || []).join('<br/>')}/>
         <br/>
-        <PanelFooter onClose={onClose} onSave={this.createProject.bind(this)}/>
+        <ErrorLabel title={(errors.non_field_errors || []).join('<br/>')}/>
+        <PanelFooter onClose={onClose} loading={loading} onSave={edit ? this.editProject.bind(this) : this.createProject.bind(this)}/>
       </div>
     );
   }
 
   _generateProjectObject() {
     const {startDate, duration, selectedSkills, selectedProject} = this.state;
+    let errors = {};
     let valid = true;
     let project = {};
-    project.startDate = startDate.toISOString().split('T')[0];
-    project.projectId = selectedProject[0] ? selectedProject[0].id : valid = false;
-    project.skillIds = selectedSkills.map(skill => skill.id);
-    project.durationMonths = duration ? duration : valid = false;
+    project.startDate = startDate ? startDate.toISOString().split('T')[0] : (errors.startDate = ['Enter start date']) && (valid = false);
+    project.projectId = selectedProject[0] ? selectedProject[0].id : (errors.project = ['Choose your project or create a new one']) && (valid = false);
+    project.skillIds = selectedSkills.length !== 0 ? selectedSkills.map(skill => skill.id) : (errors.skills = ['Choose some skills']) && (valid = false);
+    project.durationMonths = duration ? duration : errors.durationMonths = ['Enter valid positive number'];
+    this.setState({errors});
     return valid ? project : null;
   }
 
@@ -126,8 +158,8 @@ class ProjectFormComponent extends Component {
   }
 }
 
-const mapStateToProps = ({user, skills, projects}) => {
-  return {user, skills, projects};
+const mapStateToProps = ({user, skills, projects, newUserProjectLoading, createUserProjectErrors}) => {
+  return {user, skills, projects, loading: newUserProjectLoading, errors: createUserProjectErrors};
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -135,6 +167,7 @@ const mapDispatchToProps = (dispatch) => {
     createSkill: () => dispatch(setSkillModal(true)),
     createProject: () => dispatch(setProjectModal(true)),
     createUserProject: (userId, project) => dispatch(createUserProject(userId, project)),
+    editUserProject: (userId, project) => dispatch(editUserProject(userId, project)),
   };
 };
 

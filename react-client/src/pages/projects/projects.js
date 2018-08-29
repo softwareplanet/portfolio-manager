@@ -20,8 +20,8 @@ import {getSkills} from "../../actions/skills";
 
 class ProjectsPage extends Component {
 
-  editProject(projectId) {
-    console.log(projectId);
+  editProject(project) {
+    this.setState({projectToEdit: project, showPanel: true})
   }
 
   deleteProject(projectId) {
@@ -101,13 +101,13 @@ class ProjectsPage extends Component {
                 key: 'edit',
                 text: 'Edit',
                 iconProps: {iconName: 'Edit'},
-                onClick: () => this.editProject(item.id)
+                onClick: () => this.editProject(item)
               },
               {
                 key: 'delete',
                 text: 'Delete',
                 iconProps: {iconName: 'Delete'},
-                onClick: () => this._openDeleteDialog(item.project)
+                onClick: () => this._openDeleteDialog(item)
               }
 
             ],
@@ -123,7 +123,8 @@ class ProjectsPage extends Component {
   state = {
     showPanel: false,
     hideDialog: true,
-    projectToDelete: null
+    projectToDelete: null,
+    projectToEdit: null
   };
 
   componentDidMount() {
@@ -138,7 +139,19 @@ class ProjectsPage extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    const {userProjects, editUserProjectState} = this.props;
+    if ((userProjects && (userProjects.length !== nextProps.userProjects.length)) ||
+      ((editUserProjectState && this.state.projectToEdit) &&
+        (editUserProjectState === this.state.projectToEdit.id))) {
+          const {showPanel, hideDialog} = this.state;
+          !hideDialog && this._closeDialog();
+          showPanel && this._setShowPanel(false)();
+    }
+  }
+
   render() {
+    const {projectToEdit, showPanel, hideDialog, projectToDelete} = this.state;
     return (
       <div className={'page-container'}>
         <span className={'page-title'}>Projects</span>
@@ -148,14 +161,14 @@ class ProjectsPage extends Component {
             onClick={this._setShowPanel(true)}
           />
           <Panel
-            isBlocking={true}
-            isOpen={this.state.showPanel}
+            isBlocking={false}
+            isOpen={showPanel}
             onDismiss={this._setShowPanel(false)}
             type={PanelType.smallFixedFar}
-            headerText="Add a Project"
+            headerText={projectToEdit ? 'Add a Project' : 'Edit a project'}
             hasCloseButton={false}
           >
-            <ProjectsForm onClose={this._setShowPanel(false)}/>
+            <ProjectsForm onClose={this._setShowPanel(false)} userProject={projectToEdit}/>
           </Panel>
         </div>
         {
@@ -169,11 +182,11 @@ class ProjectsPage extends Component {
             <Loader title="Loading your projects..."/>
         }
         <Dialog
-          hidden={this.state.hideDialog}
+          hidden={hideDialog}
           onDismiss={this._closeDialog}
           dialogContentProps={{
             type: DialogType.normal,
-            title: `Delete project ${this.state.projectToDelete && this.state.projectToDelete.name}`,
+            title: `Delete project ${projectToDelete && projectToDelete.project.name}`,
             subText:
               'This can not be undone. Your skills from this project would not be affected.'
           }}
@@ -187,9 +200,8 @@ class ProjectsPage extends Component {
             <PrimaryButton
               iconProps={{iconName: 'Delete'}}
               onClick={() => {
-              this.deleteProject(this.state.projectToDelete.id);
-              this._closeDialog();
-            }} text="Delete"/>
+                this.deleteProject(projectToDelete.id);
+              }} text="Delete"/>
             <DefaultButton onClick={this._closeDialog} text="Cancel"/>
           </DialogFooter>
         </Dialog>
@@ -200,15 +212,16 @@ class ProjectsPage extends Component {
   _closeDialog = () => {
     this.setState({hideDialog: true});
   };
+
   _setShowPanel = (showPanel) => {
     return () => {
-      this.setState({showPanel});
+      this.setState({projectToEdit: null, showPanel});
     };
   };
 }
 
-const mapStateToProps = ({user, userProjects, projects, skills}) => {
-  return {user, userProjects, projects, skills};
+const mapStateToProps = ({user, userProjects, projects, skills, editUserProjectState}) => {
+  return {user, userProjects, projects, skills, editUserProjectState};
 };
 
 const mapDispatchToProps = (dispatch) => {
