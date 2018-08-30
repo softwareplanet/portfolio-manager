@@ -99,6 +99,37 @@ $header-size: 3rem;
       }
     }
   }
+
+  .profile-container {
+    display: flex;
+    flex: 1;
+    padding-top: 4rem;
+
+    .profile-photo {
+      border: 1px solid lightslategrey;
+      border-radius: 50%;
+      width: 12rem;
+      height: 12rem;
+      background: #fafaff url("/menu.svg") no-repeat center;
+      background-size: 40%;
+    }
+
+    .profile-info-line {
+      margin: 0.5rem 0;
+    }
+
+    .profile-name {
+      font-size: 2rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      margin-left: 2rem;
+    }
+  }
 }
 
 .page-container {
