@@ -9,6 +9,7 @@ import {
   SUCCESSFUL_EDIT_USER_SKILL
 } from "./actionTypes";
 import axios from 'axios';
+import {retryRequest} from "../service/utils";
 
 export const successfulEditUserSkill = (userSkillId) => {
   return {
@@ -36,9 +37,7 @@ export const getUserSkills = (userId) => {
       .then(res => {
         dispatch(setUserSkills(res.data));
       })
-      .catch(() => {
-        setTimeout(dispatch(getUserSkills(userId)), 1000)
-      })
+      .catch(retryRequest(getUserSkills, dispatch)(userId))
   }
 };
 

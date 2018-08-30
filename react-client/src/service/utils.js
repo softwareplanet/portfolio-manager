@@ -1,0 +1,1 @@
+export const retryRequest = (callback, dispatch) => (userId) => () => setTimeout(dispatch(callback(userId)), 5000);

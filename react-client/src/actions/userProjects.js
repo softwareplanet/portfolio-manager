@@ -8,6 +8,7 @@ import {
   SUCCESSFUL_EDIT_USER_PROJECT
 } from "./actionTypes";
 import axios from 'axios';
+import {retryRequest} from "../service/utils";
 
 export const successfulEditUserProject = (userProjectId) => {
   return {
@@ -29,9 +30,7 @@ export const getUserProjects = (userId) => {
       .then(res => {
         dispatch(setUserProjects(res.data));
       })
-      .catch(() => {
-        setTimeout(dispatch(getUserProjects(userId)), 1000)
-      })
+      .catch(retryRequest(getUserProjects, dispatch)(userId))
   }
 };
 

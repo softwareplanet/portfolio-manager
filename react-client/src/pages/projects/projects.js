@@ -66,7 +66,7 @@ class ProjectsPage extends Component {
       maxWidth: 55,
       data: 'string',
       onRender: ({durationMonths}) => {
-        return <span>{durationMonths + ' Month'}</span>;
+        return <span>{durationMonths + ` Month${durationMonths > 1 ? 's' : ''}`}</span>;
       },
       isPadded: true
     },

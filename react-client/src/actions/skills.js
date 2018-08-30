@@ -1,6 +1,7 @@
 import {ADD_SKILL, CREATE_SKILL_ERRORS, NEW_SKILL_LOADING, SET_SKILLS} from "./actionTypes";
 import axios from "axios";
 import {setSkillModal} from "./modals";
+import {retryRequest} from "../service/utils";
 
 export const setSkills = (skills = null) => {
   return {
@@ -15,9 +16,7 @@ export const getSkills = () => {
       .then(res => {
         dispatch(setSkills(res.data));
       })
-      .catch(() => {
-        setTimeout(dispatch(getSkills()), 1000)
-      })
+      .catch(retryRequest(getSkills, dispatch)())
   }
 };
 

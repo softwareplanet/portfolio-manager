@@ -1,5 +1,6 @@
 import {SET_USER} from "./actionTypes";
 import axios from 'axios';
+import {retryRequest} from "../service/utils";
 
 export const setUser = (user = null) => {
   return {
@@ -14,8 +15,6 @@ export const getUser = () => {
       .then(res => {
         dispatch(setUser(res.data));
       })
-      .catch(() => {
-        setTimeout(dispatch(getUser()), 1000)
-      })
+      .catch(retryRequest(getUser, dispatch)())
   }
 };

@@ -6,37 +6,47 @@ import {createUserProjectErrors, newUserProjectLoading, userProjects} from "./us
 import {sideBarOpened} from "./sidebar";
 import {createProjectErrors, newProjectLoading, projects} from "./projects";
 import {createSkillErrors, newSkillLoading, skills} from "./skills";
-import {projectModal, skillModal} from "./modals";
-import {editUserProjectState, editUserSkillState} from "./editUserInstanceState";
+import {projectModal, schoolModal, skillModal} from "./modals";
+import {editUserProjectState, editUserSchoolState, editUserSkillState} from "./editUserInstanceState";
 import {createUserSkillErrors, newUserSkillLoading, userSkills} from "./userSkills";
+import {createSchoolErrors, newSchoolLoading, schools} from "./schools";
+import {createUserSchoolErrors, newUserSchoolLoading, userSchools} from "./userSchools";
 
 export default combineReducers({
   sideBarOpened,
   isAuthenticated,
 
   skillModal,
+  schoolModal,
   projectModal,
 
   user,
   skills,
+  schools,
   projects,
   userProjects,
   userSkills,
+  userSchools,
 
   loginLoading,
   registerLoading,
   newSkillLoading,
+  newSchoolLoading,
   newProjectLoading,
   newUserProjectLoading,
   newUserSkillLoading,
+  newUserSchoolLoading,
 
   loginErrors,
   registerErrors,
   createSkillErrors,
+  createSchoolErrors,
   createProjectErrors,
   createUserProjectErrors,
   createUserSkillErrors,
+  createUserSchoolErrors,
 
   editUserProjectState,
   editUserSkillState,
+  editUserSchoolState,
 });

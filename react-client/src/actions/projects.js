@@ -1,6 +1,7 @@
 import {ADD_PROJECT, CREATE_PROJECT_ERRORS, NEW_PROJECT_LOADING, SET_PROJECTS} from "./actionTypes";
 import axios from "axios";
 import {setProjectModal} from "./modals";
+import {retryRequest} from "../service/utils";
 
 export const setProjects = (projects = null) => {
   return {
@@ -15,9 +16,7 @@ export const getProjects = () => {
       .then(res => {
         dispatch(setProjects(res.data));
       })
-      .catch(() => {
-        setTimeout(dispatch(getProjects()), 1000)
-      })
+      .catch(retryRequest(getProjects, dispatch)())
   }
 };
 
