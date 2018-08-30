@@ -12,7 +12,9 @@ import {history, store} from "./store";
 initializeIcons();
 
 
-axios.defaults.baseURL = 'http://10.0.1.142:8000/';
+// axios.defaults.baseURL = 'http://localhost:8000/'; //development
+axios.defaults.baseURL = '/api'; //production
+
 if (localStorage.getItem('token'))
   axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
 

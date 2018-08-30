@@ -24,7 +24,7 @@ class CreateProject extends Component {
   }
 
   render() {
-    const {opened, closeModal, loading, errors} = this.props;
+    const {opened, closeModal, loading, errors, createProject} = this.props;
     const {name, url, description, durationMonths, startDate} = this.state;
     return (
       <Modal

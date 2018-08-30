@@ -2,7 +2,7 @@
   "name": "react-client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://softwareplanet.github.io/pman",
+  "homepage": "http://softwareplanet.github.io/",
   "dependencies": {
     "@microsoft/load-themed-styles": "^1.7.81",
     "@uifabric/icons": "^6.0.3",
