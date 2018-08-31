@@ -32,15 +32,31 @@ $header-size: 3rem;
   .header-right-container {
     display: flex;
     align-items: center;
+
     .user-name {
       font-size: 0.9rem;
       color: #fff;
-      text-align: right;
+      text-align: left;
+      margin-right: 3rem;
     }
 
     .logout-button {
-      margin-right: 1rem;
-      margin-left: 1rem;
+      height: 2rem;
+      width: 2rem;
+      margin: 0.5rem 1rem;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      background: white url('/logout.svg') no-repeat center;
+      background-size: 100%;
+
+      &.logout-img {
+        background-size: 70%;
+      }
+
+      &.missing-img {
+        background-size: 90%;
+      }
     }
   }
 
@@ -104,22 +120,76 @@ $header-size: 3rem;
     display: flex;
     flex: 1;
     padding-top: 4rem;
+    flex-wrap: wrap;
+    justify-content: space-around;
 
-    .profile-photo {
-      border: 1px solid lightslategrey;
-      border-radius: 50%;
-      width: 12rem;
-      height: 12rem;
-      background: #fafaff url("/menu.svg") no-repeat center;
-      background-size: 40%;
+    .profile-edit-form {
+      display: flex;
+    }
+
+    .profile-skills {
+      margin: 0 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .summary-table {
+        tr {
+          height: 1.3rem;
+          margin: 1rem 0;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+
+    .table-title {
+      font-size: 2.5rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .profile-photo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .upload-user-photo {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+        border: 1px dashed #ccc;
+        padding: 0.2rem 0.4rem;
+        cursor: pointer;
+        font-weight: 200;
+      }
+
+      .profile-photo {
+        border: 1px solid lightslategrey;
+        border-radius: 50%;
+        width: 12rem;
+        height: 12rem;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
 
     .profile-info-line {
       margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      .profile-info-icon {
+        margin-right: 1rem;
+        font-size: 1.3rem;
+      }
     }
 
     .profile-name {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: 500;
       margin-bottom: 1rem;
     }

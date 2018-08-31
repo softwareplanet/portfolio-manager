@@ -51,8 +51,8 @@ class SkillFormComponent extends Component {
     }
   }
 
-  _renderSkillLevelLabel = (levelDescription) => (
-    <div className={'skill-level-description'}><Label>{levelDescription}</Label></div>
+  _renderSkillLevelLabel = (levelDescription, index) => (
+    <div key={index} className={'skill-level-description'}><Label>{levelDescription}</Label></div>
   );
 
   render() {

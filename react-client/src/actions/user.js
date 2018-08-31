@@ -18,3 +18,29 @@ export const getUser = () => {
       .catch(retryRequest(getUser, dispatch)())
   }
 };
+
+export const updateUserPhoto = (data) => {
+  return (dispatch) => {
+    let formData = new FormData();
+    formData.append('image', data.image);
+    axios.patch(`/api/v1/me`, formData)
+      .then(res => {
+        dispatch(setUser(res.data))
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+};
+
+export const updateUser = (data) => {
+  return (dispatch) => {
+    axios.patch(`/api/v1/me`, data)
+      .then(res => {
+        dispatch(setUser(res.data))
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+};

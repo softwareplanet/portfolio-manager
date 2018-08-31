@@ -33,12 +33,12 @@ export class HeaderComponent extends Component {
           </span>
         </div>
         <div className={'header-right-container'}>
+          <LogoutButton className={"logout-button"}/>
           <span className={'user-name'}>
-            Welcome,
+            Welcome
             <br/>
             <b>{user ? user.firstName + ' ' + user.lastName : ''}</b>
           </span>
-          <LogoutButton className={"logout-button"}/>
         </div>
       </header>
     );

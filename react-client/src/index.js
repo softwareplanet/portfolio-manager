@@ -12,7 +12,7 @@ import {history, store} from "./store";
 initializeIcons();
 
 
-process.env.NODE_ENV === 'development' ? axios.defaults.baseURL = 'http://localhost:8000/' : axios.defaults.baseURL = '/api';
+process.env.NODE_ENV === 'development' ? axios.defaults.baseURL = 'http://localhost:8000' : axios.defaults.baseURL = '/api';
 
 if (localStorage.getItem('token'))
   axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;

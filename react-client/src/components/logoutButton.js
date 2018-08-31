@@ -1,21 +1,34 @@
-import React from "react";
-import {AuthService} from "../service/authService";
-import {DefaultButton} from "office-ui-fabric-react";
+import React, {Component} from "react";
 import {Redirect} from "react-router-dom";
 import {connect} from "react-redux";
+import {AuthService} from "../service/authService";
+import axios from "axios";
 
-const LogoutButtonComponent = (props) => {
-  const {isAuthenticated} = props;
-  return (
-    <div>
-      {isAuthenticated ? <DefaultButton onClick={() => AuthService.logOut()} {...props}>Log out</DefaultButton> :
-        <Redirect to="/"/>}
-    </div>
-  );
-};
+class LogoutButtonComponent extends Component {
 
-const mapStateToProps = ({isAuthenticated}) => {
-  return {isAuthenticated};
+  state = {
+    authButtonHovered: false
+  };
+
+  render() {
+    let {isAuthenticated, user} = this.props;
+    const {authButtonHovered} = this.state;
+    if (!user) user = {};
+    return (
+      <div>
+        {isAuthenticated ? <button className={`logout-button ${authButtonHovered ? 'logout-img' : user.image ? '' : 'missing-img'}`}
+                                   style={authButtonHovered ? {} : {backgroundImage: 'url(' + axios.defaults.baseURL + (user.image ? user.image : '/missing-photo.svg') + ')'}}
+                                   onMouseEnter={() => this.setState({authButtonHovered: true})}
+                                   onMouseLeave={() => this.setState({authButtonHovered: false})}
+                                   onClick={() => AuthService.logOut()} title="Sign out"/> :
+          <Redirect to="/"/>}
+      </div>
+    );
+  };
+}
+
+const mapStateToProps = ({isAuthenticated, user}) => {
+  return {isAuthenticated, user};
 };
 
 export const LogoutButton = connect(mapStateToProps)(LogoutButtonComponent);
