@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -144,6 +144,20 @@ class ListEmployeeSchool(SingleEmployeeRelatedInstanceAPIView):
 
 
 class ListMe(APIView):
+    serializer = EmployeeSerializer
+    permission_classes = (permissions.IsAuthenticated, )
 
     def get(self, request):
         return Response(EmployeeSerializer(request.user).data)
+
+    def patch(self, request):
+        try:
+            model = request.user
+            serializer = self.serializer(model, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status.HTTP_200_OK)
+            else:
+                return Utils.error_response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist as e:
+            return Utils.error_response(e.args, status.HTTP_404_NOT_FOUND)

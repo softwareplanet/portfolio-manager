@@ -152,7 +152,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'pman/media')
+
 # CORS
 
 CORS_ORIGIN_WHITELIST = ('localhost:3000', '10.0.1.142:3000')
-
