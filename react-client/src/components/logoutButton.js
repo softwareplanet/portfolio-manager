@@ -17,7 +17,7 @@ class LogoutButtonComponent extends Component {
     return (
       <div>
         {isAuthenticated ? <button className={`logout-button ${authButtonHovered ? 'logout-img' : user.image ? '' : 'missing-img'}`}
-                                   style={authButtonHovered ? {} : {backgroundImage: 'url(' + axios.defaults.baseURL + (user.image ? user.image : '/missing-photo.svg') + ')'}}
+                                   style={authButtonHovered ? {} : {backgroundImage: 'url(' + (user.image ? axios.defaults.baseURL + user.image : '/missing-photo.svg') + ')'}}
                                    onMouseEnter={() => this.setState({authButtonHovered: true})}
                                    onMouseLeave={() => this.setState({authButtonHovered: false})}
                                    onClick={() => AuthService.logOut()} title="Sign out"/> :
