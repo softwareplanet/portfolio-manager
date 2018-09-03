@@ -72,14 +72,8 @@ class EmployeeSkillSerializer(serializers.HyperlinkedModelSerializer):
 
     @staticmethod
     def get_projects_count(obj):
-        return EmployeeSkill.objects.filter(
-            skill_id__in=Skill.objects.filter(
-                id=obj.skill_id.id,
-                employee__employeeproject__in=EmployeeProject.objects.filter(
-                    employee_id=Employee.objects.get(id=obj.employee_id.id)
-                )
-            )
-        ).count()
+        return EmployeeProject.objects.filter(employee_id=obj.employee_id,
+                                              skills=Skill.objects.get(id=obj.skill_id.id)).count()
 
     class Meta:
         model = EmployeeSkill

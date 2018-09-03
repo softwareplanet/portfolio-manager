@@ -65,6 +65,19 @@ class SkillsPage extends Component {
           />
         </div>);
       },
+    },{
+      key: 'projectsCount',
+      name: 'Used on projects',
+      fieldName: 'projectsCount',
+      minWidth: 40,
+      maxWidth: 70,
+      isResizable: false,
+      isPadded: true,
+      onRender: ({projectsCount}) => {
+        return (<div style={{textAlign: 'center'}}>
+          {projectsCount}
+        </div>);
+      },
     },
     {
       key: 'description',
