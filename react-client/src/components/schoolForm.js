@@ -7,6 +7,7 @@ import {PanelFooter} from "./panelFooter";
 import {ErrorLabel} from "./errorLabel";
 import {createUserSchool, editUserSchool, removeSchoolErrors} from "../actions/userSchools";
 import {NumberTextField} from "./numberTextField";
+import {formatDate} from "../service/utils";
 
 class SchoolFormComponent extends Component {
 
@@ -110,7 +111,7 @@ class SchoolFormComponent extends Component {
   _generateSchoolObject() {
     const {description, startDate, durationYears, selectedSchool} = this.state;
     let valid = true, errors = {}, school = {};
-    school.startDate = startDate.toISOString().split('T')[0];
+    school.startDate = formatDate(startDate);
     school.durationYears = durationYears;
     school.schoolId = selectedSchool.length !== 0 ? selectedSchool[0].id : (errors.school = ['Choose school']) && (valid = false);
     school.description = description;

@@ -53,50 +53,71 @@ class ProfilePage extends Component {
                      onChange={({target: {files}}) => files[0] && updateUserPhoto({image: files[0]})}/>
             </div>
           </div>
-          <div className={'profile-info'}>
-            <div className={'profile-info-line profile-name'}>
+          <div className={'info-container'}>
+            <div className={'summary-tables-container profile-info-container'}>
+              <div className={'profile-info'}>
+                <div className={'profile-info-line profile-name'}>
               <span>
-                {user.firstName + ' ' + user.lastName}
-              </span>
-              <Icon
-                iconName={'Edit'}
-                style={{
+                <Icon iconName="Contact" style={{
                   fontSize: 1.5 + 'rem',
-                  marginLeft: 0.6 + 'rem',
-                  marginBottom: 0.6 + 'rem',
-                  cursor: 'pointer'
-                }}
-                onClick={() => this.setState({showPanel: true})}
+                  margin: 0.5 + 'rem'
+                }}/>{user.firstName + ' ' + user.lastName}
+              </span>
+                  <Icon
+                    iconName={'Edit'}
+                    style={{
+                      fontSize: 1.5 + 'rem',
+                      marginLeft: 0.6 + 'rem',
+                      marginBottom: 0.6 + 'rem',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => this.setState({showPanel: true})}
+                  />
+                </div>
+                <ProfileInfoLine text={user.username} iconName="Accounts"/>
+                <ProfileInfoLine text={new Date(user.dob || '').toDateString()} iconName="Cake"
+                                 noneMessage="You can add birthday"/>
+                <ProfileInfoLine text={user.email} iconName="EditMail" noneMessage="You can add E-Mail"/>
+              </div>
+              <div className={'profile-description'}>
+            <span className={'table-title'}>
+              <Icon iconName={'ContactCard'}
+                    style={{
+                      fontSize: 1.5 + 'rem',
+                      margin: 0.5 + 'rem'
+                    }}/>
+              Summary
+              </span>
+                <p>{user.description || "Here will be your description"}</p>
+              </div>
+            </div>
+            <div className={'summary-tables-container'}>
+              <SummaryTable items={userSkills}
+                            renderRow={({name, level, id}) =>
+                              <tr key={`skill${id}`}>
+                                <td width="200px">{name}</td>
+                                <td className={'summary-table-second-col'}><Rating
+                                  min={1}
+                                  max={5}
+                                  rating={level}
+                                  readOnly={true}
+                                /></td>
+                              </tr>}
+                            title="Skills"
+                            iconName="UserEvent"
+              />
+              <SummaryTable items={userProjects}
+                            renderRow={({name, duration, id}) =>
+                              <tr key={`project${id}`}>
+                                <td width="200px" className={'summary-table-first-col'}>{name}</td>
+                                <td
+                                  className={'summary-table-second-col'}>{duration + ` Month${duration > 1 ? 's' : ''}`}</td>
+                              </tr>}
+                            title="Projects"
+                            iconName="ProjectLogo32"
               />
             </div>
-            <ProfileInfoLine text={user.username} iconName="Contact"/>
-            <ProfileInfoLine text={new Date(user.dob || '').toDateString()} iconName="Cake"
-                             noneMessage="You can add birthday"/>
-            <ProfileInfoLine text={user.email} iconName="EditMail" noneMessage="You can add E-Mail"/>
-            <ProfileInfoLine text={user.description} iconName="ContactCard"
-                             noneMessage="Here will be your description"/>
           </div>
-          <SummaryTable items={userSkills}
-                        renderRow={({name, level, id}) =>
-                          <tr key={`skill${id}`}>
-                            <td width="200px">{name}</td>
-                            <td className={'summary-table-second-col'}><Rating
-                              min={1}
-                              max={5}
-                              rating={level}
-                              readOnly={true}
-                            /></td>
-                          </tr>}
-                        title="Skills"
-          />
-          <SummaryTable items={userProjects}
-                        renderRow={({name, duration, id}) =>
-                          <tr key={`project${id}`}>
-                            <td width="200px" className={'summary-table-first-col'}>{name}</td>
-                            <td className={'summary-table-second-col'}>{duration + ` Month${duration > 1 ? 's' : ''}`}</td>
-                          </tr>}
-                        title="Projects"
-          />
         </div>
       </div>
     );

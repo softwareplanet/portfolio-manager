@@ -82,18 +82,40 @@
     padding-top: 4rem;
     flex-wrap: wrap;
     justify-content: space-around; }
-    .flex .profile-container .profile-skills {
-      margin: 0 1rem 1rem;
+    .flex .profile-container .profile-description {
+      margin: 4rem 2rem;
       display: flex;
       flex-direction: column;
-      align-items: center; }
-      .flex .profile-container .profile-skills .summary-table tr {
-        height: 1.3rem;
-        margin: 1rem 0;
-        display: flex;
-        align-items: center; }
-        .flex .profile-container .profile-skills .summary-table tr .summary-table-second-col {
-          min-width: 100px; }
+      align-items: flex-start;
+      text-align: justify; }
+    .flex .profile-container .info-container {
+      display: flex;
+      flex: 1;
+      flex-wrap: wrap;
+      justify-content: space-around; }
+    .flex .profile-container .summary-tables-container {
+      display: flex;
+      flex-wrap: wrap;
+      flex: 1;
+      justify-content: flex-start;
+      align-items: flex-start;
+      align-content: flex-start; }
+      .flex .profile-container .summary-tables-container.profile-info-container {
+        align-items: flex-start; }
+    .flex .profile-container .profile-skills {
+      margin: 0 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; }
+      .flex .profile-container .profile-skills .summary-table {
+        padding-top: 0.4rem; }
+        .flex .profile-container .profile-skills .summary-table tr {
+          height: 1.4rem;
+          margin: 0 0 1rem;
+          display: flex;
+          align-items: center; }
+          .flex .profile-container .profile-skills .summary-table tr .summary-table-second-col {
+            min-width: 100px; }
     .flex .profile-container .table-title {
       font-size: 2.5rem;
       font-weight: 500;
@@ -125,13 +147,14 @@
       align-items: center; }
       .flex .profile-container .profile-info-line .profile-info-icon {
         margin-right: 1rem;
-        font-size: 1.3rem; }
+        font-size: 1.4rem; }
     .flex .profile-container .profile-name {
       display: inline-flex;
       align-items: flex-end;
       font-size: 2.5rem;
       font-weight: 500;
-      margin-bottom: 1rem; }
+      margin: 0 0 1rem;
+      white-space: nowrap; }
     .flex .profile-container .profile-info {
       display: flex;
       flex-direction: column;
@@ -183,10 +206,8 @@
 .panel-footer {
   display: flex;
   justify-content: flex-start;
-  position: absolute;
-  bottom: 0;
   margin-bottom: 2rem;
-  width: 88%; }
+  margin-top: 3rem; }
   .panel-footer .panel-footer-cancel {
     margin-right: 1rem; }
 

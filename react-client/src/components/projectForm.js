@@ -9,6 +9,7 @@ import {setProjectModal, setSkillModal} from "../actions/modals";
 import {PanelFooter} from "./panelFooter";
 import {createUserProject, editUserProject} from "../actions/userProjects";
 import {ErrorLabel} from "./errorLabel";
+import {formatDate} from "../service/utils";
 
 class DocumentPicker extends BasePickerListBelow {
 }
@@ -137,7 +138,7 @@ class ProjectFormComponent extends Component {
     let errors = {};
     let valid = true;
     let project = {};
-    project.startDate = startDate ? startDate.toISOString().split('T')[0] : (errors.startDate = ['Enter start date']) && (valid = false);
+    project.startDate = startDate ? formatDate(startDate) : (errors.startDate = ['Enter start date']) && (valid = false);
     project.projectId = selectedProject[0] ? selectedProject[0].id : (errors.project = ['Choose your project or create a new one']) && (valid = false);
     project.skillIds = selectedSkills.length !== 0 ? selectedSkills.map(skill => skill.id) : (errors.skills = ['Choose some skills']) && (valid = false);
     project.durationMonths = duration ? duration : errors.durationMonths = ['Enter valid positive number'];

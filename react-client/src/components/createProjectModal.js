@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {setProjectModal} from "../actions/modals";
 import {createProject} from "../actions/projects";
 import {NumberTextField} from "./numberTextField";
+import {formatDate} from "../service/utils";
 
 class CreateProject extends Component {
 
@@ -36,7 +37,7 @@ class CreateProject extends Component {
         <span className={'modal-header'}>Create new skill</span>
         <form onSubmit={(e) => {
           e.preventDefault();
-          createProject({name, url, description, durationMonths, startDate: startDate.toISOString().split('T')[0]});
+          createProject({name, url, description, durationMonths, startDate: formatDate(startDate)});
         }}>
           <TextField label="Name:" value={name}
                      onChange={(e) => this.setState({name: e.target.value})}

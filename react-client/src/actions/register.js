@@ -1,6 +1,7 @@
 import {REGISTER_ERRORS, REGISTER_LOADING} from "./actionTypes";
 import {AuthService} from "../service/authService";
 import axios from "axios";
+import {formatDate} from "../service/utils";
 
 export const registerErrors = (errors = {}) => {
   return {
@@ -21,7 +22,7 @@ export const register = (user) => {
     dispatch(registerLoading(true));
     const {username, email, password, firstName, lastName, birthday} = user;
     axios.post('/api/v1/employee', {
-      username, email, password, firstName, lastName, dob: birthday.toISOString().split('T')[0]
+      username, email, password, firstName, lastName, dob: formatDate(birthday)
     }).then(() => {
       dispatch(registerLoading(false));
       AuthService.logIn(username, password);

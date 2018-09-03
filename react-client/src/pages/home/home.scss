@@ -123,16 +123,47 @@ $header-size: 3rem;
     flex-wrap: wrap;
     justify-content: space-around;
 
-    .profile-skills {
-      margin: 0 1rem 1rem;
+    .profile-description {
+      margin: 4rem 2rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
+      text-align: justify;
+    }
+
+    .info-container {
+      display: flex;
+      flex: 1;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .summary-tables-container {
+      display: flex;
+      flex-wrap: wrap;
+      flex: 1;
+      justify-content: flex-start;
+      align-items: flex-start;
+      align-content: flex-start;
+
+      &.profile-info-container {
+        align-items: flex-start;
+
+      }
+    }
+
+    .profile-skills {
+      margin: 0 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
 
       .summary-table {
+        padding-top: 0.4rem;
+
         tr {
-          height: 1.3rem;
-          margin: 1rem 0;
+          height: 1.4rem;
+          margin: 0 0 1rem;
           display: flex;
           align-items: center;
 
@@ -183,7 +214,7 @@ $header-size: 3rem;
 
       .profile-info-icon {
         margin-right: 1rem;
-        font-size: 1.3rem;
+        font-size: 1.4rem;
       }
     }
 
@@ -192,7 +223,8 @@ $header-size: 3rem;
       align-items: flex-end;
       font-size: 2.5rem;
       font-weight: 500;
-      margin-bottom: 1rem;
+      margin: 0 0 1rem;
+      white-space: nowrap;
     }
 
     .profile-info {
@@ -268,10 +300,8 @@ $selected-item-height: 2rem;
 .panel-footer {
   display: flex;
   justify-content: flex-start;
-  position: absolute;
-  bottom: 0;
   margin-bottom: 2rem;
-  width: 88%;
+  margin-top: 3rem;
 
   .panel-footer-cancel {
     margin-right: 1rem;

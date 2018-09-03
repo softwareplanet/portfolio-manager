@@ -3,6 +3,7 @@ import {removeUserErrors, updateUser} from "../actions/user";
 import connect from "react-redux/es/connect/connect";
 import {DatePicker, TextField} from "office-ui-fabric-react";
 import {PanelFooter} from "./panelFooter";
+import {formatDate} from "../service/utils";
 
 class UserFormComponent extends Component {
 
@@ -73,9 +74,11 @@ class UserFormComponent extends Component {
                    type="email"
                    placeholder="Your summary..."
                    multiline
+                   rows={16}
+                   resizable={false}
         />
         <PanelFooter onClose={this._onClose.bind(this)} loading={loading}
-                     onSave={() => this.props.updateUser({...this.state, dob: dob.toISOString().split('T')[0]})}/>
+                     onSave={() => this.props.updateUser({...this.state, dob: formatDate(dob)})}/>
       </form>
     );
   }
@@ -95,7 +98,7 @@ const mapStateToProps = ({user: {firstName, lastName, dob, username, email, desc
     email,
     description,
     editUserState,
-    errors: editUserErrors || {},
+    errors: editUserErrors,
     loading: editUserLoading
   };
 };
