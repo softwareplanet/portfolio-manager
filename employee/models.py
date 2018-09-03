@@ -69,6 +69,7 @@ class Employee(AbstractUser):
     projects = models.ManyToManyField(Project, through='EmployeeProject')
     school = models.ManyToManyField(School, through='EmployeeSchool')
     image = models.ImageField(upload_to='profile_images', blank=True)
+    description = models.TextField(blank=True)
 
     class Meta:
         db_table = 'employees'
