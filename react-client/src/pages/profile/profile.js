@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {ProfileInfoLine, SummaryTable, UserAvatar, UserForm} from "../../components";
-import {Icon, Rating} from "office-ui-fabric-react";
+import {Icon, Panel, PanelType, Rating} from "office-ui-fabric-react";
 import {updateUser, updateUserPhoto} from "../../actions/user";
 import {getUserProjects} from "../../actions/userProjects";
 import {getUserSkills} from "../../actions/userSkills";
@@ -9,12 +9,7 @@ import {getUserSkills} from "../../actions/userSkills";
 class ProfilePage extends Component {
 
   state = {
-    editName: false,
-    editDob: false,
-    editEmail: false,
-
-    dob: '',
-    email: ''
+    showPanel: false,
   };
 
   componentDidMount() {
@@ -26,13 +21,23 @@ class ProfilePage extends Component {
   }
 
   render() {
-    let {user, updateUserPhoto, updateUser, userSkills, userProjects} = this.props;
-    const {editName, editDob, editEmail} = this.state;
+    let {user, updateUserPhoto, userSkills, userProjects} = this.props;
+    const {showPanel} = this.state;
     if (!user) {
       user = {}
     }
     return (
       <div className={'page-container'}>
+        <Panel
+          isBlocking={false}
+          isOpen={showPanel}
+          onDismiss={this._setShowPanel(false)}
+          type={PanelType.smallFixedFar}
+          headerText={'Edit profile'}
+          hasCloseButton={false}
+        >
+          <UserForm onClose={this._setShowPanel(false)}/>
+        </Panel>
         <span className={'page-title'}>Profile</span>
         <div className={'profile-container'}>
           <div className={'profile-photo-container'}>
@@ -49,8 +54,22 @@ class ProfilePage extends Component {
             </div>
           </div>
           <div className={'profile-info'}>
-            <span className={'profile-info-line profile-name'}>{user.firstName + ' ' + user.lastName}</span>
-            <ProfileInfoLine text={user.username} iconName="Contact" onClick={() => this.setState({editName: true})}/>
+            <div className={'profile-info-line profile-name'}>
+              <span>
+                {user.firstName + ' ' + user.lastName}
+              </span>
+              <Icon
+                iconName={'Edit'}
+                style={{
+                  fontSize: 1.5 + 'rem',
+                  marginLeft: 0.6 + 'rem',
+                  marginBottom: 0.6 + 'rem',
+                  cursor: 'pointer'
+                }}
+                onClick={() => this.setState({showPanel: true})}
+              />
+            </div>
+            <ProfileInfoLine text={user.username} iconName="Contact"/>
             <ProfileInfoLine text={new Date(user.dob || '').toDateString()} iconName="Cake"
                              noneMessage="You can add birthday"/>
             <ProfileInfoLine text={user.email} iconName="EditMail" noneMessage="You can add E-Mail"/>
@@ -61,7 +80,7 @@ class ProfilePage extends Component {
                         renderRow={({name, level, id}) =>
                           <tr key={`skill${id}`}>
                             <td width="200px">{name}</td>
-                            <td><Rating
+                            <td className={'summary-table-second-col'}><Rating
                               min={1}
                               max={5}
                               rating={level}
@@ -73,8 +92,8 @@ class ProfilePage extends Component {
           <SummaryTable items={userProjects}
                         renderRow={({name, duration, id}) =>
                           <tr key={`project${id}`}>
-                            <td width="200px">{name}</td>
-                            <td>{duration + ` Month${duration > 1 ? 's' : ''}`}</td>
+                            <td width="200px" className={'summary-table-first-col'}>{name}</td>
+                            <td className={'summary-table-second-col'}>{duration + ` Month${duration > 1 ? 's' : ''}`}</td>
                           </tr>}
                         title="Projects"
           />
@@ -82,21 +101,27 @@ class ProfilePage extends Component {
       </div>
     );
   }
+
+  _setShowPanel = (showPanel) => {
+    return () => {
+      this.setState({showPanel});
+    };
+  };
 }
 
 const mapStateToProps = ({user, userSkills, userProjects}) => {
   return {
     user,
-    userSkills: userSkills && userSkills.slice(0, 4).map(({skill: {name}, level, id}) => ({
+    userSkills: userSkills && userSkills.sort((a, b) => b.level - a.level).slice(0, 4).map(({skill: {name}, level, id}) => ({
       id,
       name,
       level
-    })).sort((a, b) => b.level - a.level),
-    userProjects: userProjects && userProjects.slice(0, 4).map(({project: {name}, durationMonths, id}) => ({
+    })),
+    userProjects: userProjects && userProjects.sort((a, b) => b.durationMonths - a.durationMonths).slice(0, 4).map(({project: {name}, durationMonths, id}) => ({
       id,
       name,
       duration: durationMonths
-    })).sort((a, b) => b.duration - a.duration),
+    })),
   };
 };
 

@@ -1,6 +1,33 @@
-import {SET_USER} from "./actionTypes";
+import {EDIT_USER_ERRORS, EDIT_USER_LOADING, REMOVE_USER_ERRORS, SET_USER, SUCCESSFUL_EDIT_USER} from "./actionTypes";
 import axios from 'axios';
 import {retryRequest} from "../service/utils";
+
+export const successfulEditUser = (userId) => {
+  return {
+    type: SUCCESSFUL_EDIT_USER,
+    payload: userId
+  };
+};
+
+export const editUserErrors = (errors = {}) => {
+  return {
+    type: EDIT_USER_ERRORS,
+    payload: errors
+  };
+};
+
+export const removeUserErrors = () => {
+  return {
+    type: REMOVE_USER_ERRORS
+  }
+};
+
+export const editUserLoading = (bool = false) => {
+  return {
+    type: EDIT_USER_LOADING,
+    payload: bool
+  };
+};
 
 export const setUser = (user = null) => {
   return {
@@ -35,12 +62,16 @@ export const updateUserPhoto = (data) => {
 
 export const updateUser = (data) => {
   return (dispatch) => {
+    dispatch(editUserLoading(true));
     axios.patch(`/api/v1/me`, data)
       .then(res => {
+        dispatch(removeUserErrors());
+        dispatch(successfulEditUser(res.data.id));
         dispatch(setUser(res.data))
       })
-      .catch(error => {
-        console.log(error);
+      .catch(errors => {
+        dispatch(editUserErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
       })
+      .finally(() => dispatch(editUserLoading(false)))
   }
 };

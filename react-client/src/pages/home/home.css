@@ -82,8 +82,6 @@
     padding-top: 4rem;
     flex-wrap: wrap;
     justify-content: space-around; }
-    .flex .profile-container .profile-edit-form {
-      display: flex; }
     .flex .profile-container .profile-skills {
       margin: 0 1rem 1rem;
       display: flex;
@@ -94,6 +92,8 @@
         margin: 1rem 0;
         display: flex;
         align-items: center; }
+        .flex .profile-container .profile-skills .summary-table tr .summary-table-second-col {
+          min-width: 100px; }
     .flex .profile-container .table-title {
       font-size: 2.5rem;
       font-weight: 500;
@@ -122,12 +122,13 @@
     .flex .profile-container .profile-info-line {
       margin: 0.5rem 0;
       display: flex;
-      align-items: center;
-      cursor: pointer; }
+      align-items: center; }
       .flex .profile-container .profile-info-line .profile-info-icon {
         margin-right: 1rem;
         font-size: 1.3rem; }
     .flex .profile-container .profile-name {
+      display: inline-flex;
+      align-items: flex-end;
       font-size: 2.5rem;
       font-weight: 500;
       margin-bottom: 1rem; }
@@ -181,7 +182,11 @@
 
 .panel-footer {
   display: flex;
-  justify-content: flex-start; }
+  justify-content: flex-start;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 2rem;
+  width: 88%; }
   .panel-footer .panel-footer-cancel {
     margin-right: 1rem; }
 

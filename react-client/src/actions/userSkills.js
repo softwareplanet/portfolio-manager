@@ -92,11 +92,13 @@ export const editUserSkill = (userId, skill) => {
       .then(res => {
         dispatch(successfulEditUserSkill(res.data.id));
         dispatch(changeUserSkill(res.data))
-      }).catch(errors => {
-      dispatch(createUserSkillErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
-    }).finally(() => {
-      dispatch(newUserSkillLoading(false));
-    });
+      })
+      .catch(errors => {
+        dispatch(createUserSkillErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+      })
+      .finally(() => {
+        dispatch(newUserSkillLoading(false));
+      });
   }
 };
 
@@ -106,10 +108,12 @@ export const createUserSkill = (userId, skill) => {
     axios.post(`/api/v1/employee/${userId}/skill`, skill)
       .then(res => {
         dispatch(addUserSkill(res.data))
-      }).catch(errors => {
-      dispatch(createUserSkillErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
-    }).finally(() => {
-      dispatch(newUserSkillLoading(false));
-    });
+      })
+      .catch(errors => {
+        dispatch(createUserSkillErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+      })
+      .finally(() => {
+        dispatch(newUserSkillLoading(false));
+      });
   }
 };

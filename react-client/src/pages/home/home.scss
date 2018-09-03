@@ -123,10 +123,6 @@ $header-size: 3rem;
     flex-wrap: wrap;
     justify-content: space-around;
 
-    .profile-edit-form {
-      display: flex;
-    }
-
     .profile-skills {
       margin: 0 1rem 1rem;
       display: flex;
@@ -139,6 +135,10 @@ $header-size: 3rem;
           margin: 1rem 0;
           display: flex;
           align-items: center;
+
+          .summary-table-second-col {
+            min-width: 100px;
+          }
         }
       }
     }
@@ -180,7 +180,6 @@ $header-size: 3rem;
       margin: 0.5rem 0;
       display: flex;
       align-items: center;
-      cursor: pointer;
 
       .profile-info-icon {
         margin-right: 1rem;
@@ -189,6 +188,8 @@ $header-size: 3rem;
     }
 
     .profile-name {
+      display: inline-flex;
+      align-items: flex-end;
       font-size: 2.5rem;
       font-weight: 500;
       margin-bottom: 1rem;
@@ -267,6 +268,10 @@ $selected-item-height: 2rem;
 .panel-footer {
   display: flex;
   justify-content: flex-start;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 2rem;
+  width: 88%;
 
   .panel-footer-cancel {
     margin-right: 1rem;
