@@ -37,8 +37,8 @@ class ProjectsPage extends Component {
       key: 'projectName',
       name: 'Project Name',
       fieldName: 'project.name',
-      minWidth: 210,
-      maxWidth: 350,
+      minWidth: 110,
+      maxWidth: 250,
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
@@ -69,6 +69,18 @@ class ProjectsPage extends Component {
         return <span>{durationMonths + ` Month${durationMonths > 1 ? 's' : ''}`}</span>;
       },
       isPadded: true
+    },
+    {
+      key: 'description',
+      name: 'Role on project',
+      fieldName: 'description',
+      minWidth: 110,
+      maxWidth: 250,
+      isResizable: true,
+      isPadded: true,
+      onRender: ({description}) => {
+        return <span>{description}</span>;
+      },
     },
     {
       key: 'skills',

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {BasePickerListBelow, DatePicker, Label, TagPicker} from "office-ui-fabric-react";
+import {BasePickerListBelow, DatePicker, Label, TagPicker, TextField} from "office-ui-fabric-react";
 import {CreateNew} from "../projectCommon/suggestions/createNewSuggestion";
 import {NumberTextField} from "../common/numberTextField";
 import {SelectedItem} from "../projectCommon/suggestions/selectedItem";
@@ -22,6 +22,7 @@ class ProjectFormComponent extends Component {
   state = {
     startDate: new Date(),
     duration: '',
+    description: '',
     selectedSkills: [],
     selectedProject: [],
     errors: {},
@@ -51,12 +52,13 @@ class ProjectFormComponent extends Component {
   componentWillMount() {
     const {userProject} = this.props;
     if (userProject) {
-      const {startDate, durationMonths, skills, project} = userProject;
+      const {startDate, durationMonths, skills, project, description} = userProject;
       const projectToEdit = {
         startDate: new Date(startDate),
         duration: durationMonths,
         selectedSkills: skills,
-        selectedProject: [project]
+        selectedProject: [project],
+        description
       };
       this.setState({...this.state, ...projectToEdit, edit: true})
     }
@@ -64,7 +66,7 @@ class ProjectFormComponent extends Component {
 
   render() {
     const {projects, skills, createSkill, createProject, onClose, loading} = this.props;
-    const {duration, startDate, selectedSkills, selectedProject, errors, edit} = this.state;
+    const {duration, startDate, selectedSkills, selectedProject, errors, edit, description} = this.state;
     return (
       <div>
         <Label>Name</Label>
@@ -106,6 +108,14 @@ class ProjectFormComponent extends Component {
           errorMessage={(errors.durationMonths || []).join('<br/>')}
         />
         <br/>
+        <TextField label="Role on project:" value={description}
+                   onChange={(e) => this.setState({description: e.target.value})}
+                   errorMessage={(errors.description || []).join('<br/>')}
+                   placeholder="Detailed description about your role on project..."
+                   isRequired={true}
+                   multiline rows={8}
+        />
+        <br/>
         <Label>Skills</Label>
         <DocumentPicker
           onRenderSuggestionsItem={SuggestionsItem}
@@ -134,11 +144,12 @@ class ProjectFormComponent extends Component {
   }
 
   _generateProjectObject() {
-    const {startDate, duration, selectedSkills, selectedProject} = this.state;
+    const {startDate, duration, selectedSkills, selectedProject, description} = this.state;
     let errors = {};
     let valid = true;
     let project = {};
     project.startDate = startDate ? formatDate(startDate) : (errors.startDate = ['Enter start date']) && (valid = false);
+    project.description = description ? description : (errors.description = ['Your role on this project can not be empty, what you`ve done there?']) && (valid = false);
     project.projectId = selectedProject[0] ? selectedProject[0].id : (errors.project = ['Choose your project or create a new one']) && (valid = false);
     project.skillIds = selectedSkills.length !== 0 ? selectedSkills.map(skill => skill.id) : (errors.skills = ['Choose some skills']) && (valid = false);
     project.durationMonths = duration ? duration : errors.durationMonths = ['Enter valid positive number'];
