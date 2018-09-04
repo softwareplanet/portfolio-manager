@@ -67,10 +67,10 @@ class SkillsPage extends Component {
       },
     },{
       key: 'projectsCount',
-      name: 'Used on projects',
+      name: 'No. of projects',
       fieldName: 'projectsCount',
       minWidth: 40,
-      maxWidth: 70,
+      maxWidth: 60,
       isResizable: false,
       isPadded: true,
       onRender: ({projectsCount}) => {

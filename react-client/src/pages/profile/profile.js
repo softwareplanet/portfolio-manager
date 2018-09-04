@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {ProfileInfoLine, SummaryTable, UserAvatar, UserForm} from "../../components";
+import {ErrorLabel, Loader, ProfileInfoLine, SummaryTable, UserAvatar, UserForm} from "../../components";
 import {Icon, Panel, PanelType, Rating} from "office-ui-fabric-react";
 import {updateUser, updateUserPhoto} from "../../actions/user";
 import {getUserProjects} from "../../actions/userProjects";
@@ -21,7 +21,7 @@ class ProfilePage extends Component {
   }
 
   render() {
-    let {user, updateUserPhoto, userSkills, userProjects} = this.props;
+    let {user, updateUserPhoto, userSkills, userProjects, photoLoading, photoErrors} = this.props;
     const {showPanel} = this.state;
     if (!user) {
       user = {}
@@ -42,13 +42,16 @@ class ProfilePage extends Component {
         <div className={'profile-container'}>
           <div className={'profile-photo-container'}>
             <div className={'profile-photo'}>
-              <UserAvatar/>
+              {photoLoading ? <Loader/> : <UserAvatar/>}
             </div>
             <div>
               <label htmlFor="user-avatar" className={'upload-user-photo'}>
                 <Icon iconName={'Upload'} style={{marginRight: 4}}/>
                 Upload photo
               </label>
+              <div style={{width: 9 + 'rem', textAlign: 'justify'}}>
+                <ErrorLabel title={photoErrors}/>
+              </div>
               <input type="file" id="user-avatar" style={{display: 'none'}}
                      onChange={({target: {files}}) => files[0] && updateUserPhoto({image: files[0]})}/>
             </div>
@@ -130,9 +133,11 @@ class ProfilePage extends Component {
   };
 }
 
-const mapStateToProps = ({user, userSkills, userProjects}) => {
+const mapStateToProps = ({user, userSkills, userProjects, editUserPhotoLoading, editUserErrors: {image}}) => {
   return {
     user,
+    photoLoading: editUserPhotoLoading,
+    photoErrors: image,
     userSkills: userSkills && userSkills.sort((a, b) => b.level - a.level).slice(0, 4).map(({skill: {name}, level, id}) => ({
       id,
       name,
