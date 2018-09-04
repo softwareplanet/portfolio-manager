@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {ActionButton, Modal, PrimaryButton, Spinner, SpinnerSize, TextField} from "office-ui-fabric-react";
 import {connect} from "react-redux";
-import {setSchoolModal} from "../actions/modals";
-import {createSchool} from "../actions/schools";
+import {setSchoolModal} from "../../actions/modals";
+import {createSchool} from "../../actions/schools";
 
 class CreateSchool extends Component {
 

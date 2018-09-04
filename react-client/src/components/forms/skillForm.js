@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Label, Slider, TagPicker, TextField} from "office-ui-fabric-react";
-import {CreateNew} from "./createNewSuggestion";
-import {setSkillModal} from "../actions/modals";
-import {PanelFooter} from "./panelFooter";
-import {ErrorLabel} from "./errorLabel";
-import {createUserSkill, editUserSkill, removeSkillErrors} from "../actions/userSkills";
+import {CreateNew} from "../projectCommon/suggestions/createNewSuggestion";
+import {setSkillModal} from "../../actions/modals";
+import {PanelFooter} from "../projectCommon/panelFooter";
+import {ErrorLabel} from "../common/errorLabel";
+import {createUserSkill, editUserSkill, removeSkillErrors} from "../../actions/userSkills";
 
 class SkillFormComponent extends Component {
 

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Redirect} from "react-router-dom";
 import {connect} from "react-redux";
-import {AuthService} from "../service/authService";
+import {AuthService} from "../../service/authService";
 import axios from "axios";
 
 class LogoutButtonComponent extends Component {

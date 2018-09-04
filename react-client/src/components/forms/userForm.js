@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {removeUserErrors, updateUser} from "../actions/user";
+import {removeUserErrors, updateUser} from "../../actions/user";
 import connect from "react-redux/es/connect/connect";
 import {DatePicker, TextField} from "office-ui-fabric-react";
-import {PanelFooter} from "./panelFooter";
-import {formatDate} from "../service/utils";
+import {PanelFooter} from "../projectCommon/panelFooter";
+import {formatDate} from "../../service/utils";
 
 class UserFormComponent extends Component {
 

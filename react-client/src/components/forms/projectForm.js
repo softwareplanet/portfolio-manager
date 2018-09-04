@@ -1,15 +1,15 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {BasePickerListBelow, DatePicker, Label, TagPicker} from "office-ui-fabric-react";
-import {CreateNew} from "./createNewSuggestion";
-import {NumberTextField} from "./numberTextField";
-import {SelectedItem} from "./selectedItem";
-import {SuggestionsItem} from "./suggestionsItem";
-import {setProjectModal, setSkillModal} from "../actions/modals";
-import {PanelFooter} from "./panelFooter";
-import {createUserProject, editUserProject} from "../actions/userProjects";
-import {ErrorLabel} from "./errorLabel";
-import {formatDate} from "../service/utils";
+import {CreateNew} from "../projectCommon/suggestions/createNewSuggestion";
+import {NumberTextField} from "../common/numberTextField";
+import {SelectedItem} from "../projectCommon/suggestions/selectedItem";
+import {SuggestionsItem} from "../projectCommon/suggestions/suggestionsItem";
+import {setProjectModal, setSkillModal} from "../../actions/modals";
+import {PanelFooter} from "../projectCommon/panelFooter";
+import {createUserProject, editUserProject} from "../../actions/userProjects";
+import {ErrorLabel} from "../common/errorLabel";
+import {formatDate} from "../../service/utils";
 
 class DocumentPicker extends BasePickerListBelow {
 }

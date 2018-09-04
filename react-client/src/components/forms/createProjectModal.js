@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {ActionButton, DatePicker, Modal, PrimaryButton, Spinner, SpinnerSize, TextField} from "office-ui-fabric-react";
 import {connect} from "react-redux";
-import {setProjectModal} from "../actions/modals";
-import {createProject} from "../actions/projects";
-import {NumberTextField} from "./numberTextField";
-import {formatDate} from "../service/utils";
+import {setProjectModal} from "../../actions/modals";
+import {createProject} from "../../actions/projects";
+import {NumberTextField} from "../common/numberTextField";
+import {formatDate} from "../../service/utils";
 
 class CreateProject extends Component {
 

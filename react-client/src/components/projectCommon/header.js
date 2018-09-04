@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {LogoutButton} from "./logoutButton";
 import connect from "react-redux/es/connect/connect";
-import {getUser} from "../actions/user";
-import {history} from "../store";
-import {toggleSideBar} from "../actions/sidebar";
+import {getUser} from "../../actions/user";
+import {history} from "../../store";
+import {toggleSideBar} from "../../actions/sidebar";
 
 export class HeaderComponent extends Component {
 

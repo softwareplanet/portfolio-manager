@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {ActionButton, Modal, PrimaryButton, Spinner, SpinnerSize, TextField} from "office-ui-fabric-react";
 import {connect} from "react-redux";
-import {setSkillModal} from "../actions/modals";
-import {createSkill} from "../actions/skills";
+import {setSkillModal} from "../../actions/modals";
+import {createSkill} from "../../actions/skills";
 
 class CreateSkill extends Component {
 

@@ -10,6 +10,14 @@ const Link = ({url, history, title}) => {
 };
 
 export const NavBar = ({history, sideBarOpened}) => {
+
+  const employeeRoutes = [
+    {title: 'General', url: '/home/profile'},
+    {title: 'Projects', url: '/home/projects'},
+    {title: 'Skills', url: '/home/skills'},
+    {title: 'Schools', url: '/home/schools'},
+  ];
+
   return (
     <aside className={`nav-bar ${sideBarOpened ? '' : 'none'}`}>
       <SearchBox
@@ -21,10 +29,7 @@ export const NavBar = ({history, sideBarOpened}) => {
           Profile
         </span>
         <ul className={'links-container'}>
-          <Link history={history} title="General" url="/home/profile"/>
-          <Link history={history} title="Projects" url="/home/projects"/>
-          <Link history={history} title="Skills" url="/home/skills"/>
-          <Link history={history} title="Schools" url="/home/schools"/>
+          {employeeRoutes.map( route => <Link history={history} {...route}/> )}
         </ul>
       </div>
     </aside>

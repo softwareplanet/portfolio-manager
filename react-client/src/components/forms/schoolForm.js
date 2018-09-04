@@ -1,13 +1,13 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {DatePicker, Label, TagPicker} from "office-ui-fabric-react";
-import {CreateNew} from "./createNewSuggestion";
-import {setSchoolModal} from "../actions/modals";
-import {PanelFooter} from "./panelFooter";
-import {ErrorLabel} from "./errorLabel";
-import {createUserSchool, editUserSchool, removeSchoolErrors} from "../actions/userSchools";
-import {NumberTextField} from "./numberTextField";
-import {formatDate} from "../service/utils";
+import {CreateNew} from "../projectCommon/suggestions/createNewSuggestion";
+import {setSchoolModal} from "../../actions/modals";
+import {PanelFooter} from "../projectCommon/panelFooter";
+import {ErrorLabel} from "../common/errorLabel";
+import {createUserSchool, editUserSchool, removeSchoolErrors} from "../../actions/userSchools";
+import {NumberTextField} from "../common/numberTextField";
+import {formatDate} from "../../service/utils";
 
 class SchoolFormComponent extends Component {
 

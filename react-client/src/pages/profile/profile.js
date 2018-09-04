@@ -138,12 +138,12 @@ const mapStateToProps = ({user, userSkills, userProjects, editUserPhotoLoading, 
     user,
     photoLoading: editUserPhotoLoading,
     photoErrors: image,
-    userSkills: userSkills && userSkills.sort((a, b) => b.level - a.level).slice(0, 4).map(({skill: {name}, level, id}) => ({
+    userSkills: userSkills && userSkills.sort((a, b) => a.level - b.level).slice(-4).reverse().map(({skill: {name}, level, id}) => ({
       id,
       name,
       level
     })),
-    userProjects: userProjects && userProjects.sort((a, b) => b.durationMonths - a.durationMonths).slice(0, 4).map(({project: {name}, durationMonths, id}) => ({
+    userProjects: userProjects && userProjects.sort((a, b) => a.durationMonths - b.durationMonths).slice(-4).reverse().map(({project: {name}, durationMonths, id}) => ({
       id,
       name,
       duration: durationMonths
