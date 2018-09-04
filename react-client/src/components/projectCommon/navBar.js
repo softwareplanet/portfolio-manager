@@ -29,7 +29,7 @@ export const NavBar = ({history, sideBarOpened}) => {
           Profile
         </span>
         <ul className={'links-container'}>
-          {employeeRoutes.map( route => <Link history={history} {...route}/> )}
+          {employeeRoutes.map((route, index) => <Link key={index} history={history} {...route}/>)}
         </ul>
       </div>
     </aside>

@@ -1,4 +1,6 @@
 $header-size: 3rem;
+$theme-color-primary: #0178d4;
+$theme-color-secondary: #0198ff;
 
 .header {
   width: 100%;
@@ -16,7 +18,7 @@ $header-size: 3rem;
     .header-logo {
       height: 100%;
       width: $header-size;
-      background: #0178d4 url("/menu.svg") no-repeat center;
+      background: $theme-color-primary url("/menu.svg") no-repeat center;
       background-size: 30%;
     }
 
@@ -106,10 +108,10 @@ $header-size: 3rem;
         }
 
         &.active {
-          color: #0178d4;
+          color: $theme-color-primary;
 
           &:hover {
-            color: #0198ff;
+            color: $theme-color-secondary;
           }
         }
       }
