@@ -40,6 +40,7 @@ class EmployeeProject(models.Model):
     employee_id = models.ForeignKey('Employee', on_delete=models.CASCADE)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     skills = models.ManyToManyField(Skill)
+    description = models.TextField(blank=True)
 
     class Meta:
         db_table = 'employee_projects'

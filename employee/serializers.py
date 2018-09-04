@@ -107,7 +107,10 @@ class EmployeeProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeProject
-        fields = ('id', 'startDate', 'durationMonths', 'project', 'skills', 'employeeId', 'projectId', 'skillIds')
+        fields = (
+            'id', 'startDate', 'durationMonths', 'project', 'skills',
+            'employeeId', 'projectId', 'skillIds', 'description'
+        )
 
 
 class EmployeeSchoolSerializer(serializers.HyperlinkedModelSerializer):
