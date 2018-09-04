@@ -40,6 +40,7 @@ $theme-color-secondary: #0198ff;
       color: #fff;
       text-align: left;
       margin-right: 3rem;
+      margin-bottom: 0.15rem;
     }
 
     .logout-button {
@@ -126,7 +127,7 @@ $theme-color-secondary: #0198ff;
     justify-content: space-around;
 
     .profile-description {
-      margin: 4rem 2rem;
+      margin: 6.5rem 2rem 4rem;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -263,7 +264,7 @@ $selected-item-height: 2rem;
   height: $selected-item-height;
   background-color: #dadada;
   padding: 0 0 0 0.5rem;
-  margin: 1rem 1rem 0 0;
+  margin: 0.3rem 1rem 0 0;
 
   .title {
     line-height: $selected-item-height;
@@ -342,4 +343,8 @@ $selected-item-height: 2rem;
       flex: 1;
     }
   }
+}
+
+.ms-RatingStar-back {
+  color: rgba(165, 165, 165, 0.21);
 }

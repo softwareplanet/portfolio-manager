@@ -108,13 +108,13 @@ class SkillsPage extends Component {
               {
                 key: 'edit',
                 text: 'Edit',
-                iconProps: {iconName: 'Edit'},
+                iconProps: {iconName: 'Edit', style: {color: '#000'}},
                 onClick: () => this.editSkill(item)
               },
               {
                 key: 'delete',
                 text: 'Delete',
-                iconProps: {iconName: 'Delete'},
+                iconProps: {iconName: 'Delete', style: {color: '#000'}},
                 onClick: () => this._openDeleteDialog(item)
               }
 

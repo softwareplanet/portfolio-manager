@@ -27,7 +27,8 @@
       font-size: 0.9rem;
       color: #fff;
       text-align: left;
-      margin-right: 3rem; }
+      margin-right: 3rem;
+      margin-bottom: 0.15rem; }
     .header .header-right-container .logout-button {
       height: 2rem;
       width: 2rem;
@@ -83,7 +84,7 @@
     flex-wrap: wrap;
     justify-content: space-around; }
     .flex .profile-container .profile-description {
-      margin: 4rem 2rem;
+      margin: 6.5rem 2rem 4rem;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -179,7 +180,7 @@
   height: 2rem;
   background-color: #dadada;
   padding: 0 0 0 0.5rem;
-  margin: 1rem 1rem 0 0; }
+  margin: 0.3rem 1rem 0 0; }
   .selected-item .title {
     line-height: 2rem;
     font-weight: 600; }
@@ -236,3 +237,6 @@
     margin: 0 0 1.4rem; }
     .skill-slider-container .skill-level-description-container .skill-level-description {
       flex: 1; }
+
+.ms-RatingStar-back {
+  color: rgba(165, 165, 165, 0.21); }
