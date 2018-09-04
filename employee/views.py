@@ -132,6 +132,19 @@ class ListEmployeeSkill(SingleEmployeeRelatedInstanceAPIView):
     serializer = EmployeeSkillSerializer
     model = EmployeeSkill
 
+    def delete(self, request, employee_id, model_id):
+        try:
+            model = self.model.objects.get(id=model_id, employee_id=employee_id)
+            if self._owner_or_admin(request, employee_id):
+                for project in EmployeeProject.objects.filter(employee_id=employee_id):
+                    project.skills.remove(model.skill_id)
+                model.delete()
+                return Response({'id': model_id}, status.HTTP_200_OK)
+            else:
+                return Utils.error_response("Permission denied", status.HTTP_403_FORBIDDEN)
+        except ObjectDoesNotExist as e:
+            return Utils.error_response(e.args, status.HTTP_404_NOT_FOUND)
+
 
 class ListEmployeeSchools(MultipleEmployeeRelatedInstanceAPIView):
     serializer = EmployeeSchoolSerializer
