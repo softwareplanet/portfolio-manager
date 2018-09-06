@@ -8,6 +8,22 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     lastName = serializers.CharField(source='last_name', required=True)
     password = serializers.CharField(write_only=True, required=True)
     isStaff = serializers.BooleanField(read_only=True, source='is_staff')
+    skills = serializers.SerializerMethodField(read_only=True)
+    projects = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_skills(obj):
+        skills = []
+        for skill in obj.skills.all():
+            skills.append(skill.name)
+        return skills
+
+    @staticmethod
+    def get_projects(obj):
+        projects = []
+        for project in obj.projects.distinct():
+            projects.append(project.name)
+        return projects
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -29,7 +45,9 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Employee
         fields = (
-            'id', 'username', 'email', 'password', 'firstName', 'lastName', 'dob', 'isStaff', 'image', 'description')
+            'id', 'username', 'email', 'password', 'firstName', 'lastName', 'dob',
+            'isStaff', 'image', 'description', 'skills', 'projects'
+        )
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):

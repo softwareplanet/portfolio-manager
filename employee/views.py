@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from employee.model_views import MultipleInstanceAPIView, SingleInstanceAPIView, \
     MultipleEmployeeRelatedInstanceAPIView, SingleEmployeeRelatedInstanceAPIView
 from employee.models import Employee, Project, EmployeeProject, School, Skill, EmployeeSkill, EmployeeSchool
+from employee.permissions import IsAdminOrSelf
 from employee.serializers import EmployeeSerializer, ProjectSerializer, EmployeeProjectSerializer, SchoolSerializer, \
     SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer
 from employee.utils import Utils
@@ -16,10 +17,15 @@ class ListEmployees(MultipleInstanceAPIView):
     model = Employee
     permission_classes = ()
 
+    def get(self, request):
+        models = self.model.objects.filter(is_staff=False, is_active=1)
+        return Response(self.serializer(models, many=True).data)
+
 
 class ListEmployee(SingleInstanceAPIView):
     serializer = EmployeeSerializer
     model = Employee
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrSelf)
 
 
 class ListProjects(MultipleInstanceAPIView):
