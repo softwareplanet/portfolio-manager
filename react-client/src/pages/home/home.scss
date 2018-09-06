@@ -161,6 +161,8 @@ $theme-color-secondary: #0198ff;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      width: 19rem;
+      height: 17rem;
 
       .summary-table {
         padding-top: 0.4rem;
@@ -346,5 +348,5 @@ $selected-item-height: 2rem;
 }
 
 .ms-RatingStar-back {
-  color: rgba(180, 180, 180, 0.15);
+  color: rgba(180, 180, 180, 0.15) !important;
 }

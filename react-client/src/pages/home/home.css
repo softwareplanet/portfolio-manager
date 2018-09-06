@@ -108,7 +108,9 @@
       margin: 0 2rem 1rem;
       display: flex;
       flex-direction: column;
-      align-items: flex-start; }
+      align-items: flex-start;
+      width: 19rem;
+      height: 17rem; }
       .flex .profile-container .profile-skills .summary-table {
         padding-top: 0.4rem; }
         .flex .profile-container .profile-skills .summary-table tr {
@@ -239,4 +241,4 @@
       flex: 1; }
 
 .ms-RatingStar-back {
-  color: rgba(180, 180, 180, 0.15); }
+  color: rgba(180, 180, 180, 0.15) !important; }

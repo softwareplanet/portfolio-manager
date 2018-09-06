@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {ErrorLabel, Loader, ProfileInfoLine, SummaryTable, UserAvatar, UserForm} from "../../components";
 import {Icon, Panel, PanelType, Rating} from "office-ui-fabric-react";
-import {updateUser, updateUserPhoto} from "../../actions/user";
+import {getEmployee, updateUserPhoto} from "../../actions/user";
 import {getUserProjects} from "../../actions/userProjects";
 import {getUserSkills} from "../../actions/userSkills";
 
@@ -13,19 +13,29 @@ class ProfilePage extends Component {
   };
 
   componentDidMount() {
-    const {user, getUserProjects, getUserSkills} = this.props;
-    if (user) {
-      getUserProjects(user.id);
-      getUserSkills(user.id)
+    const {getUserProjects, getUserSkills, employeeId, employee, getEmployee} = this.props;
+    if (!employee || employee.id !== employeeId) {
+      getEmployee(employeeId);
+      getUserProjects(employeeId);
+      getUserSkills(employeeId)
+    }
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    const {getUserProjects, getUserSkills, employeeId, getEmployee} = this.props;
+    const {employeeId: nextId} = nextProps;
+    if ((nextId !== employeeId)) {
+      getEmployee(nextId);
+      getUserProjects(nextId);
+      getUserSkills(nextId)
     }
   }
 
   render() {
-    let {user, updateUserPhoto, userSkills, userProjects, photoLoading, photoErrors} = this.props;
+    let {updateUserPhoto, userSkills, userProjects, photoLoading, photoErrors, employee: user, user: currentUser, isStaff} = this.props;
     const {showPanel} = this.state;
-    if (!user) {
-      user = {}
-    }
+    if (!user) user = {};
+    if (!currentUser) currentUser = {};
     return (
       <div className={'page-container'}>
         <Panel
@@ -36,14 +46,15 @@ class ProfilePage extends Component {
           headerText={'Edit profile'}
           hasCloseButton={false}
         >
-          <UserForm onClose={this._setShowPanel(false)}/>
+          <UserForm onClose={this._setShowPanel(false)} employee={user}/>
         </Panel>
         <span className={'page-title'}>Profile</span>
         <div className={'profile-container'}>
           <div className={'profile-photo-container'}>
             <div className={'profile-photo'}>
-              {photoLoading ? <Loader/> : <UserAvatar/>}
+              {photoLoading ? <Loader/> : <UserAvatar url={user.image}/>}
             </div>
+            {(isStaff || user.id === currentUser.id) &&
             <div>
               <label htmlFor="user-avatar" className={'upload-user-photo'}>
                 <Icon iconName={'Upload'} style={{marginRight: 4}}/>
@@ -53,8 +64,8 @@ class ProfilePage extends Component {
                 <ErrorLabel title={photoErrors}/>
               </div>
               <input type="file" id="user-avatar" style={{display: 'none'}}
-                     onChange={({target: {files}}) => files[0] && updateUserPhoto({image: files[0]})}/>
-            </div>
+                     onChange={({target: {files}}) => files[0] && updateUserPhoto(user.id, {image: files[0]}, currentUser.id)}/>
+            </div>}
           </div>
           <div className={'info-container'}>
             <div className={'summary-tables-container profile-info-container'}>
@@ -66,6 +77,7 @@ class ProfilePage extends Component {
                   margin: 0.5 + 'rem'
                 }}/>{user.firstName + ' ' + user.lastName}
               </span>
+                  {(isStaff || user.id === currentUser.id) &&
                   <Icon
                     iconName={'Edit'}
                     style={{
@@ -75,25 +87,27 @@ class ProfilePage extends Component {
                       cursor: 'pointer'
                     }}
                     onClick={() => this.setState({showPanel: true})}
-                  />
+                  />}
                 </div>
                 <ProfileInfoLine text={user.username} iconName="Accounts"/>
                 <ProfileInfoLine text={new Date(user.dob || '').toDateString()} iconName="Cake"
                                  noneMessage="You can add birthday"/>
                 <ProfileInfoLine text={user.email} iconName="EditMail" noneMessage="You can add E-Mail"/>
               </div>
+              {(this._shouldShowElement()) &&
               <div className={'profile-description'}>
-            <span className={'table-title'}>
-              <Icon iconName={'ContactCard'}
-                    style={{
-                      fontSize: 1.5 + 'rem',
-                      margin: 0.5 + 'rem'
-                    }}/>
-              Summary
-              </span>
+                <span className={'table-title'}>
+                  <Icon iconName={'ContactCard'}
+                        style={{
+                          fontSize: 1.5 + 'rem',
+                          margin: 0.5 + 'rem'
+                        }}/>
+                  Summary
+                </span>
                 <p>{user.description || "Here will be your description"}</p>
-              </div>
+              </div>}
             </div>
+            {(this._shouldShowElement()) &&
             <div className={'summary-tables-container'}>
               <SummaryTable items={userSkills}
                             renderRow={({name, level, id}) =>
@@ -119,12 +133,17 @@ class ProfilePage extends Component {
                             title="Projects"
                             iconName="ProjectLogo32"
               />
-            </div>
+            </div>}
           </div>
         </div>
       </div>
     );
   }
+
+  _shouldShowElement = () => {
+    const {employee} = this.props;
+    return !employee.isStaff;
+  };
 
   _setShowPanel = (showPanel) => {
     return () => {
@@ -135,17 +154,20 @@ class ProfilePage extends Component {
 
 const numOfItemsToShowInSummaryTables = 5;
 
-const mapStateToProps = ({user, userSkills, userProjects, editUserPhotoLoading, editUserErrors: {image}}) => {
+const mapStateToProps = ({user, userSkills, userProjects, editUserPhotoLoading, editUserErrors: {image}, isStaff, employee}, {match: {params: {employeeId}}}) => {
   return {
     user,
+    employee,
+    employeeId,
+    isStaff,
     photoLoading: editUserPhotoLoading,
     photoErrors: image,
-    userSkills: userSkills && userSkills.sort((a, b) => a.level - b.level).slice(-numOfItemsToShowInSummaryTables).reverse().map(({skill: {name}, level, id}) => ({
+    userSkills: userSkills && userSkills.slice().sort((a, b) => a.level - b.level).slice(-numOfItemsToShowInSummaryTables).reverse().map(({skill: {name}, level, id}) => ({
       id,
       name,
       level
     })),
-    userProjects: userProjects && userProjects.sort((a, b) => a.durationMonths - b.durationMonths).slice(-numOfItemsToShowInSummaryTables).reverse().map(({project: {name}, durationMonths, id}) => ({
+    userProjects: userProjects && userProjects.slice().sort((a, b) => a.durationMonths - b.durationMonths).slice(-numOfItemsToShowInSummaryTables).reverse().map(({project: {name}, durationMonths, id}) => ({
       id,
       name,
       duration: durationMonths
@@ -155,10 +177,10 @@ const mapStateToProps = ({user, userSkills, userProjects, editUserPhotoLoading, 
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateUserPhoto: (user) => dispatch(updateUserPhoto(user)),
-    updateUser: (user) => dispatch(updateUser(user)),
+    updateUserPhoto: (userId, photo, currentUserId) => dispatch(updateUserPhoto(userId, photo, currentUserId)),
     getUserProjects: (userId) => dispatch(getUserProjects(userId)),
     getUserSkills: (userId) => dispatch(getUserSkills(userId)),
+    getEmployee: (userId) => dispatch(getEmployee(userId)),
   };
 };
 

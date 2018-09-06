@@ -6,6 +6,7 @@ export const IS_AUTHENTICATED = 'IS_AUTHENTICATED';
 export const SET_SKILL_MODAL = 'SET_SKILL_MODAL';
 export const SET_SCHOOL_MODAL = 'SET_SCHOOL_MODAL';
 export const SET_PROJECT_MODAL = 'SET_PROJECT_MODAL';
+export const IS_STAFF = 'IS_STAFF';
 
 //Set operations
 export const SET_USER = 'SET_USER';
@@ -15,6 +16,8 @@ export const SET_PROJECTS = 'SET_PROJECTS';
 export const SET_USER_PROJECTS = 'SET_USER_PROJECTS';
 export const SET_USER_SKILLS = 'SET_USER_SKILLS';
 export const SET_USER_SCHOOLS = 'SET_USER_SCHOOLS';
+export const SET_EMPLOYEES = 'SET_EMPLOYEES';
+export const SET_EMPLOYEE = 'SET_EMPLOYEE';
 
 //Loadings
 export const LOGIN_LOADING = 'LOGIN_LOADING';

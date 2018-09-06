@@ -243,4 +243,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export const Projects = connect(mapStateToProps, mapDispatchToProps)(ProjectsPage);
+export const EmployeeProjects = connect(mapStateToProps, mapDispatchToProps)(ProjectsPage);

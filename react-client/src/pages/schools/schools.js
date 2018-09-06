@@ -227,4 +227,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export const Schools = connect(mapStateToProps, mapDispatchToProps)(SchoolsPage);
+export const EmployeeSchools = connect(mapStateToProps, mapDispatchToProps)(SchoolsPage);

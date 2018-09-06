@@ -25,7 +25,7 @@ class UserFormComponent extends Component {
 
   render() {
     const {firstName, lastName, dob, username, email, description} = this.state;
-    const {errors, loading} = this.props;
+    const {errors, loading, id, isStaff, user} = this.props;
     return (
       <form className={'profile-edit-form'}>
         <TextField label="First name:"
@@ -68,6 +68,7 @@ class UserFormComponent extends Component {
                    placeholder="example@mail.com"
         />
         <br/>
+        {isStaff && id !== user.id &&
         <TextField label="Summary:" value={description}
                    onChange={(e) => this.setState({description: e.target.value})}
                    errorMessage={(errors.description || []).join('<br/>')}
@@ -76,9 +77,9 @@ class UserFormComponent extends Component {
                    multiline
                    rows={16}
                    resizable={false}
-        />
+        />}
         <PanelFooter onClose={this._onClose.bind(this)} loading={loading}
-                     onSave={() => this.props.updateUser({...this.state, dob: formatDate(dob)})}/>
+                     onSave={() => this.props.updateUser(id, {...this.state, dob: formatDate(dob)}, user.id)}/>
       </form>
     );
   }
@@ -89,8 +90,10 @@ class UserFormComponent extends Component {
   }
 }
 
-const mapStateToProps = ({user: {firstName, lastName, dob, username, email, description}, editUserErrors, editUserLoading, editUserState}) => {
+const mapStateToProps = ({user, editUserErrors, editUserLoading, editUserState, isStaff},{employee: {id, firstName, lastName, dob, username, email, description}}) => {
   return {
+    user,
+    id,
     firstName,
     lastName,
     dob,
@@ -99,13 +102,14 @@ const mapStateToProps = ({user: {firstName, lastName, dob, username, email, desc
     description,
     editUserState,
     errors: editUserErrors,
-    loading: editUserLoading
+    loading: editUserLoading,
+    isStaff
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateUser: (user) => dispatch(updateUser(user)),
+    updateUser: (userId, user, currentUserId) => dispatch(updateUser(userId, user, currentUserId)),
     removeErrors: () => dispatch(removeUserErrors())
   };
 };

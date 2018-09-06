@@ -237,4 +237,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export const Skills = connect(mapStateToProps, mapDispatchToProps)(SkillsPage);
+export const EmployeeSkills = connect(mapStateToProps, mapDispatchToProps)(SkillsPage);

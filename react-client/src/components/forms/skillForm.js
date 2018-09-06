@@ -21,7 +21,7 @@ class SkillFormComponent extends Component {
 
   _onFilterChange = (items) => {
     return (filterText) => {
-      return filterText ? items.filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
+      return filterText ? items.filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) : [];
     }
   };
 

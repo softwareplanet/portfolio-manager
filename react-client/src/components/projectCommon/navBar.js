@@ -9,10 +9,18 @@ const Link = ({url, history, title}) => {
   );
 };
 
-export const NavBar = ({history, sideBarOpened}) => {
+export const NavBar = ({history, sideBarOpened, isStaff, userId}) => {
 
   const employeeRoutes = [
-    {title: 'General', url: '/home/profile'},
+    {title: 'General', url: `/home/${userId}/profile`},
+    {title: 'Projects', url: `/home/${userId}/projects`},
+    {title: 'Skills', url: `/home/${userId}/skills`},
+    {title: 'Schools', url: `/home/${userId}/schools`},
+  ];
+
+  const staffRoutes = [
+    {title: 'General', url: `/home/${userId}/profile`},
+    {title: 'Employees', url: '/home/employees'},
     {title: 'Projects', url: '/home/projects'},
     {title: 'Skills', url: '/home/skills'},
     {title: 'Schools', url: '/home/schools'},
@@ -29,7 +37,7 @@ export const NavBar = ({history, sideBarOpened}) => {
           Profile
         </span>
         <ul className={'links-container'}>
-          {employeeRoutes.map((route, index) => <Link key={index} history={history} {...route}/>)}
+          {(isStaff ? staffRoutes : employeeRoutes).map((route, index) => <Link key={index} history={history} {...route}/>)}
         </ul>
       </div>
     </aside>
