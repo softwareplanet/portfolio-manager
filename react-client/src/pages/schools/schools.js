@@ -56,43 +56,44 @@ class SchoolsPage extends Component {
         return <span>{description}</span>;
       },
       isPadded: true
-    },
-    {
-      key: 'actions',
-      name: 'Actions',
-      fieldName: 'schools',
-      minWidth: 50,
-      maxWidth: 50,
-      onRender: (item) => {
-        return (<IconButton
-          style={{height: 'auto'}}
-          allowDisabledFocus={true}
-          menuIcon={{iconName: 'MoreVertical'}}
-          menuProps={{
-            items: [
-              {
-                key: 'edit',
-                text: 'Edit',
-                iconProps: {iconName: 'Edit', style: {color: '#000'}},
-                onClick: () => this.editSchool(item)
-              },
-              {
-                key: 'delete',
-                text: 'Delete',
-                iconProps: {iconName: 'Delete', style: {color: '#000'}},
-                onClick: () => this._openDeleteDialog(item)
-              }
-
-            ],
-            directionalHintFixed: true
-          }}
-          split={false}
-        />);
-      },
-      isPadded: true
     }
   ];
 
+  _actions = {
+    key: 'actions',
+    name: 'Actions',
+    fieldName: 'schools',
+    minWidth: 50,
+    maxWidth: 50,
+    onRender: (item) => {
+      return (<IconButton
+        style={{height: 'auto'}}
+        allowDisabledFocus={true}
+        menuIcon={{iconName: 'MoreVertical'}}
+        menuProps={{
+          items: [
+            {
+              key: 'edit',
+              text: 'Edit',
+              iconProps: {iconName: 'Edit', style: {color: '#000'}},
+              onClick: () => this.editSchool(item)
+            },
+            {
+              key: 'delete',
+              text: 'Delete',
+              iconProps: {iconName: 'Delete', style: {color: '#000'}},
+              onClick: () => this._openDeleteDialog(item)
+            }
+
+          ],
+          directionalHintFixed: true
+        }}
+        split={false}
+      />);
+    },
+    isPadded: true
+  };
+  
   state = {
     hideDialog: true,
     schoolToDelete: null,
@@ -107,6 +108,9 @@ class SchoolsPage extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
+    if (this.props.isStaff && this._columns.length === 2)
+      this._columns.push(this._actions);
+    
     const {schools} = this.props;
     if ((schools && nextProps.schools && (schools.length !== nextProps.schools.length))) {
       const {hideDialog} = this.state;

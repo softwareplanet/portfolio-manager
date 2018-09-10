@@ -151,3 +151,25 @@ class EmployeeSchoolSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = EmployeeSchool
         fields = ('id', 'startDate', 'durationYears', 'school', 'employeeId', 'schoolId')
+
+
+class EmployeeOnProjectSerializer(EmployeeProjectSerializer):
+    employeeName = serializers.SerializerMethodField(method_name='get_employee_name')
+
+    @staticmethod
+    def get_employee_name(obj):
+        return obj.employee_id.first_name + ' ' + obj.employee_id.last_name
+
+    class Meta(EmployeeProjectSerializer.Meta):
+        fields = EmployeeProjectSerializer.Meta.fields + ('employeeName', )
+
+
+class ExtendedProjectSerializer(ProjectSerializer):
+    team = serializers.SerializerMethodField(method_name='get_project_team')
+
+    @staticmethod
+    def get_project_team(obj):
+        return EmployeeOnProjectSerializer(EmployeeProject.objects.filter(project_id=obj.id), many=True).data
+
+    class Meta(ProjectSerializer.Meta):
+        fields = ProjectSerializer.Meta.fields + ('team', )

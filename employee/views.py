@@ -8,7 +8,7 @@ from employee.model_views import MultipleInstanceAPIView, SingleInstanceAPIView,
 from employee.models import Employee, Project, EmployeeProject, School, Skill, EmployeeSkill, EmployeeSchool
 from employee.permissions import IsAdminOrSelf
 from employee.serializers import EmployeeSerializer, ProjectSerializer, EmployeeProjectSerializer, SchoolSerializer, \
-    SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer
+    SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer, ExtendedProjectSerializer
 from employee.utils import Utils
 
 
@@ -43,7 +43,7 @@ class ListProjects(MultipleInstanceAPIView):
 
 
 class ListProject(SingleInstanceAPIView):
-    serializer = ProjectSerializer
+    serializer = ExtendedProjectSerializer
     model = Project
 
 

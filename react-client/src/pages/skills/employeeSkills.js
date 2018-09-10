@@ -92,42 +92,43 @@ class SkillsPage extends Component {
         return <span>{description}</span>;
       },
       isPadded: true
-    },
-    {
-      key: 'actions',
-      name: 'Actions',
-      fieldName: 'skills',
-      minWidth: 50,
-      maxWidth: 50,
-      onRender: (item) => {
-        return (<IconButton
-          style={{height: 'auto'}}
-          allowDisabledFocus={true}
-          menuIcon={{iconName: 'MoreVertical'}}
-          menuProps={{
-            items: [
-              {
-                key: 'edit',
-                text: 'Edit',
-                iconProps: {iconName: 'Edit', style: {color: '#000'}},
-                onClick: () => this.editSkill(item)
-              },
-              {
-                key: 'delete',
-                text: 'Delete',
-                iconProps: {iconName: 'Delete', style: {color: '#000'}},
-                onClick: () => this._openDeleteDialog(item)
-              }
-
-            ],
-            directionalHintFixed: true
-          }}
-          split={false}
-        />);
-      },
-      isPadded: true
     }
   ];
+
+  _actions = {
+    key: 'actions',
+    name: 'Actions',
+    fieldName: 'skills',
+    minWidth: 50,
+    maxWidth: 50,
+    onRender: (item) => {
+      return (<IconButton
+        style={{height: 'auto'}}
+        allowDisabledFocus={true}
+        menuIcon={{iconName: 'MoreVertical'}}
+        menuProps={{
+          items: [
+            {
+              key: 'edit',
+              text: 'Edit',
+              iconProps: {iconName: 'Edit', style: {color: '#000'}},
+              onClick: () => this.editSkill(item)
+            },
+            {
+              key: 'delete',
+              text: 'Delete',
+              iconProps: {iconName: 'Delete', style: {color: '#000'}},
+              onClick: () => this._openDeleteDialog(item)
+            }
+
+          ],
+          directionalHintFixed: true
+        }}
+        split={false}
+      />);
+    },
+    isPadded: true
+  };
 
   state = {
     showPanel: false,
@@ -147,6 +148,9 @@ class SkillsPage extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
+    if (((this.props.isStaff) || (this.props.employee && this.props.user && this.props.employee.id === this.props.user.id)) && (this._columns.length === 4))
+      this._columns.push(this._actions);
+
     const {userSkills, editUserSkillState} = this.props;
     if ((userSkills && nextProps.userSkills && (userSkills.length !== nextProps.userSkills.length)) ||
       ((editUserSkillState && this.state.skillToEdit) &&
@@ -155,20 +159,28 @@ class SkillsPage extends Component {
       !hideDialog && this._closeDialog();
       showPanel && this._setShowPanel(false)();
     }
+
+    const {getUserSkills, employeeId, getEmployee} = this.props;
+    const {employeeId: nextId} = nextProps;
+    if ((nextId !== employeeId)) {
+      getEmployee(nextId);
+      getUserSkills(nextId)
+    }
   }
 
   render() {
     const {skillToEdit, showPanel, hideDialog, skillToDelete} = this.state;
-    const {isStaff, employee} = this.props;
+    const {isStaff, employee, user} = this.props;
     return (
       <div className={'page-container'}>
         <span
           className={'page-title'}>{'Skills' + ((isStaff && (employee.firstName || employee.lastName)) ? ` of ${employee.firstName} ${employee.lastName}` : '')}</span>
         <div className={'add-button'}>
+          {(isStaff || ((employee && user) && employee.id === user.id)) &&
           <PrimaryButton
             text={'Add a Skill'}
             onClick={this._setShowPanel(true)}
-          />
+          />}
           <Panel
             isBlocking={false}
             isOpen={showPanel}
