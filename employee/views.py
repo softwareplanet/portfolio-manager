@@ -27,6 +27,15 @@ class ListEmployee(SingleInstanceAPIView):
     model = Employee
     permission_classes = (permissions.IsAuthenticated, IsAdminOrSelf)
 
+    def delete(self, request, model_id):
+        try:
+            model = self.model.objects.get(id=model_id)
+            model.is_active = False
+            model.save()
+            return Response({'id': model_id}, status.HTTP_200_OK)
+        except ObjectDoesNotExist as e:
+            return Utils.error_response(e.args, status.HTTP_404_NOT_FOUND)
+
 
 class ListProjects(MultipleInstanceAPIView):
     serializer = ProjectSerializer
