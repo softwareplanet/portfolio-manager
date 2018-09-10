@@ -155,13 +155,18 @@ class EmployeeSchoolSerializer(serializers.HyperlinkedModelSerializer):
 
 class EmployeeOnProjectSerializer(EmployeeProjectSerializer):
     employeeName = serializers.SerializerMethodField(method_name='get_employee_name')
+    employeeId = serializers.SerializerMethodField(method_name='get_employee_id')
 
     @staticmethod
     def get_employee_name(obj):
         return obj.employee_id.first_name + ' ' + obj.employee_id.last_name
 
+    @staticmethod
+    def get_employee_id(obj):
+        return obj.employee_id.id
+
     class Meta(EmployeeProjectSerializer.Meta):
-        fields = ('id', 'startDate', 'durationMonths', 'skills', 'description', 'employeeName')
+        fields = ('id', 'startDate', 'durationMonths', 'skills', 'description', 'employeeName', 'employeeId')
 
 
 class ExtendedProjectSerializer(ProjectSerializer):
@@ -177,13 +182,18 @@ class ExtendedProjectSerializer(ProjectSerializer):
 
 class EmployeeWithSkillSerializer(EmployeeSkillSerializer):
     employeeName = serializers.SerializerMethodField(method_name='get_employee_name')
+    employeeId = serializers.SerializerMethodField(method_name='get_employee_id')
 
     @staticmethod
     def get_employee_name(obj):
         return obj.employee_id.first_name + ' ' + obj.employee_id.last_name
 
+    @staticmethod
+    def get_employee_id(obj):
+        return obj.employee_id.id
+
     class Meta(EmployeeProjectSerializer.Meta):
-        fields = ('id', 'level', 'description', 'projectsCount', 'employeeName')
+        fields = ('id', 'level', 'description', 'projectsCount', 'employeeName', 'employeeId')
 
 
 class ExtendedSkillSerializer(SkillSerializer):
