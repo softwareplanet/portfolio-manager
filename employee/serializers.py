@@ -161,7 +161,7 @@ class EmployeeOnProjectSerializer(EmployeeProjectSerializer):
         return obj.employee_id.first_name + ' ' + obj.employee_id.last_name
 
     class Meta(EmployeeProjectSerializer.Meta):
-        fields = EmployeeProjectSerializer.Meta.fields + ('employeeName', )
+        fields = ('id', 'startDate', 'durationMonths', 'skills', 'description', 'employeeName')
 
 
 class ExtendedProjectSerializer(ProjectSerializer):
