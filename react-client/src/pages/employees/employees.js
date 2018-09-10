@@ -11,7 +11,7 @@ import {
   PrimaryButton,
   SelectionMode
 } from "office-ui-fabric-react";
-import {getEmployees} from "../../actions/user";
+import {disableEmployee, getEmployees} from "../../actions/user";
 
 class EmployeesPage extends Component {
 
@@ -81,24 +81,35 @@ class EmployeesPage extends Component {
           style={{height: 'auto'}}
           allowDisabledFocus={true}
           menuIcon={{iconName: 'MoreVertical'}}
-          menuProps={{
-            items: [
-              {
-                key: 'open',
-                text: 'Open profile',
-                iconProps: {iconName: 'Contact', style: {color: '#000'}},
-                onClick: () => this._openEmployeeProfile(item.id)
-              },
-              {
-                key: 'delete',
-                text: 'Disable',
-                iconProps: {iconName: 'Delete', style: {color: '#000'}},
-                onClick: () => this._openDeleteDialog(item)
-              }
-
-            ],
-            directionalHintFixed: true
-          }}
+          menuProps={this.props.isStaff ? {
+              items: [
+                {
+                  key: 'open',
+                  text: 'Open profile',
+                  iconProps: {iconName: 'Contact', style: {color: '#000'}},
+                  onClick: () => this._openEmployeeProfile(item.id)
+                },
+                {
+                  key: 'delete',
+                  text: 'Disable',
+                  iconProps: {iconName: 'Delete', style: {color: '#000'}},
+                  onClick: () => this._openDeleteDialog(item)
+                }
+              ],
+              directionalHintFixed: true
+            } :
+            {
+              items: [
+                {
+                  key: 'open',
+                  text: 'Open profile',
+                  iconProps: {iconName: 'Contact', style: {color: '#000'}},
+                  onClick: () => this._openEmployeeProfile(item.id)
+                }
+              ],
+              directionalHintFixed: true
+            }
+          }
           split={false}
         />);
       },
@@ -107,7 +118,6 @@ class EmployeesPage extends Component {
   ];
 
   state = {
-    showPanel: false,
     hideDialog: true,
     employeeToDelete: null
   };
@@ -120,13 +130,10 @@ class EmployeesPage extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    const {userSchools, editUserSchoolState} = this.props;
-    if ((userSchools && nextProps.userSchools && (userSchools.length !== nextProps.userSchools.length)) ||
-      ((editUserSchoolState && this.state.schoolToEdit) &&
-        (editUserSchoolState === this.state.schoolToEdit.id))) {
-      const {showPanel, hideDialog} = this.state;
+    const {employees} = this.props;
+    if ((employees && nextProps.employees && (employees.length !== nextProps.employees.length))) {
+      const {hideDialog} = this.state;
       !hideDialog && this._closeDialog();
-      showPanel && this._setShowPanel(false)();
     }
   }
 
@@ -174,8 +181,8 @@ class EmployeesPage extends Component {
     );
   }
 
-  deleteEmployee = () => {
-
+  deleteEmployee = (employeeId) => {
+    this.props.disableEmployee(employeeId);
   };
 
   _closeDialog = () => {
@@ -185,21 +192,16 @@ class EmployeesPage extends Component {
   _openEmployeeProfile = (employeeId) => {
     this.props.history.push(`./${employeeId}/profile`);
   };
-
-  _setShowPanel = (showPanel) => {
-    return () => {
-      this.setState({showPanel});
-    };
-  };
 }
 
-const mapStateToProps = ({user, employees}) => {
-  return {user, employees};
+const mapStateToProps = ({user, employees, isStaff}) => {
+  return {user, employees, isStaff};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getEmployees: () => dispatch(getEmployees())
+    getEmployees: () => dispatch(getEmployees()),
+    disableEmployee: (employeeId) => dispatch(disableEmployee(employeeId))
   };
 };
 
