@@ -173,3 +173,25 @@ class ExtendedProjectSerializer(ProjectSerializer):
 
     class Meta(ProjectSerializer.Meta):
         fields = ProjectSerializer.Meta.fields + ('team', )
+
+
+class EmployeeWithSkillSerializer(EmployeeSkillSerializer):
+    employeeName = serializers.SerializerMethodField(method_name='get_employee_name')
+
+    @staticmethod
+    def get_employee_name(obj):
+        return obj.employee_id.first_name + ' ' + obj.employee_id.last_name
+
+    class Meta(EmployeeProjectSerializer.Meta):
+        fields = ('id', 'level', 'description', 'projectsCount', 'employeeName')
+
+
+class ExtendedSkillSerializer(SkillSerializer):
+    employees = serializers.SerializerMethodField(method_name='get_employees_with_skill', read_only=True)
+
+    @staticmethod
+    def get_employees_with_skill(obj):
+        return EmployeeWithSkillSerializer(EmployeeSkill.objects.filter(skill_id=obj.id), many=True).data
+
+    class Meta(SkillSerializer.Meta):
+        fields = SkillSerializer.Meta.fields + ('employees', )
