@@ -1,12 +1,27 @@
-import {ADD_PROJECT, CREATE_PROJECT_ERRORS, NEW_PROJECT_LOADING, SET_PROJECTS} from "../actions/actionTypes";
+import {
+  ADD_PROJECT,
+  CHANGE_PROJECT,
+  CREATE_PROJECT_ERRORS,
+  DELETE_PROJECT,
+  NEW_PROJECT_LOADING,
+  SET_PROJECTS
+} from "../actions/actionTypes";
 
-export const projects = (state = [], action) => {
+export const projects = (state = null, action) => {
   switch (action.type) {
     case SET_PROJECTS:
       return action.payload;
 
     case ADD_PROJECT:
       return [...state, action.payload];
+
+    case DELETE_PROJECT:
+      return state.filter(project => project.id !== action.payload.id);
+
+    case CHANGE_PROJECT: {
+      const indexOfProject = state.findIndex(({id}) => id === action.payload.id);
+      return [...state.slice(0, indexOfProject), action.payload, ...state.slice(indexOfProject + 1)];
+    }
 
     default:
       return state;

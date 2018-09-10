@@ -1,4 +1,5 @@
 import {
+  SUCCESSFUL_EDIT_PROJECT,
   SUCCESSFUL_EDIT_USER,
   SUCCESSFUL_EDIT_USER_PROJECT,
   SUCCESSFUL_EDIT_USER_SCHOOL,
@@ -12,6 +13,16 @@ export const editUserProjectState = (state = null, action) => {
 
     default:
       return state;
+  }
+};
+
+export const editProjectState = (state = null, action) => {
+  switch (action.type) {
+    case SUCCESSFUL_EDIT_PROJECT:
+      return action.payload;
+
+    default:
+      return null;
   }
 };
 

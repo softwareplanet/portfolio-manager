@@ -1,4 +1,4 @@
-import {SET_PROJECT_MODAL, SET_SKILL_MODAL, SET_SCHOOL_MODAL} from "./actionTypes";
+import {SET_PROJECT_MODAL, SET_SCHOOL_MODAL, SET_SKILL_MODAL} from "./actionTypes";
 
 export const setProjectModal = (modalState = false) => {
   return {

@@ -7,7 +7,13 @@ import {sideBarOpened} from "./sidebar";
 import {createProjectErrors, newProjectLoading, projects} from "./projects";
 import {createSkillErrors, newSkillLoading, skills} from "./skills";
 import {projectModal, schoolModal, skillModal} from "./modals";
-import {editUserProjectState, editUserSchoolState, editUserSkillState, editUserState} from "./editUserInstanceState";
+import {
+  editProjectState,
+  editUserProjectState,
+  editUserSchoolState,
+  editUserSkillState,
+  editUserState
+} from "./editUserInstanceState";
 import {createUserSkillErrors, newUserSkillLoading, userSkills} from "./userSkills";
 import {createSchoolErrors, newSchoolLoading, schools} from "./schools";
 import {createUserSchoolErrors, newUserSchoolLoading, userSchools} from "./userSchools";
@@ -53,6 +59,7 @@ export default combineReducers({
   editUserErrors,
 
   editUserProjectState,
+  editProjectState,
   editUserSkillState,
   editUserSchoolState,
   editUserState,

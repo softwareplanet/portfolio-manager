@@ -1,29 +1,32 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {CreateProjectModal, Loader} from "../../components";
+import {Loader, ProjectsForm} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
+import {deleteUserProject, getUserProjects} from "../../actions/userProjects";
 import {
   DefaultButton,
   Dialog,
   DialogFooter,
   DialogType,
   IconButton,
+  Panel,
+  PanelType,
   PrimaryButton,
   SelectionMode
 } from "office-ui-fabric-react";
-import {deleteProject, getProjects} from "../../actions/projects";
-import {setProjectModal} from "../../actions/modals";
+import {getProjects} from "../../actions/projects";
+import {getSkills} from "../../actions/skills";
+import {getEmployee} from "../../actions/user";
 
 class ProjectsPage extends Component {
 
   editProject(project) {
-    this.props.createProject();
-    this.setState({projectToEdit: project})
+    this.setState({projectToEdit: project, showPanel: true})
   }
 
   deleteProject(projectId) {
-    const {deleteProject} = this.props;
-    deleteProject(projectId);
+    const {employee, deleteProject} = this.props;
+    deleteProject(employee.id, projectId);
   }
 
   _openDeleteDialog(project) {
@@ -32,16 +35,16 @@ class ProjectsPage extends Component {
 
   _columns = [
     {
-      key: 'name',
+      key: 'projectName',
       name: 'Project Name',
-      fieldName: 'name',
+      fieldName: 'project.name',
       minWidth: 110,
       maxWidth: 250,
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({name}) => {
-        return <span>{name}</span>;
+      onRender: ({project}) => {
+        return <span>{project.name}</span>;
       },
     },
     {
@@ -61,7 +64,7 @@ class ProjectsPage extends Component {
       name: 'Duration',
       fieldName: 'durationMonths',
       minWidth: 30,
-      maxWidth: 65,
+      maxWidth: 55,
       data: 'string',
       onRender: ({durationMonths}) => {
         return <span>{durationMonths + ` Month${durationMonths > 1 ? 's' : ''}`}</span>;
@@ -70,7 +73,7 @@ class ProjectsPage extends Component {
     },
     {
       key: 'description',
-      name: 'Description',
+      name: 'Role on project',
       fieldName: 'description',
       minWidth: 110,
       maxWidth: 250,
@@ -81,15 +84,15 @@ class ProjectsPage extends Component {
       },
     },
     {
-      key: 'url',
-      name: 'Link',
-      fieldName: 'url',
+      key: 'skills',
+      name: 'Skills',
+      fieldName: 'skills',
       minWidth: 150,
       maxWidth: 350,
       isResizable: true,
       data: 'string',
-      onRender: ({url}) => {
-        return <span>{url}</span>;
+      onRender: ({skills}) => {
+        return <span>{skills.map((skill) => skill.name).join(', ')}</span>;
       },
       isPadded: true
     },
@@ -130,65 +133,87 @@ class ProjectsPage extends Component {
   ];
 
   state = {
+    showPanel: false,
     hideDialog: true,
     projectToDelete: null,
     projectToEdit: null
   };
 
   componentDidMount() {
-    const {user, getProjects} = this.props;
+    const {user, getUserProjects, projects, skills, getProjects, getSkills, employeeId, getEmployee} = this.props;
     if (user) {
-      getProjects();
+      getEmployee(employeeId);
+      getUserProjects(employeeId);
+      if (!projects)
+        getProjects();
+      if (!skills)
+        getSkills();
     }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    const {projects} = this.props;
-    if (projects && nextProps.projects && (projects.length !== nextProps.projects.length)) {
-      const {hideDialog} = this.state;
+    const {userProjects, editUserProjectState} = this.props;
+    if ((userProjects && nextProps.userProjects && (userProjects.length !== nextProps.userProjects.length)) ||
+      ((editUserProjectState && this.state.projectToEdit) &&
+        (editUserProjectState === this.state.projectToEdit.id))) {
+      const {showPanel, hideDialog} = this.state;
       !hideDialog && this._closeDialog();
+      showPanel && this._setShowPanel(false)();
     }
-    if (!nextProps.projectModal) this.setState({projectToEdit: null});
+
+    const {getUserProjects, employeeId, getEmployee} = this.props;
+    const {employeeId: nextId} = nextProps;
+    if ((nextId !== employeeId)) {
+      getEmployee(nextId);
+      getUserProjects(nextId);
+    }
   }
 
-  _openCreateModal = () => {
-    const {createProject} = this.props;
-    createProject();
-  };
-
   render() {
-    const {projectToEdit, hideDialog, projectToDelete} = this.state;
-
+    const {projectToEdit, showPanel, hideDialog, projectToDelete} = this.state;
+    const {isStaff, employee} = this.props;
     return (
       <div className={'page-container'}>
-        <CreateProjectModal project={projectToEdit}/>
-        <span className={'page-title'}>Projects</span>
+        <span
+          className={'page-title'}>{'Projects' + ((isStaff && (employee.firstName || employee.lastName)) ? ` of ${employee.firstName} ${employee.lastName}` : '')}</span>
         <div className={'add-button'}>
           <PrimaryButton
             text={'Add a Project'}
-            onClick={this._openCreateModal}
+            onClick={this._setShowPanel(true)}
           />
+          <Panel
+            isBlocking={false}
+            isOpen={showPanel}
+            onDismiss={this._setShowPanel(false)}
+            type={PanelType.smallFixedFar}
+            headerText={!projectToEdit ? 'Add a Project' : 'Edit a project'}
+            hasCloseButton={false}
+          >
+            <ProjectsForm onClose={this._setShowPanel(false)} userProject={projectToEdit}/>
+          </Panel>
         </div>
         {
-          this.props.projects ?
+          this.props.userProjects ?
             <DetailsList
-              items={this.props.projects}
+              items={this.props.userProjects}
               columns={this._columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
             /> :
-            <Loader title="Loading projects..."/>
+            <Loader title="Loading your projects..."/>
         }
         <Dialog
           hidden={hideDialog}
           onDismiss={this._closeDialog}
           dialogContentProps={{
             type: DialogType.normal,
-            title: `Delete project ${projectToDelete && projectToDelete.name}`,
+            title: `Delete project ${projectToDelete && projectToDelete.project.name}`,
             subText:
-              'This can not be undone. This project will be deleted for all employees.'
+              'This can not be undone. Your skills from this project would not be affected.'
           }}
           modalProps={{
+            titleAriaId: 'myLabelId',
+            subtitleAriaId: 'mySubTextId',
             isBlocking: false
           }}
         >
@@ -216,16 +241,18 @@ class ProjectsPage extends Component {
   };
 }
 
-const mapStateToProps = ({user, projects, isStaff, projectModal}) => {
-  return {user, projects, isStaff, projectModal};
+const mapStateToProps = ({user, userProjects, projects, skills, editUserProjectState, employee, isStaff}, {match: {params: {employeeId}}}) => {
+  return {user, userProjects, projects, skills, editUserProjectState, employeeId, employee, isStaff};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getUserProjects: (userId) => dispatch(getUserProjects(userId)),
     getProjects: () => dispatch(getProjects()),
-    deleteProject: (userId, projectId) => dispatch(deleteProject(userId, projectId)),
-    createProject: () => dispatch(setProjectModal(true)),
+    getSkills: () => dispatch(getSkills()),
+    deleteProject: (userId, projectId) => dispatch(deleteUserProject(userId, projectId)),
+    getEmployee: (userId) => dispatch(getEmployee(userId)),
   };
 };
 
-export const Projects = connect(mapStateToProps, mapDispatchToProps)(ProjectsPage);
+export const EmployeeProjects = connect(mapStateToProps, mapDispatchToProps)(ProjectsPage);

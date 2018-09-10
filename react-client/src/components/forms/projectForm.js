@@ -16,9 +16,6 @@ class DocumentPicker extends BasePickerListBelow {
 
 class ProjectFormComponent extends Component {
 
-  projectsInput = React.createRef();
-  skillsInput = React.createRef();
-
   state = {
     startDate: new Date(),
     duration: '',
@@ -72,7 +69,6 @@ class ProjectFormComponent extends Component {
         <Label>Name</Label>
         <TagPicker
           onChange={this._onChange(selectedProject, 'selectedProject')}
-          componentRef={this.projectsInput}
           items={projects}
           getTextFromItem={({name}) => name}
           onResolveSuggestions={this._onFilterChange(projects)}
@@ -119,7 +115,6 @@ class ProjectFormComponent extends Component {
         <Label>Skills</Label>
         <DocumentPicker
           onRenderSuggestionsItem={SuggestionsItem}
-          componentRef={this.skillsInput}
           items={skills}
           getTextFromItem={({name}) => name}
           onResolveSuggestions={this._onFilterChange(skills)}
@@ -171,7 +166,7 @@ class ProjectFormComponent extends Component {
   }
 }
 
-const mapStateToProps = ({user, skills, projects, newUserProjectLoading, createUserProjectErrors}) => {
+const mapStateToProps = ({employee: user, skills = [], projects = [], newUserProjectLoading, createUserProjectErrors}) => {
   return {user, skills, projects, loading: newUserProjectLoading, errors: createUserProjectErrors};
 };
 
