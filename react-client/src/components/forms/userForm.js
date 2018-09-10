@@ -90,7 +90,7 @@ class UserFormComponent extends Component {
   }
 }
 
-const mapStateToProps = ({user, editUserErrors, editUserLoading, editUserState, isStaff},{employee: {id, firstName, lastName, dob, username, email, description}}) => {
+const mapStateToProps = ({user, editUserErrors, editUserLoading, editUserState, isStaff}, {employee: {id, firstName, lastName, dob, username, email, description}}) => {
   return {
     user,
     id,

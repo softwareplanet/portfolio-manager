@@ -3,7 +3,10 @@ import {
   EDIT_USER_LOADING,
   EDIT_USER_PHOTO_LOADING,
   IS_STAFF,
-  REMOVE_USER_ERRORS, SET_EMPLOYEE, SET_EMPLOYEES,
+  REMOVE_EMPLOYEE,
+  REMOVE_USER_ERRORS,
+  SET_EMPLOYEE,
+  SET_EMPLOYEES,
   SET_USER,
   SUCCESSFUL_EDIT_USER
 } from "./actionTypes";
@@ -65,10 +68,26 @@ export const setEmployee = (employees = null) => {
   };
 };
 
+export const removeEmployee = (employeeId = null) => {
+  return {
+    type: REMOVE_EMPLOYEE,
+    payload: employeeId
+  };
+};
+
 export const isStaff = (bool = false) => {
   return {
     type: IS_STAFF,
     payload: bool
+  }
+};
+
+export const disableEmployee = (employeeId) => {
+  return (dispatch) => {
+    axios.delete(`/api/v1/employee/${employeeId}`)
+      .then(res => {
+        dispatch(removeEmployee(res.data));
+      })
   }
 };
 

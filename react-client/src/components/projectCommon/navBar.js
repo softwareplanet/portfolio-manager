@@ -37,7 +37,8 @@ export const NavBar = ({history, sideBarOpened, isStaff, userId}) => {
           Profile
         </span>
         <ul className={'links-container'}>
-          {(isStaff ? staffRoutes : employeeRoutes).map((route, index) => <Link key={index} history={history} {...route}/>)}
+          {(isStaff ? staffRoutes : employeeRoutes).map((route, index) => <Link key={index}
+                                                                                history={history} {...route}/>)}
         </ul>
       </div>
     </aside>
