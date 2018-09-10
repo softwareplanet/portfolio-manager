@@ -1,31 +1,29 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader, SkillsForm} from "../../components";
+import {CreateSkillModal, Loader} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
-import {deleteUserSkill, getUserSkills} from "../../actions/userSkills";
 import {
   DefaultButton,
   Dialog,
   DialogFooter,
   DialogType,
   IconButton,
-  Panel,
-  PanelType,
   PrimaryButton,
-  Rating,
   SelectionMode
 } from "office-ui-fabric-react";
-import {getSkills} from "../../actions/skills";
+import {deleteSkill, getSkills} from "../../actions/skills";
+import {setSkillModal} from "../../actions/modals";
 
 class SkillsPage extends Component {
 
   editSkill(skill) {
-    this.setState({skillToEdit: skill, showPanel: true})
+    this.props.createSkill();
+    this.setState({skillToEdit: skill})
   }
 
   deleteSkill(skillId) {
-    const {user, deleteSkill} = this.props;
-    deleteSkill(user.id, skillId);
+    const {deleteSkill} = this.props;
+    deleteSkill(skillId);
   }
 
   _openDeleteDialog(skill) {
@@ -38,59 +36,27 @@ class SkillsPage extends Component {
       name: 'Skill Name',
       fieldName: 'skill.name',
       minWidth: 210,
-      maxWidth: 350,
+      maxWidth: 450,
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({skill}) => {
-        return <span>{skill.name}</span>;
+      onRender: ({name}) => {
+        return <span>{name}</span>;
       },
     },
     {
-      key: 'level',
-      name: 'Level',
-      fieldName: 'level',
-      minWidth: 70,
-      maxWidth: 100,
-      isResizable: true,
-      isPadded: true,
-      onRender: ({level}) => {
-        return (<div>
-          <Rating
-            id={'readOnlyRatingStar'}
-            min={1}
-            max={5}
-            rating={level}
-            readOnly={true}
-          />
-        </div>);
-      },
-    },{
-      key: 'projectsCount',
+      key: 'url',
       name: 'No. of projects',
       fieldName: 'projectsCount',
-      minWidth: 40,
-      maxWidth: 60,
+      minWidth: 90,
+      maxWidth: 460,
       isResizable: false,
       isPadded: true,
-      onRender: ({projectsCount}) => {
-        return (<div style={{textAlign: 'center'}}>
-          {projectsCount}
+      onRender: ({url}) => {
+        return (<div>
+          {url}
         </div>);
       },
-    },
-    {
-      key: 'description',
-      name: 'Description',
-      fieldName: 'description',
-      minWidth: 150,
-      maxWidth: 350,
-      isResizable: true,
-      data: 'string',
-      onRender: ({description}) => {
-        return <span>{description}</span>;
-      },
-      isPadded: true
     },
     {
       key: 'actions',
@@ -129,57 +95,43 @@ class SkillsPage extends Component {
   ];
 
   state = {
-    showPanel: false,
     hideDialog: true,
     skillToDelete: null,
     skillToEdit: null
   };
 
   componentDidMount() {
-    const {user, getUserSkills, skills, getSkills} = this.props;
+    const {user, getSkills} = this.props;
     if (user) {
-      getUserSkills(user.id);
-      if (skills.length === 0)
-        getSkills();
+      getSkills();
     }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    const {userSkills, editUserSkillState} = this.props;
-    if ((userSkills && nextProps.userSkills && (userSkills.length !== nextProps.userSkills.length)) ||
-      ((editUserSkillState && this.state.skillToEdit) &&
-        (editUserSkillState === this.state.skillToEdit.id))) {
-      const {showPanel, hideDialog} = this.state;
+    const {skills} = this.props;
+    if (skills && nextProps.skills && (skills.length !== nextProps.skills.length)) {
+      const {hideDialog} = this.state;
       !hideDialog && this._closeDialog();
-      showPanel && this._setShowPanel(false)();
     }
+    if (!nextProps.skillModal) this.setState({skillToEdit: null});
   }
 
   render() {
-    const {skillToEdit, showPanel, hideDialog, skillToDelete} = this.state;
+    const {skillToEdit, hideDialog, skillToDelete} = this.state;
     return (
       <div className={'page-container'}>
+        <CreateSkillModal skill={skillToEdit}/>
         <span className={'page-title'}>Skills</span>
         <div className={'add-button'}>
           <PrimaryButton
             text={'Add a Skill'}
-            onClick={this._setShowPanel(true)}
+            onClick={this.props.createSkill}
           />
-          <Panel
-            isBlocking={false}
-            isOpen={showPanel}
-            onDismiss={this._setShowPanel(false)}
-            type={PanelType.smallFixedFar}
-            headerText={skillToEdit ? 'Add a Skill' : 'Edit a skill'}
-            hasCloseButton={false}
-          >
-            <SkillsForm onClose={this._setShowPanel(false)} userSkill={skillToEdit}/>
-          </Panel>
         </div>
         {
-          this.props.userSkills ?
+          this.props.skills ?
             <DetailsList
-              items={this.props.userSkills}
+              items={this.props.skills}
               columns={this._columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
@@ -191,9 +143,9 @@ class SkillsPage extends Component {
           onDismiss={this._closeDialog}
           dialogContentProps={{
             type: DialogType.normal,
-            title: `Delete skill ${skillToDelete && skillToDelete.skill.name}`,
+            title: `Delete skill ${skillToDelete && skillToDelete.name}`,
             subText:
-              'This can not be undone. Your this skill will be deleted from all your projects.'
+              'This can not be undone. This skill will be deleted for all employees.'
           }}
           modalProps={{
             titleAriaId: 'myLabelId',
@@ -217,24 +169,18 @@ class SkillsPage extends Component {
   _closeDialog = () => {
     this.setState({hideDialog: true});
   };
-
-  _setShowPanel = (showPanel) => {
-    return () => {
-      this.setState({skillToEdit: null, showPanel});
-    };
-  };
 }
 
-const mapStateToProps = ({user, userSkills, skills, editUserSkillState}) => {
-  return {user, userSkills, skills, editUserSkillState};
+const mapStateToProps = ({user, skills, isStaff, skillModal}) => {
+  return {user, skills, isStaff, skillModal};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUserSkills: (userId) => dispatch(getUserSkills(userId)),
     getSkills: () => dispatch(getSkills()),
-    deleteSkill: (userId, skillId) => dispatch(deleteUserSkill(userId, skillId))
+    deleteSkill: (userId, skillId) => dispatch(deleteSkill(userId, skillId)),
+    createSkill: () => dispatch(setSkillModal(true))
   };
 };
 
-export const EmployeeSkills = connect(mapStateToProps, mapDispatchToProps)(SkillsPage);
+export const Skills = connect(mapStateToProps, mapDispatchToProps)(SkillsPage);

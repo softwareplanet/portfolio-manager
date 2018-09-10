@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {ActionButton, Modal, PrimaryButton, Spinner, SpinnerSize, TextField} from "office-ui-fabric-react";
 import {connect} from "react-redux";
 import {setSkillModal} from "../../actions/modals";
-import {createSkill} from "../../actions/skills";
+import {createSkill, editSkill} from "../../actions/skills";
 
 class CreateSkill extends Component {
 
@@ -13,15 +13,16 @@ class CreateSkill extends Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (!nextProps.opened) {
-      this.setState({
-        name: '',
-        url: ''
-      })
+      this.setState({name: '', url: ''})
     }
+    if (nextProps.skill && !nextProps.loading) {
+      this.setState({...nextProps.skill});
+    }
+    if (!nextProps.skill) this.setState({name: '', url: ''});
   }
 
   render() {
-    const {opened, closeModal, loading, createSkill, errors} = this.props;
+    const {opened, closeModal, loading, createSkill, errors, skill, editSkill} = this.props;
     const {name, url} = this.state;
     return (
       <Modal
@@ -33,7 +34,9 @@ class CreateSkill extends Component {
         <span className={'modal-header'}>Create new skill</span>
         <form onSubmit={(e) => {
           e.preventDefault();
-          createSkill({name, url});
+          !skill ?
+            createSkill({name, url}) :
+            editSkill({name, url, id: skill.id});
         }}>
           <TextField label="Name:" value={name}
                      onChange={(e) => this.setState({name: e.target.value})}
@@ -46,6 +49,7 @@ class CreateSkill extends Component {
                      placeholder="Link to technology page"
                      errorMessage={(errors.url || errors.non_field_errors || []).join('<br/>')}
                      isRequired={true}
+                     style={{width: 15 + 'rem'}}
           />
           <div className={'button-group-right'}>
             <div>
@@ -55,7 +59,7 @@ class CreateSkill extends Component {
               </ActionButton>
             </div>
             <PrimaryButton type="submit">
-              {loading ? <Spinner size={SpinnerSize.medium} ariaLive="assertive"/> : 'Create'}
+              {loading ? <Spinner size={SpinnerSize.medium} ariaLive="assertive"/> : skill ? 'Save' : 'Create'}
             </PrimaryButton>
           </div>
         </form>
@@ -75,7 +79,8 @@ const mapStateToProps = ({skillModal, newSkillLoading, createSkillErrors}) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     closeModal: () => dispatch(setSkillModal(false)),
-    createSkill: (skill) => dispatch(createSkill(skill))
+    createSkill: (skill) => dispatch(createSkill(skill)),
+    editSkill: (skill) => dispatch(editSkill(skill))
   };
 };
 export const CreateSkillModal = connect(mapStateToProps, mapDispatchToProps)(CreateSkill);

@@ -1,4 +1,12 @@
-import {ADD_SKILL, CREATE_SKILL_ERRORS, NEW_SKILL_LOADING, SET_SKILLS} from "./actionTypes";
+import {
+  ADD_SKILL,
+  CHANGE_SKILL,
+  CREATE_SKILL_ERRORS,
+  DELETE_SKILL,
+  NEW_SKILL_LOADING,
+  SET_SKILLS,
+  SUCCESSFUL_EDIT_SKILL
+} from "./actionTypes";
 import axios from "axios";
 import {setSkillModal} from "./modals";
 import {retryRequest} from "../service/utils";
@@ -54,5 +62,50 @@ export const createSkill = (skill) => {
       }).finally(() => {
       dispatch(newSkillLoading(false));
     })
+  }
+};
+
+export const removeSkill = (skill) => {
+  return {
+    type: DELETE_SKILL,
+    payload: skill
+  }
+};
+
+export const deleteSkill = (skillId) => {
+  return (dispatch) => {
+    axios.delete(`/api/v1/skill/${skillId}`)
+      .then(res => {
+        dispatch(removeSkill(res.data))
+      })
+  }
+};
+
+export const successfulEditSkill = (skillId) => {
+  return {
+    type: SUCCESSFUL_EDIT_SKILL,
+    payload: skillId
+  };
+};
+
+export const changeSkill = (skill) => {
+  return {
+    type: CHANGE_SKILL,
+    payload: skill
+  }
+};
+
+export const editSkill = (skill) => {
+  return (dispatch) => {
+    dispatch(newSkillLoading(true));
+    axios.patch(`/api/v1/skill/${skill.id}`, skill)
+      .then(res => {
+        dispatch(setSkillModal(false));
+        dispatch(changeSkill(res.data))
+      }).catch(errors => {
+      dispatch(createSkillErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+    }).finally(() => {
+      dispatch(newSkillLoading(false));
+    });
   }
 };

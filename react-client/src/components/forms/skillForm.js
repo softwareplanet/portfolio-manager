@@ -56,7 +56,7 @@ class SkillFormComponent extends Component {
   );
 
   render() {
-    const {skills, createSkill, loading, errors} = this.props;
+    const {createSkill, loading, errors, skills} = this.props;
     const {selectedSkill, edit, description, level} = this.state;
     return (
       <div>
@@ -144,7 +144,7 @@ class SkillFormComponent extends Component {
   }
 }
 
-const mapStateToProps = ({user, skills, newUserSkillLoading, createUserSkillErrors}) => {
+const mapStateToProps = ({employee: user, skills = [], newUserSkillLoading, createUserSkillErrors}) => {
   return {user, skills, loading: newUserSkillLoading, errors: createUserSkillErrors};
 };
 
