@@ -1,8 +1,12 @@
 import {
   EDIT_USER_ERRORS,
   EDIT_USER_LOADING,
-  EDIT_USER_PHOTO_LOADING, IS_STAFF,
-  REMOVE_USER_ERRORS, SET_EMPLOYEE, SET_EMPLOYEES,
+  EDIT_USER_PHOTO_LOADING,
+  IS_STAFF,
+  REMOVE_EMPLOYEE,
+  REMOVE_USER_ERRORS,
+  SET_EMPLOYEE,
+  SET_EMPLOYEES,
   SET_USER
 } from "../actions/actionTypes";
 
@@ -16,17 +20,21 @@ export const user = (state = null, action) => {
   }
 };
 
-export const employees = (state = [], action) => {
+export const employees = (state = null, action) => {
   switch (action.type) {
     case SET_EMPLOYEES:
       return action.payload;
+
+    case REMOVE_EMPLOYEE: {
+      return state.filter(({id}) => id !== action.payload.id);
+    }
 
     default:
       return state;
   }
 };
 
-export const employee = (state = [], action) => {
+export const employee = (state = {}, action) => {
   switch (action.type) {
     case SET_EMPLOYEE:
       return action.payload;

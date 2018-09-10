@@ -122,6 +122,7 @@ class ProfilePage extends Component {
                               </tr>}
                             title="Skills"
                             iconName="UserEvent"
+                            onTitleClick={() => this.props.history.push(`/home/${user.id}/skills`)}
               />
               <SummaryTable items={userProjects}
                             renderRow={({name, duration, id}) =>
@@ -132,6 +133,7 @@ class ProfilePage extends Component {
                               </tr>}
                             title="Projects"
                             iconName="ProjectLogo32"
+                            onTitleClick={() => this.props.history.push(`/home/${user.id}/projects`)}
               />
             </div>}
           </div>
