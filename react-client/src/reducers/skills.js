@@ -4,6 +4,7 @@ import {
   CREATE_SKILL_ERRORS,
   DELETE_SKILL,
   NEW_SKILL_LOADING,
+  SET_SKILL,
   SET_SKILLS
 } from "../actions/actionTypes";
 
@@ -22,6 +23,16 @@ export const skills = (state = null, action) => {
       const indexOfSkill = state.findIndex(({id}) => id === action.payload.id);
       return [...state.slice(0, indexOfSkill), action.payload, ...state.slice(indexOfSkill + 1)];
     }
+
+    default:
+      return state;
+  }
+};
+
+export const skill = (state = {}, action) => {
+  switch (action.type) {
+    case SET_SKILL:
+      return action.payload;
 
     default:
       return state;
