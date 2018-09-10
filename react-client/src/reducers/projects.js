@@ -4,6 +4,7 @@ import {
   CREATE_PROJECT_ERRORS,
   DELETE_PROJECT,
   NEW_PROJECT_LOADING,
+  SET_PROJECT,
   SET_PROJECTS
 } from "../actions/actionTypes";
 
@@ -22,6 +23,16 @@ export const projects = (state = null, action) => {
       const indexOfProject = state.findIndex(({id}) => id === action.payload.id);
       return [...state.slice(0, indexOfProject), action.payload, ...state.slice(indexOfProject + 1)];
     }
+
+    default:
+      return state;
+  }
+};
+
+export const project = (state = {}, action) => {
+  switch (action.type) {
+    case SET_PROJECT:
+      return action.payload;
 
     default:
       return state;

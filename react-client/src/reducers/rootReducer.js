@@ -4,8 +4,8 @@ import {registerErrors, registerLoading} from "./register";
 import {editUserErrors, editUserLoading, editUserPhotoLoading, employee, employees, isStaff, user} from "./user";
 import {createUserProjectErrors, newUserProjectLoading, userProjects} from "./userProjects";
 import {sideBarOpened} from "./sidebar";
-import {createProjectErrors, newProjectLoading, projects} from "./projects";
-import {createSkillErrors, newSkillLoading, skills} from "./skills";
+import {createProjectErrors, newProjectLoading, project, projects} from "./projects";
+import {createSkillErrors, newSkillLoading, skill, skills} from "./skills";
 import {projectModal, schoolModal, skillModal} from "./modals";
 import {
   editProjectState,
@@ -20,18 +20,20 @@ import {createUserSchoolErrors, newUserSchoolLoading, userSchools} from "./userS
 
 export default combineReducers({
   sideBarOpened,
+  isStaff,
   isAuthenticated,
-
+  
   skillModal,
   schoolModal,
   projectModal,
-  isStaff,
 
   user,
   employee,
   employees,
+  skill,
   skills,
   schools,
+  project,
   projects,
   userProjects,
   userSkills,

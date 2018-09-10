@@ -109,6 +109,12 @@ class ProjectsPage extends Component {
         menuProps={{
           items: [
             {
+              key: 'open',
+              text: 'Team',
+              iconProps: {iconName: 'Group', style: {color: '#000'}},
+              onClick: () => this.props.history.push(`/home/projects/${item.id}`)
+            },
+            {
               key: 'edit',
               text: 'Edit',
               iconProps: {iconName: 'Edit', style: {color: '#000'}},
@@ -119,8 +125,7 @@ class ProjectsPage extends Component {
               text: 'Delete',
               iconProps: {iconName: 'Delete', style: {color: '#000'}},
               onClick: () => this._openDeleteDialog(item)
-            }
-
+            },
           ],
           directionalHintFixed: true
         }}

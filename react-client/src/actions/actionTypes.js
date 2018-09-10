@@ -10,8 +10,10 @@ export const SET_PROJECT_MODAL = 'SET_PROJECT_MODAL';
 
 //Set operations
 export const SET_USER = 'SET_USER';
+export const SET_SKILL = 'SET_SKILL';
 export const SET_SKILLS = 'SET_SKILLS';
 export const SET_SCHOOLS = 'SET_SCHOOLS';
+export const SET_PROJECT = 'SET_PROJECT';
 export const SET_PROJECTS = 'SET_PROJECTS';
 export const SET_USER_PROJECTS = 'SET_USER_PROJECTS';
 export const SET_USER_SKILLS = 'SET_USER_SKILLS';

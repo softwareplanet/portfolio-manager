@@ -3,7 +3,7 @@ import {
   CHANGE_PROJECT,
   CREATE_PROJECT_ERRORS,
   DELETE_PROJECT,
-  NEW_PROJECT_LOADING,
+  NEW_PROJECT_LOADING, SET_PROJECT,
   SET_PROJECTS,
   SUCCESSFUL_EDIT_PROJECT
 } from "./actionTypes";
@@ -107,5 +107,23 @@ export const editProject = (project) => {
     }).finally(() => {
       dispatch(newProjectLoading(false));
     });
+  }
+};
+
+export const setProject = (projects = {}) => {
+  return {
+    type: SET_PROJECT,
+    payload: projects
+  };
+};
+
+export const getProject = (projectId) => {
+  return (dispatch) => {
+    dispatch(setProject());
+    axios.get(`/api/v1/project/${projectId}`)
+      .then(res => {
+        dispatch(setProject(res.data));
+      })
+      .catch(retryRequest(getProject, dispatch)(projectId))
   }
 };
