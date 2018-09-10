@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader, ProjectsForm} from "../../components";
+import {AddButton, Loader, PageTitle, ProjectsForm} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserProject, getUserProjects} from "../../actions/userProjects";
 import {
@@ -175,17 +175,11 @@ class ProjectsPage extends Component {
 
   render() {
     const {projectToEdit, showPanel, hideDialog, projectToDelete} = this.state;
-    const {isStaff, employee = {}, user = {}} = this.props;
     return (
       <div className={'page-container'} key={'employeeProjects'}>
-        <span
-          className={'page-title'}>{'Projects' + ((isStaff && (employee.firstName || employee.lastName)) ? ` of ${employee.firstName} ${employee.lastName}` : '')}</span>
+        <PageTitle title="Projects"/>
         <div className={'add-button'}>
-          {(isStaff || ((employee && user) && employee.id === user.id)) &&
-          <PrimaryButton
-            text={'Add a Project'}
-            onClick={this._setShowPanel(true)}
-          />}
+          <AddButton title="Add a Project" onClick={this._setShowPanel(true)}/>
           <Panel
             isBlocking={false}
             isOpen={showPanel}

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader, SkillsForm} from "../../components";
+import {AddButton, Loader, PageTitle, SkillsForm} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserSkill, getUserSkills} from "../../actions/userSkills";
 import {
@@ -170,17 +170,11 @@ class SkillsPage extends Component {
 
   render() {
     const {skillToEdit, showPanel, hideDialog, skillToDelete} = this.state;
-    const {isStaff, employee, user} = this.props;
     return (
       <div className={'page-container'}>
-        <span
-          className={'page-title'}>{'Skills' + ((isStaff && (employee.firstName || employee.lastName)) ? ` of ${employee.firstName} ${employee.lastName}` : '')}</span>
+        <PageTitle title="Skills"/>
         <div className={'add-button'}>
-          {(isStaff || ((employee && user) && employee.id === user.id)) &&
-          <PrimaryButton
-            text={'Add a Skill'}
-            onClick={this._setShowPanel(true)}
-          />}
+          <AddButton title="Add a Skill" onClick={this._setShowPanel(true)}/>
           <Panel
             isBlocking={false}
             isOpen={showPanel}

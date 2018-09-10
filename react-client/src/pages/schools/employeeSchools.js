@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader, SchoolsForm} from "../../components";
+import {AddButton, Loader, PageTitle, SchoolsForm} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserSchool, getUserSchools} from "../../actions/userSchools";
 import {
@@ -160,17 +160,11 @@ class SchoolsPage extends Component {
 
   render() {
     const {schoolToEdit, showPanel, hideDialog, schoolToDelete} = this.state;
-    const {isStaff, employee, user} = this.props;
     return (
       <div className={'page-container'}>
-        <span
-          className={'page-title'}>{'Schools' + ((isStaff && (employee.firstName || employee.lastName)) ? ` of ${employee.firstName} ${employee.lastName}` : '')}</span>
+        <PageTitle title="Schools"/>
         <div className={'add-button'}>
-          {(isStaff || ((employee && user) && employee.id === user.id)) &&
-          <PrimaryButton
-            text={'Add a School'}
-            onClick={this._setShowPanel(true)}
-          />}
+          <AddButton title="Add a School" onClick={this._setShowPanel(true)}/>
           <Panel
             isBlocking={false}
             isOpen={showPanel}
