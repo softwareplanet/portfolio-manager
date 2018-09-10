@@ -184,6 +184,11 @@ $theme-color-secondary: #0198ff;
       font-size: 2.5rem;
       font-weight: 500;
       margin-bottom: 1rem;
+      cursor: pointer;
+
+      &:hover {
+        color: rgba(0, 0, 0, 0.85);
+      }
     }
 
     .profile-photo-container {

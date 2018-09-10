@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import './home.css';
 import {CreateProjectModal, CreateSchoolModal, CreateSkillModal, Header, NavBar} from "../../components";
 import {Route, Switch} from "react-router-dom";
-import {EmployeeProjects, EmployeeSchools, EmployeeSkills, Profile, Projects, Schools, Skills} from "..";
+import {EmployeeProjects, Employees, EmployeeSchools, EmployeeSkills, Profile, Projects, Schools, Skills} from "..";
 import {connect} from "react-redux";
-import {Employees} from "../employees/employees";
 
 class HomePage extends Component {
   componentDidMount() {
@@ -29,11 +28,14 @@ class HomePage extends Component {
                   userId={user && user.id}/>
           <div className={`content-container ${!sideBarOpened && 'full'}`}>
             <Switch>
-              <Route path='/home/:employeeId/profile' component={Profile}/>
-              <Route path='/home/:employeeId/projects' component={EmployeeProjects}/>
-              <Route path='/home/:employeeId/skills' component={EmployeeSkills}/>
-              <Route path='/home/:employeeId/schools' component={EmployeeSchools}/>
-              <Route path='/home/employees' component={Employees}/>
+              <Route exact={true} path='/home/:employeeId/profile' component={Profile}/>
+              <Route exact={true} path='/home/:employeeId/projects' component={EmployeeProjects}/>
+              <Route exact={true} path='/home/projects' component={Projects}/>
+              <Route exact={true} path='/home/:employeeId/skills' component={EmployeeSkills}/>
+              <Route exact={true} path='/home/skills' component={Skills}/>
+              <Route exact={true} path='/home/:employeeId/schools' component={EmployeeSchools}/>
+              <Route exact={true} path='/home/schools' component={Schools}/>
+              <Route exact={true} path='/home/employees' component={Employees}/>
             </Switch>
           </div>
         </div>

@@ -123,7 +123,10 @@
     .flex .profile-container .table-title {
       font-size: 2.5rem;
       font-weight: 500;
-      margin-bottom: 1rem; }
+      margin-bottom: 1rem;
+      cursor: pointer; }
+      .flex .profile-container .table-title:hover {
+        color: rgba(0, 0, 0, 0.85); }
     .flex .profile-container .profile-photo-container {
       display: flex;
       flex-direction: column;
