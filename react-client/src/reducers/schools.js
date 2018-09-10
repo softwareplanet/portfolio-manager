@@ -1,6 +1,6 @@
 import {
   ADD_SCHOOL,
-  CHANGE_SKILL,
+  CHANGE_SCHOOL,
   CREATE_SCHOOL_ERRORS,
   DELETE_SCHOOL,
   NEW_SCHOOL_LOADING,
@@ -18,7 +18,7 @@ export const schools = (state = null, action) => {
     case DELETE_SCHOOL:
       return state.filter(school => school.id !== action.payload.id);
 
-    case CHANGE_SKILL: {
+    case CHANGE_SCHOOL: {
       const indexOfSchool = state.findIndex(({id}) => id === action.payload.id);
       return [...state.slice(0, indexOfSchool), action.payload, ...state.slice(indexOfSchool + 1)];
     }

@@ -192,7 +192,7 @@ class EmployeeWithSkillSerializer(EmployeeSkillSerializer):
     def get_employee_id(obj):
         return obj.employee_id.id
 
-    class Meta(EmployeeProjectSerializer.Meta):
+    class Meta(EmployeeSkillSerializer.Meta):
         fields = ('id', 'level', 'description', 'projectsCount', 'employeeName', 'employeeId')
 
 
@@ -202,6 +202,33 @@ class ExtendedSkillSerializer(SkillSerializer):
     @staticmethod
     def get_employees_with_skill(obj):
         return EmployeeWithSkillSerializer(EmployeeSkill.objects.filter(skill_id=obj.id), many=True).data
+
+    class Meta(SkillSerializer.Meta):
+        fields = SkillSerializer.Meta.fields + ('employees', )
+
+
+class EmployeeFromSchoolSerializer(EmployeeSchoolSerializer):
+    employeeName = serializers.SerializerMethodField(method_name='get_employee_name')
+    employeeId = serializers.SerializerMethodField(method_name='get_employee_id')
+
+    @staticmethod
+    def get_employee_name(obj):
+        return obj.employee_id.first_name + ' ' + obj.employee_id.last_name
+
+    @staticmethod
+    def get_employee_id(obj):
+        return obj.employee_id.id
+
+    class Meta(EmployeeSchoolSerializer.Meta):
+        fields = ('id', 'durationYears', 'startDate', 'employeeName', 'employeeId')
+
+
+class ExtendedSchoolSerializer(SkillSerializer):
+    employees = serializers.SerializerMethodField(method_name='get_employees_from_school', read_only=True)
+
+    @staticmethod
+    def get_employees_with_skill(obj):
+        return EmployeeWithSkillSerializer(EmployeeSchool.objects.filter(school_id=obj.id), many=True).data
 
     class Meta(SkillSerializer.Meta):
         fields = SkillSerializer.Meta.fields + ('employees', )

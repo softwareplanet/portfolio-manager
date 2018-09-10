@@ -116,7 +116,7 @@ class SchoolsPage extends Component {
       const {hideDialog} = this.state;
       !hideDialog && this._closeDialog();
     }
-    if (!nextProps.schoolModal) this.setState({skillToEdit: null});
+    if (!nextProps.schoolModal) this.setState({schoolToEdit: null});
   }
 
   render() {
@@ -171,12 +171,6 @@ class SchoolsPage extends Component {
 
   _closeDialog = () => {
     this.setState({hideDialog: true});
-  };
-
-  _setShowPanel = (showPanel) => {
-    return () => {
-      this.setState({schoolToEdit: null, showPanel});
-    };
   };
 }
 

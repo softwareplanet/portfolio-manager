@@ -101,8 +101,9 @@ export const getEmployees = () => {
   }
 };
 
-export const getEmployee = (employeeId) => {
+export const getEmployee = (employeeId, needsLoader = false) => {
   return (dispatch) => {
+    needsLoader && dispatch(setEmployee({}));
     axios.get(`/api/v1/employee/${employeeId}`)
       .then(res => {
         dispatch(setEmployee(res.data));

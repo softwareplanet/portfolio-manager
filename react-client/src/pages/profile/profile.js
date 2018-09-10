@@ -25,14 +25,14 @@ class ProfilePage extends Component {
     const {getUserProjects, getUserSkills, employeeId, getEmployee} = this.props;
     const {employeeId: nextId} = nextProps;
     if ((nextId !== employeeId)) {
-      getEmployee(nextId);
+      getEmployee(nextId, true);
       getUserProjects(nextId);
       getUserSkills(nextId)
     }
   }
 
   render() {
-    let {updateUserPhoto, userSkills, userProjects, photoLoading, photoErrors, employee: user, user: currentUser, isStaff} = this.props;
+    let {updateUserPhoto, userSkills, userProjects, photoLoading, photoErrors, employee: user, user: currentUser, isStaff, employeeId} = this.props;
     const {showPanel} = this.state;
     if (!user) user = {};
     if (!currentUser) currentUser = {};
@@ -52,7 +52,7 @@ class ProfilePage extends Component {
         <div className={'profile-container'}>
           <div className={'profile-photo-container'}>
             <div className={'profile-photo'}>
-              {photoLoading ? <Loader/> : <UserAvatar url={user.image}/>}
+              {photoLoading ? <Loader/> : <UserAvatar url={user.id === Number(employeeId) && user.image}/>}
             </div>
             {(isStaff || user.id === currentUser.id) &&
             <div>
@@ -68,7 +68,8 @@ class ProfilePage extends Component {
             </div>}
           </div>
           <div className={'info-container'}>
-            <div className={'summary-tables-container profile-info-container'}>
+            {user.id === Number(employeeId) ?
+              (<div className={'summary-tables-container profile-info-container'}>
               <div className={'profile-info'}>
                 <div className={'profile-info-line profile-name'}>
               <span>
@@ -106,7 +107,9 @@ class ProfilePage extends Component {
                 </span>
                 <p>{user.description || "Here will be your description"}</p>
               </div>}
-            </div>
+            </div>) :
+              <Loader title="Loading profile information..." style={{marginTop: -5 + 'rem'}}/>
+            }
             {(this._shouldShowElement()) &&
             <div className={'summary-tables-container'}>
               <SummaryTable items={userSkills}
@@ -143,8 +146,8 @@ class ProfilePage extends Component {
   }
 
   _shouldShowElement = () => {
-    const {employee} = this.props;
-    return !employee.isStaff;
+    const {employee, employeeId} = this.props;
+    return !employee.isStaff && (employee && employee.id === Number(employeeId));
   };
 
   _setShowPanel = (showPanel) => {

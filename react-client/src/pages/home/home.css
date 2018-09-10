@@ -245,3 +245,6 @@
 
 .ms-RatingStar-back {
   color: rgba(180, 180, 180, 0.15) !important; }
+
+.ms-DetailsList {
+  margin-bottom: 4rem; }

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Loader} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
-import {SelectionMode} from "office-ui-fabric-react";
+import {IconButton, SelectionMode} from "office-ui-fabric-react";
 import {getProject} from "../../actions/projects";
 
 class ProjectTeamPage extends Component {
@@ -69,6 +69,39 @@ class ProjectTeamPage extends Component {
         return <span>{skills.map((skill) => skill.name).join(', ')}</span>;
       },
       isPadded: true
+    },
+    {
+      key: 'actions',
+      name: 'Actions',
+      minWidth: 50,
+      maxWidth: 50,
+      onRender: (item) => {
+        return (<IconButton
+          style={{height: 'auto'}}
+          allowDisabledFocus={true}
+          menuIcon={{iconName: 'MoreVertical'}}
+          menuProps={{
+            items: [
+              {
+                key: 'open',
+                text: 'Open profile',
+                iconProps: {iconName: 'Contact', style: {color: '#000'}},
+                onClick: () => this._openEmployeeProfile(item.employeeId)
+              },
+              {
+                key: 'skills',
+                text: 'All projects',
+                iconProps: {iconName: 'ProjectLogo32', style: {color: '#000'}},
+                onClick: () => this._openEmployeeProjects(item.employeeId)
+              }
+            ],
+            directionalHintFixed: true
+          }
+          }
+          split={false}
+        />);
+      },
+      isPadded: true
     }
   ];
 
@@ -98,6 +131,13 @@ class ProjectTeamPage extends Component {
       </div>
     );
   }
+
+  _openEmployeeProfile = (employeeId) => {
+    this.props.history.push(`/home/${employeeId}/profile`);
+  };
+  _openEmployeeProjects = (employeeId) => {
+    this.props.history.push(`/home/${employeeId}/projects`);
+  };
 }
 
 const mapStateToProps = ({user, project}, {match: {params: {projectId}}}) => {

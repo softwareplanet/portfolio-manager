@@ -117,9 +117,8 @@ export const setSkill = (skill = {}) => {
   };
 };
 
-export const getSkill = (skillId, skill) => {
+export const getSkill = (skillId) => {
   return (dispatch) => {
-    dispatch(setSkill(skill));
     axios.get(`/api/v1/skill/${skillId}`)
       .then(res => {
         dispatch(setSkill(res.data));

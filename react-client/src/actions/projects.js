@@ -119,7 +119,6 @@ export const setProject = (projects = {}) => {
 
 export const getProject = (projectId) => {
   return (dispatch) => {
-    dispatch(setProject());
     axios.get(`/api/v1/project/${projectId}`)
       .then(res => {
         dispatch(setProject(res.data));

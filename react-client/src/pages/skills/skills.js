@@ -11,7 +11,7 @@ import {
   PrimaryButton,
   SelectionMode
 } from "office-ui-fabric-react";
-import {deleteSkill, getSkills} from "../../actions/skills";
+import {deleteSkill, getSkills, setSkill} from "../../actions/skills";
 import {setSkillModal} from "../../actions/modals";
 
 class SkillsPage extends Component {
@@ -46,8 +46,8 @@ class SkillsPage extends Component {
     },
     {
       key: 'url',
-      name: 'No. of projects',
-      fieldName: 'projectsCount',
+      name: 'Link',
+      fieldName: 'url',
       minWidth: 90,
       maxWidth: 460,
       isResizable: false,
@@ -73,6 +73,15 @@ class SkillsPage extends Component {
         menuIcon={{iconName: 'MoreVertical'}}
         menuProps={{
           items: [
+            {
+              key: 'open',
+              text: 'Employees with this skill',
+              iconProps: {iconName: 'Group', style: {color: '#000'}},
+              onClick: () => {
+                this.props.setSkill(item);
+                this.props.history.push(`/home/skills/${item.id}`)
+              }
+            },
             {
               key: 'edit',
               text: 'Edit',
@@ -140,7 +149,7 @@ class SkillsPage extends Component {
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
             /> :
-            <Loader title="Loading your skills..."/>
+            <Loader title="Loading skills..."/>
         }
         <Dialog
           hidden={hideDialog}
@@ -183,7 +192,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getSkills: () => dispatch(getSkills()),
     deleteSkill: (userId, skillId) => dispatch(deleteSkill(userId, skillId)),
-    createSkill: () => dispatch(setSkillModal(true))
+    createSkill: () => dispatch(setSkillModal(true)),
+    setSkill: (skill) => dispatch(setSkill(skill)),
   };
 };
 

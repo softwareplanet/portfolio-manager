@@ -11,7 +11,7 @@ import {
   PrimaryButton,
   SelectionMode
 } from "office-ui-fabric-react";
-import {deleteProject, getProjects} from "../../actions/projects";
+import {deleteProject, getProjects, setProject} from "../../actions/projects";
 import {setProjectModal} from "../../actions/modals";
 
 class ProjectsPage extends Component {
@@ -112,7 +112,10 @@ class ProjectsPage extends Component {
               key: 'open',
               text: 'Team',
               iconProps: {iconName: 'Group', style: {color: '#000'}},
-              onClick: () => this.props.history.push(`/home/projects/${item.id}`)
+              onClick: () => {
+                this.props.setProject(item);
+                this.props.history.push(`/home/projects/${item.id}`)
+              }
             },
             {
               key: 'edit',
@@ -217,12 +220,6 @@ class ProjectsPage extends Component {
   _closeDialog = () => {
     this.setState({hideDialog: true});
   };
-
-  _setShowPanel = (showPanel) => {
-    return () => {
-      this.setState({projectToEdit: null, showPanel});
-    };
-  };
 }
 
 const mapStateToProps = ({user, projects, isStaff, projectModal}) => {
@@ -234,6 +231,7 @@ const mapDispatchToProps = (dispatch) => {
     getProjects: () => dispatch(getProjects()),
     deleteProject: (userId, projectId) => dispatch(deleteProject(userId, projectId)),
     createProject: () => dispatch(setProjectModal(true)),
+    setProject: (project) => dispatch(setProject(project)),
   };
 };
 

@@ -6,7 +6,7 @@ import {
   EmployeeProjects,
   Employees,
   EmployeeSchools,
-  EmployeeSkills,
+  EmployeeSkills, EmployeesWithSkill,
   Profile,
   Projects,
   ProjectTeam,
@@ -44,6 +44,7 @@ class HomePage extends Component {
               <Route exact={true} path='/home/projects/:projectId' component={ProjectTeam}/>
               <Route exact={true} path='/home/:employeeId/skills' component={EmployeeSkills}/>
               <Route exact={true} path='/home/skills' component={Skills}/>
+              <Route exact={true} path='/home/skills/:skillId' component={EmployeesWithSkill}/>
               <Route exact={true} path='/home/:employeeId/schools' component={EmployeeSchools}/>
               <Route exact={true} path='/home/schools' component={Schools}/>
               <Route exact={true} path='/home/employees' component={Employees}/>

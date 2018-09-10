@@ -5,7 +5,7 @@ import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/De
 import {IconButton, Rating, SelectionMode} from "office-ui-fabric-react";
 import {getSkill} from "../../actions/skills";
 
-class EmployeesWithSkillPage extends Component {
+class EmployeesFromSchoolPage extends Component {
 
   _columns = [
     {
@@ -78,22 +78,22 @@ class EmployeesWithSkillPage extends Component {
           allowDisabledFocus={true}
           menuIcon={{iconName: 'MoreVertical'}}
           menuProps={{
-              items: [
-                {
-                  key: 'open',
-                  text: 'Open profile',
-                  iconProps: {iconName: 'Contact', style: {color: '#000'}},
-                  onClick: () => this._openEmployeeProfile(item.employeeId)
-                },
-                {
-                  key: 'skills',
-                  text: 'All skills',
-                  iconProps: {iconName: 'UserEvent', style: {color: '#000'}},
-                  onClick: () => this._openEmployeeSkills(item.employeeId)
-                }
-              ],
-              directionalHintFixed: true
-            }
+            items: [
+              {
+                key: 'open',
+                text: 'Open profile',
+                iconProps: {iconName: 'Contact', style: {color: '#000'}},
+                onClick: () => this._openEmployeeProfile(item.employeeId)
+              },
+              {
+                key: 'skills',
+                text: 'All skills',
+                iconProps: {iconName: 'UserEvent', style: {color: '#000'}},
+                onClick: () => this._openEmployeeSkills(item.employeeId)
+              }
+            ],
+            directionalHintFixed: true
+          }
           }
           split={false}
         />);
@@ -147,4 +147,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export const EmployeesWithSkill = connect(mapStateToProps, mapDispatchToProps)(EmployeesWithSkillPage);
+export const EmployeesFromSchool = connect(mapStateToProps, mapDispatchToProps)(EmployeesFromSchoolPage);
