@@ -165,7 +165,7 @@ class EmployeeOnProjectSerializer(EmployeeProjectSerializer):
 
 
 class ExtendedProjectSerializer(ProjectSerializer):
-    team = serializers.SerializerMethodField(method_name='get_project_team')
+    team = serializers.SerializerMethodField(method_name='get_project_team', read_only=True)
 
     @staticmethod
     def get_project_team(obj):
