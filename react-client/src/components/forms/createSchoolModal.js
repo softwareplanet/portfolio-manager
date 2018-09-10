@@ -2,26 +2,27 @@ import React, {Component} from "react";
 import {ActionButton, Modal, PrimaryButton, Spinner, SpinnerSize, TextField} from "office-ui-fabric-react";
 import {connect} from "react-redux";
 import {setSchoolModal} from "../../actions/modals";
-import {createSchool} from "../../actions/schools";
+import {createSchool, editSchool} from "../../actions/schools";
 
 class CreateSchool extends Component {
 
   state = {
     name: '',
-    url: ''
+    description: ''
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (!nextProps.opened) {
-      this.setState({
-        name: '',
-        url: ''
-      })
+      this.setState({name: '', description: ''})
     }
+    if (nextProps.school && !nextProps.loading) {
+      this.setState({...nextProps.school});
+    }
+    if (!nextProps.school) this.setState({name: '', description: ''});
   }
 
   render() {
-    const {opened, closeModal, loading, createSchool, errors} = this.props;
+    const {opened, closeModal, loading, createSchool, errors, school, editSchool} = this.props;
     const {name, description} = this.state;
     return (
       <Modal
@@ -33,7 +34,9 @@ class CreateSchool extends Component {
         <span className={'modal-header'}>Create new school</span>
         <form onSubmit={(e) => {
           e.preventDefault();
-          createSchool({name, description});
+          !school ?
+          createSchool({name, description}) :
+          editSchool({name, description, id: school.id});
         }}>
           <TextField label="Name:" value={name}
                      onChange={(e) => this.setState({name: e.target.value})}
@@ -46,7 +49,8 @@ class CreateSchool extends Component {
                      isRequired={true}
                      errorMessage={(errors.description || []).join('<br/>')}
                      placeholder="Detailed description of this school/course..."
-                     multiline rows={4}
+                     multiline rows={12}
+                     style={{width: 15 + 'rem'}}
           />
           <div className={'button-group-right'}>
             <div>
@@ -56,7 +60,7 @@ class CreateSchool extends Component {
               </ActionButton>
             </div>
             <PrimaryButton type="submit">
-              {loading ? <Spinner size={SpinnerSize.medium} ariaLive="assertive"/> : 'Create'}
+              {loading ? <Spinner size={SpinnerSize.medium} ariaLive="assertive"/> : school ? 'Save' : 'Create'}
             </PrimaryButton>
           </div>
         </form>
@@ -76,7 +80,8 @@ const mapStateToProps = ({schoolModal, newSchoolLoading, createSchoolErrors}) =>
 const mapDispatchToProps = (dispatch) => {
   return {
     closeModal: () => dispatch(setSchoolModal(false)),
-    createSchool: (school) => dispatch(createSchool(school))
+    createSchool: (school) => dispatch(createSchool(school)),
+    editSchool: (school) => dispatch(editSchool(school))
   };
 };
 export const CreateSchoolModal = connect(mapStateToProps, mapDispatchToProps)(CreateSchool);

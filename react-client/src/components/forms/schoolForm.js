@@ -48,7 +48,6 @@ class SchoolFormComponent extends Component {
         startDate: new Date(startDate),
         durationYears
       };
-      console.log(schoolToEdit);
       this.setState({...this.state, ...schoolToEdit, edit: true})
     }
   }
@@ -133,7 +132,7 @@ class SchoolFormComponent extends Component {
   }
 }
 
-const mapStateToProps = ({user, schools, newUserSchoolLoading, createUserSchoolErrors}) => {
+const mapStateToProps = ({employee: user, schools = [], newUserSchoolLoading, createUserSchoolErrors}) => {
   return {user, schools, loading: newUserSchoolLoading, errors: createUserSchoolErrors};
 };
 

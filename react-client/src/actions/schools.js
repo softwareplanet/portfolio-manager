@@ -1,4 +1,12 @@
-import {ADD_SCHOOL, CREATE_SCHOOL_ERRORS, NEW_SCHOOL_LOADING, SET_SCHOOLS} from "./actionTypes";
+import {
+  ADD_SCHOOL,
+  CHANGE_SCHOOL,
+  CREATE_SCHOOL_ERRORS,
+  DELETE_SCHOOL,
+  NEW_SCHOOL_LOADING,
+  SET_SCHOOLS,
+  SUCCESSFUL_EDIT_SCHOOL
+} from "./actionTypes";
 import axios from "axios";
 import {setSchoolModal} from "./modals";
 
@@ -55,5 +63,50 @@ export const createSchool = (school) => {
       }).finally(() => {
       dispatch(newSchoolLoading(false));
     })
+  }
+};
+
+export const removeSchool = (school) => {
+  return {
+    type: DELETE_SCHOOL,
+    payload: school
+  }
+};
+
+export const deleteSchool = (schoolId) => {
+  return (dispatch) => {
+    axios.delete(`/api/v1/school/${schoolId}`)
+      .then(res => {
+        dispatch(removeSchool(res.data))
+      })
+  }
+};
+
+export const successfulEditSchool = (schoolId) => {
+  return {
+    type: SUCCESSFUL_EDIT_SCHOOL,
+    payload: schoolId
+  };
+};
+
+export const changeSchool = (school) => {
+  return {
+    type: CHANGE_SCHOOL,
+    payload: school
+  }
+};
+
+export const editSchool = (school) => {
+  return (dispatch) => {
+    dispatch(newSchoolLoading(true));
+    axios.patch(`/api/v1/school/${school.id}`, school)
+      .then(res => {
+        dispatch(setSchoolModal(false));
+        dispatch(changeSchool(res.data))
+      }).catch(errors => {
+      dispatch(createSchoolErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+    }).finally(() => {
+      dispatch(newSchoolLoading(false));
+    });
   }
 };

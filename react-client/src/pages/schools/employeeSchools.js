@@ -1,29 +1,31 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {CreateSchoolModal, Loader} from "../../components";
+import {Loader, SchoolsForm} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
+import {deleteUserSchool, getUserSchools} from "../../actions/userSchools";
 import {
   DefaultButton,
   Dialog,
   DialogFooter,
   DialogType,
   IconButton,
+  Panel,
+  PanelType,
   PrimaryButton,
   SelectionMode
 } from "office-ui-fabric-react";
-import {deleteSchool, getSchools} from "../../actions/schools";
-import {setSchoolModal} from "../../actions/modals";
+import {getSchools} from "../../actions/schools";
+import {getEmployee} from "../../actions/user";
 
 class SchoolsPage extends Component {
 
   editSchool(school) {
-    this.props.createSchool();
-    this.setState({schoolToEdit: school})
+    this.setState({schoolToEdit: school, showPanel: true})
   }
 
   deleteSchool(schoolId) {
-    const {deleteSchool} = this.props;
-    deleteSchool(schoolId);
+    const {employee, deleteSchool} = this.props;
+    deleteSchool(employee.id, schoolId);
   }
 
   _openDeleteDialog(school) {
@@ -32,27 +34,51 @@ class SchoolsPage extends Component {
 
   _columns = [
     {
-      key: 'name',
+      key: 'schoolName',
       name: 'School Name',
-      fieldName: 'name',
+      fieldName: 'school.name',
       minWidth: 210,
-      maxWidth: 450,
+      maxWidth: 350,
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({name}) => {
-        return <span>{name}</span>;
+      onRender: ({school}) => {
+        return <span>{school.name}</span>;
       },
+    },
+    {
+      key: 'startDate',
+      name: 'Start Date',
+      fieldName: 'startDate',
+      minWidth: 70,
+      maxWidth: 100,
+      isResizable: true,
+      isPadded: true,
+      onRender: ({startDate}) => {
+        return <span>{new Date(startDate).toDateString()}</span>;
+      },
+    },
+    {
+      key: 'duration',
+      name: 'Duration',
+      fieldName: 'durationYears',
+      minWidth: 30,
+      maxWidth: 55,
+      data: 'string',
+      onRender: ({durationYears}) => {
+        return <span>{durationYears + ` Year${durationYears > 1 ? 's' : ''}`}</span>;
+      },
+      isPadded: true
     },
     {
       key: 'description',
       name: 'Description',
       fieldName: 'description',
-      minWidth: 250,
-      maxWidth: 450,
+      minWidth: 150,
+      maxWidth: 350,
       isResizable: true,
       data: 'string',
-      onRender: ({description}) => {
+      onRender: ({school: {description}}) => {
         return <span>{description}</span>;
       },
       isPadded: true
@@ -94,43 +120,59 @@ class SchoolsPage extends Component {
   ];
 
   state = {
+    showPanel: false,
     hideDialog: true,
     schoolToDelete: null,
     schoolToEdit: null
   };
 
   componentDidMount() {
-    const {user, getSchools} = this.props;
+    const {user, getUserSchools, schools, getSchools, employeeId, getEmployee} = this.props;
     if (user) {
-      getSchools();
+      getEmployee(employeeId);
+      getUserSchools(employeeId);
+      if (!schools)
+        getSchools();
     }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    const {schools} = this.props;
-    if ((schools && nextProps.schools && (schools.length !== nextProps.schools.length))) {
-      const {hideDialog} = this.state;
+    const {userSchools, editUserSchoolState} = this.props;
+    if ((userSchools && nextProps.userSchools && (userSchools.length !== nextProps.userSchools.length)) ||
+      ((editUserSchoolState && this.state.schoolToEdit) &&
+        (editUserSchoolState === this.state.schoolToEdit.id))) {
+      const {showPanel, hideDialog} = this.state;
       !hideDialog && this._closeDialog();
+      showPanel && this._setShowPanel(false)();
     }
-    if (!nextProps.schoolModal) this.setState({skillToEdit: null});
   }
 
   render() {
-    const {schoolToEdit, hideDialog, schoolToDelete} = this.state;
+    const {schoolToEdit, showPanel, hideDialog, schoolToDelete} = this.state;
+    const {isStaff, employee} = this.props;
     return (
       <div className={'page-container'}>
-        <CreateSchoolModal school={schoolToEdit}/>
-        <span className={'page-title'}>Schools</span>
+        <span className={'page-title'}>{'Schools' + ((isStaff && (employee.firstName || employee.lastName)) ? ` of ${employee.firstName} ${employee.lastName}` : '')}</span>
         <div className={'add-button'}>
           <PrimaryButton
             text={'Add a School'}
-            onClick={this.props.createSchool}
+            onClick={this._setShowPanel(true)}
           />
+          <Panel
+            isBlocking={false}
+            isOpen={showPanel}
+            onDismiss={this._setShowPanel(false)}
+            type={PanelType.smallFixedFar}
+            headerText={schoolToEdit ? 'Add a School' : 'Edit a school'}
+            hasCloseButton={false}
+          >
+            <SchoolsForm onClose={this._setShowPanel(false)} userSchool={schoolToEdit}/>
+          </Panel>
         </div>
         {
-          this.props.schools ?
+          this.props.userSchools ?
             <DetailsList
-              items={this.props.schools}
+              items={this.props.userSchools}
               columns={this._columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
@@ -142,9 +184,9 @@ class SchoolsPage extends Component {
           onDismiss={this._closeDialog}
           dialogContentProps={{
             type: DialogType.normal,
-            title: `Delete school ${schoolToDelete && schoolToDelete.name}`,
+            title: `Delete school ${schoolToDelete && schoolToDelete.school.name}`,
             subText:
-              'This can not be undone. School will be deleted for all employees.'
+              'This can not be undone.'
           }}
           modalProps={{
             titleAriaId: 'myLabelId',
@@ -176,16 +218,17 @@ class SchoolsPage extends Component {
   };
 }
 
-const mapStateToProps = ({user, schools, isStaff, schoolModal}) => {
-  return {user, isStaff, schools, schoolModal};
+const mapStateToProps = ({user, userSchools, schools, editUserSchoolState, employee, isStaff}, {match: {params: {employeeId}}}) => {
+  return {user, userSchools, schools, editUserSchoolState, employeeId, employee, isStaff};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getUserSchools: (userId) => dispatch(getUserSchools(userId)),
     getSchools: () => dispatch(getSchools()),
-    deleteSchool: (schoolId) => dispatch(deleteSchool(schoolId)),
-    createSchool: () => dispatch(setSchoolModal(true))
+    deleteSchool: (userId, schoolId) => dispatch(deleteUserSchool(userId, schoolId)),
+    getEmployee: (userId) => dispatch(getEmployee(userId)),
   };
 };
 
-export const Schools = connect(mapStateToProps, mapDispatchToProps)(SchoolsPage);
+export const EmployeeSchools = connect(mapStateToProps, mapDispatchToProps)(SchoolsPage);
