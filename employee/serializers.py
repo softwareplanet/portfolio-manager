@@ -228,7 +228,7 @@ class ExtendedSchoolSerializer(SkillSerializer):
 
     @staticmethod
     def get_employees_with_skill(obj):
-        return EmployeeWithSkillSerializer(EmployeeSchool.objects.filter(school_id=obj.id), many=True).data
+        return EmployeeFromSchoolSerializer(EmployeeSchool.objects.filter(school_id=obj.id), many=True).data
 
     class Meta(SkillSerializer.Meta):
         fields = SkillSerializer.Meta.fields + ('employees', )

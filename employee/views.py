@@ -9,7 +9,7 @@ from employee.models import Employee, Project, EmployeeProject, School, Skill, E
 from employee.permissions import IsAdminOrSelf
 from employee.serializers import EmployeeSerializer, ProjectSerializer, EmployeeProjectSerializer, SchoolSerializer, \
     SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer, ExtendedProjectSerializer, \
-    ExtendedSkillSerializer
+    ExtendedSkillSerializer, ExtendedSchoolSerializer
 from employee.utils import Utils
 
 
@@ -64,7 +64,7 @@ class ListSchools(MultipleInstanceAPIView):
 
 
 class ListSchool(SingleInstanceAPIView):
-    serializer = SchoolSerializer
+    serializer = ExtendedSchoolSerializer
     model = School
 
 
