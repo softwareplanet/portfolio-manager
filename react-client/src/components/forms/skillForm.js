@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {Label, Slider, TagPicker, TextField} from "office-ui-fabric-react";
+import {Label, Slider, TagPicker, TextField, TooltipHost} from "office-ui-fabric-react";
 import {CreateNew} from "../projectCommon/suggestions/createNewSuggestion";
 import {setSkillModal} from "../../actions/modals";
 import {PanelFooter} from "../projectCommon/panelFooter";
@@ -17,7 +17,17 @@ class SkillFormComponent extends Component {
     errors: []
   };
 
-  skillDescriptions = ['Master', 'Great', 'Good', 'Normal', 'Lower than normal'];
+  skillDescriptions = [{
+    name: 'Expert', description: 'Recognized authority'
+  }, {
+    name: 'Advanced', description: 'Applied previous experience'
+  }, {
+    name: 'Intermediate', description: 'Practical application'
+  }, {
+    name: 'Novice', description: 'Limited experience'
+  }, {
+    name: 'Fundamental Awareness', description: 'Basic knowledge'
+  }];
 
   _onFilterChange = (items) => {
     return (filterText) => {
@@ -51,8 +61,12 @@ class SkillFormComponent extends Component {
     }
   }
 
-  _renderSkillLevelLabel = (levelDescription, index) => (
-    <div key={index} className={'skill-level-description'}><Label>{levelDescription}</Label></div>
+  _renderSkillLevelLabel = ({name, description}, index) => (
+    <div key={index} className={'skill-level-description'}>
+      <TooltipHost content={description} id={`tip${index}`} calloutProps={{ gapSpace: 0 }}>
+        <Label onClick={() => this.setState({level: 5-index})}>{name}</Label>
+      </TooltipHost>
+    </div>
   );
 
   render() {
