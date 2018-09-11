@@ -113,11 +113,12 @@ class ProjectTeamPage extends Component {
   }
 
   render() {
-    const {project: {team, name}} = this.props;
+    const {project: {team, name, description}} = this.props;
     return (
       <div className={'page-container'} key={'employeeProjects'}>
         <span
           className={'page-title'}>{'Project ' + (name ? name : '')}</span>
+        <p className={'page-description'}>&emsp;{'    ' + description}</p>
         {
           team ?
             <DetailsList

@@ -172,6 +172,10 @@
   display: flex;
   flex-direction: column;
   padding: 2rem; }
+  .page-container .page-description {
+    padding: 0 0.2rem;
+    text-align: justify;
+    font-weight: lighter; }
   .page-container .add-button {
     width: 10rem;
     margin-bottom: 2rem; }

@@ -88,11 +88,12 @@ class EmployeesFromSchoolPage extends Component {
   }
 
   render() {
-    const {school: {employees, name}} = this.props;
+    const {school: {employees, name, description}} = this.props;
     return (
       <div className={'page-container'}>
         <span
-          className={'page-title'}>{'Employees with skill: ' + (name ? name : '')}</span>
+          className={'page-title'}>{'Employees from school: ' + (name ? name : '')}</span>
+        <p className={'page-description'}>&emsp;{'    ' + description}</p>
         {
           employees ?
             <DetailsList

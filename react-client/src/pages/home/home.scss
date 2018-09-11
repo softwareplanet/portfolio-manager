@@ -252,6 +252,12 @@ $theme-color-secondary: #0198ff;
   flex-direction: column;
   padding: 2rem;
 
+  .page-description {
+    padding: 0 0.2rem;
+    text-align: justify;
+    font-weight: lighter;
+  }
+
   .add-button {
     width: 10rem;
     margin-bottom: 2rem;

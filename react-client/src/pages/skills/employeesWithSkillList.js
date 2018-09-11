@@ -110,11 +110,12 @@ class EmployeesWithSkillPage extends Component {
   }
 
   render() {
-    const {skill: {employees, name}} = this.props;
+    const {skill: {employees, name, url}} = this.props;
     return (
       <div className={'page-container'}>
         <span
           className={'page-title'}>{'Employees with skill: ' + (name ? name : '')}</span>
+        <p className={'page-description'}>&emsp;{'    ' + url}</p>
         {
           employees ?
             <DetailsList
