@@ -15,7 +15,7 @@ import {
   editUserState
 } from "./editUserInstanceState";
 import {createUserSkillErrors, newUserSkillLoading, userSkills} from "./userSkills";
-import {createSchoolErrors, newSchoolLoading, schools} from "./schools";
+import {createSchoolErrors, newSchoolLoading, school, schools} from "./schools";
 import {createUserSchoolErrors, newUserSchoolLoading, userSchools} from "./userSchools";
 
 export default combineReducers({
@@ -32,6 +32,7 @@ export default combineReducers({
   employees,
   skill,
   skills,
+  school,
   schools,
   project,
   projects,

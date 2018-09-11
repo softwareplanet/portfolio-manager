@@ -11,7 +11,7 @@ import {
   PrimaryButton,
   SelectionMode
 } from "office-ui-fabric-react";
-import {deleteSchool, getSchools} from "../../actions/schools";
+import {deleteSchool, getSchools, setSchool} from "../../actions/schools";
 import {setSchoolModal} from "../../actions/modals";
 
 class SchoolsPage extends Component {
@@ -73,6 +73,15 @@ class SchoolsPage extends Component {
         menuProps={{
           items: [
             {
+              key: 'open',
+              text: 'Employees from this school',
+              iconProps: {iconName: 'PublishCourse', style: {color: '#000'}},
+              onClick: () => {
+                this.props.setSchool(item);
+                this.props.history.push(`/home/schools/${item.id}`)
+              }
+            },
+            {
               key: 'edit',
               text: 'Edit',
               iconProps: {iconName: 'Edit', style: {color: '#000'}},
@@ -93,7 +102,7 @@ class SchoolsPage extends Component {
     },
     isPadded: true
   };
-  
+
   state = {
     hideDialog: true,
     schoolToDelete: null,
@@ -110,7 +119,7 @@ class SchoolsPage extends Component {
   componentWillReceiveProps(nextProps, nextContext) {
     if (this.props.isStaff && this._columns.length === 2)
       this._columns.push(this._actions);
-    
+
     const {schools} = this.props;
     if ((schools && nextProps.schools && (schools.length !== nextProps.schools.length))) {
       const {hideDialog} = this.state;
@@ -182,7 +191,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getSchools: () => dispatch(getSchools()),
     deleteSchool: (schoolId) => dispatch(deleteSchool(schoolId)),
-    createSchool: () => dispatch(setSchoolModal(true))
+    createSchool: () => dispatch(setSchoolModal(true)),
+    setSchool: (school) => dispatch(setSchool(school)),
   };
 };
 

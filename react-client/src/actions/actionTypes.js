@@ -12,6 +12,7 @@ export const SET_PROJECT_MODAL = 'SET_PROJECT_MODAL';
 export const SET_USER = 'SET_USER';
 export const SET_SKILL = 'SET_SKILL';
 export const SET_SKILLS = 'SET_SKILLS';
+export const SET_SCHOOL = 'SET_SCHOOL';
 export const SET_SCHOOLS = 'SET_SCHOOLS';
 export const SET_PROJECT = 'SET_PROJECT';
 export const SET_PROJECTS = 'SET_PROJECTS';

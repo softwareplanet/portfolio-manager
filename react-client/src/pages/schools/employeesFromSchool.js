@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Loader} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
-import {IconButton, Rating, SelectionMode} from "office-ui-fabric-react";
-import {getSkill} from "../../actions/skills";
+import {IconButton, SelectionMode} from "office-ui-fabric-react";
+import {getSchool} from "../../actions/schools";
 
 class EmployeesFromSchoolPage extends Component {
 
@@ -22,48 +22,26 @@ class EmployeesFromSchoolPage extends Component {
       },
     },
     {
-      key: 'level',
-      name: 'Level',
-      fieldName: 'level',
+      key: 'startDate',
+      name: 'Start Date',
+      fieldName: 'startDate',
       minWidth: 70,
       maxWidth: 100,
       isResizable: true,
       isPadded: true,
-      onRender: ({level}) => {
-        return (<div>
-          <Rating
-            id={'readOnlyRatingStar'}
-            min={1}
-            max={5}
-            rating={level}
-            readOnly={true}
-          />
-        </div>);
-      },
-    }, {
-      key: 'projectsCount',
-      name: 'No. of projects',
-      fieldName: 'projectsCount',
-      minWidth: 40,
-      maxWidth: 60,
-      isResizable: false,
-      isPadded: true,
-      onRender: ({projectsCount}) => {
-        return (<div style={{textAlign: 'center'}}>
-          {projectsCount}
-        </div>);
+      onRender: ({startDate}) => {
+        return <span>{new Date(startDate).toDateString()}</span>;
       },
     },
     {
-      key: 'description',
-      name: 'Description',
-      fieldName: 'description',
-      minWidth: 150,
-      maxWidth: 350,
-      isResizable: true,
+      key: 'duration',
+      name: 'Duration',
+      fieldName: 'durationYears',
+      minWidth: 30,
+      maxWidth: 55,
       data: 'string',
-      onRender: ({description}) => {
-        return <span>{description}</span>;
+      onRender: ({durationYears}) => {
+        return <span>{durationYears + ` Year${durationYears > 1 ? 's' : ''}`}</span>;
       },
       isPadded: true
     },
@@ -87,9 +65,9 @@ class EmployeesFromSchoolPage extends Component {
               },
               {
                 key: 'skills',
-                text: 'All skills',
+                text: 'All schools',
                 iconProps: {iconName: 'UserEvent', style: {color: '#000'}},
-                onClick: () => this._openEmployeeSkills(item.employeeId)
+                onClick: () => this._openEmployeeSchools(item.employeeId)
               }
             ],
             directionalHintFixed: true
@@ -103,14 +81,14 @@ class EmployeesFromSchoolPage extends Component {
   ];
 
   componentDidMount() {
-    const {user, getSkill, skillId} = this.props;
+    const {user, getSchool, schoolId} = this.props;
     if (user) {
-      getSkill(skillId);
+      getSchool(schoolId);
     }
   }
 
   render() {
-    const {skill: {employees, name}} = this.props;
+    const {school: {employees, name}} = this.props;
     return (
       <div className={'page-container'}>
         <span
@@ -123,7 +101,7 @@ class EmployeesFromSchoolPage extends Component {
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
             /> :
-            <Loader title="Loading people with selected skill..."/>
+            <Loader title="Loading people from selected school..."/>
         }
       </div>
     );
@@ -132,18 +110,18 @@ class EmployeesFromSchoolPage extends Component {
   _openEmployeeProfile = (employeeId) => {
     this.props.history.push(`/home/${employeeId}/profile`);
   };
-  _openEmployeeSkills = (employeeId) => {
-    this.props.history.push(`/home/${employeeId}/skills`);
+  _openEmployeeSchools = (employeeId) => {
+    this.props.history.push(`/home/${employeeId}/schools`);
   };
 }
 
-const mapStateToProps = ({user, skill}, {match: {params: {skillId}}}) => {
-  return {user, skillId, skill};
+const mapStateToProps = ({user, school}, {match: {params: {schoolId}}}) => {
+  return {user, school, schoolId};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getSkill: (projectId) => dispatch(getSkill(projectId))
+    getSchool: (schoolId) => dispatch(getSchool(schoolId))
   };
 };
 

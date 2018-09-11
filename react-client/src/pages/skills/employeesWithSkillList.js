@@ -143,7 +143,7 @@ const mapStateToProps = ({user, skill}, {match: {params: {skillId}}}) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getSkill: (projectId) => dispatch(getSkill(projectId))
+    getSkill: (skillId) => dispatch(getSkill(skillId))
   };
 };
 

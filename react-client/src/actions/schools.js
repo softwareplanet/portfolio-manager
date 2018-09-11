@@ -4,11 +4,12 @@ import {
   CREATE_SCHOOL_ERRORS,
   DELETE_SCHOOL,
   NEW_SCHOOL_LOADING,
-  SET_SCHOOLS,
+  SET_SCHOOLS, SET_SCHOOL,
   SUCCESSFUL_EDIT_SCHOOL
 } from "./actionTypes";
 import axios from "axios";
 import {setSchoolModal} from "./modals";
+import {retryRequest} from "../service/utils";
 
 export const setSchools = (schools = null) => {
   return {
@@ -108,5 +109,22 @@ export const editSchool = (school) => {
     }).finally(() => {
       dispatch(newSchoolLoading(false));
     });
+  }
+};
+
+export const setSchool = (school = {}) => {
+  return {
+    type: SET_SCHOOL,
+    payload: school
+  };
+};
+
+export const getSchool = (schoolId) => {
+  return (dispatch) => {
+    axios.get(`/api/v1/school/${schoolId}`)
+      .then(res => {
+        dispatch(setSchool(res.data));
+      })
+      .catch(retryRequest(getSchool, dispatch)(schoolId))
   }
 };

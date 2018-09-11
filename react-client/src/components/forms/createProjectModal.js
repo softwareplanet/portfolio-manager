@@ -83,7 +83,7 @@ class CreateProject extends Component {
           <TextField
             label="Url:" value={url}
             onChange={(e) => this.setState({url: e.target.value})}
-            placeholder="Link to technology page"
+            placeholder="Link to project page"
             errorMessage={(errors.url || errors.non_field_errors || []).join('<br/>')}
             isRequired={true}
           />

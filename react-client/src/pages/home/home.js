@@ -5,7 +5,7 @@ import {Route, Switch} from "react-router-dom";
 import {
   EmployeeProjects,
   Employees,
-  EmployeeSchools,
+  EmployeeSchools, EmployeesFromSchool,
   EmployeeSkills, EmployeesWithSkill,
   Profile,
   Projects,
@@ -47,6 +47,7 @@ class HomePage extends Component {
               <Route exact={true} path='/home/skills/:skillId' component={EmployeesWithSkill}/>
               <Route exact={true} path='/home/:employeeId/schools' component={EmployeeSchools}/>
               <Route exact={true} path='/home/schools' component={Schools}/>
+              <Route exact={true} path='/home/schools/:schoolId' component={EmployeesFromSchool}/>
               <Route exact={true} path='/home/employees' component={Employees}/>
             </Switch>
           </div>

@@ -4,6 +4,7 @@ import {
   CREATE_SCHOOL_ERRORS,
   DELETE_SCHOOL,
   NEW_SCHOOL_LOADING,
+  SET_SCHOOL,
   SET_SCHOOLS
 } from "../actions/actionTypes";
 
@@ -22,6 +23,16 @@ export const schools = (state = null, action) => {
       const indexOfSchool = state.findIndex(({id}) => id === action.payload.id);
       return [...state.slice(0, indexOfSchool), action.payload, ...state.slice(indexOfSchool + 1)];
     }
+
+    default:
+      return state;
+  }
+};
+
+export const school = (state = {}, action) => {
+  switch (action.type) {
+    case SET_SCHOOL:
+      return action.payload;
 
     default:
       return state;
