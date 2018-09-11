@@ -252,6 +252,14 @@ $theme-color-secondary: #0198ff;
   flex-direction: column;
   padding: 2rem;
 
+  .presentation-container {
+    flex: 3;
+    padding: 0 2rem;
+    .info {
+      max-width: 50rem;
+    }
+  }
+
   .page-description {
     padding: 0 0.2rem;
     text-align: justify;

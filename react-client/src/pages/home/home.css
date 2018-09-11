@@ -172,6 +172,11 @@
   display: flex;
   flex-direction: column;
   padding: 2rem; }
+  .page-container .presentation-container {
+    flex: 3;
+    padding: 0 2rem; }
+    .page-container .presentation-container .info {
+      max-width: 50rem; }
   .page-container .page-description {
     padding: 0 0.2rem;
     text-align: justify;

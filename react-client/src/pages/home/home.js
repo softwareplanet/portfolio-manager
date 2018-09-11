@@ -6,7 +6,7 @@ import {
   EmployeeProjects,
   Employees,
   EmployeeSchools, EmployeesFromSchool,
-  EmployeeSkills, EmployeesWithSkill,
+  EmployeeSkills, EmployeesWithSkill, Presentation,
   Profile,
   Projects,
   ProjectTeam,
@@ -39,6 +39,7 @@ class HomePage extends Component {
           <div className={`content-container ${!sideBarOpened && 'full'}`}>
             <Switch>
               <Route exact={true} path='/home/:employeeId/profile' component={Profile}/>
+              <Route exact={true} path='/home/:employeeId/presentation' component={Presentation}/>
               <Route exact={true} path='/home/:employeeId/projects' component={EmployeeProjects}/>
               <Route exact={true} path='/home/projects' component={Projects}/>
               <Route exact={true} path='/home/projects/:projectId' component={ProjectTeam}/>

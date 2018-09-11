@@ -96,7 +96,7 @@ class ProfilePage extends Component {
                 <ProfileInfoLine text={user.email} iconName="EditMail" noneMessage="You can add E-Mail"/>
               </div>
               {(this._shouldShowElement()) &&
-              <div className={'profile-description'}>
+              <div className={'profile-description'} onClick={() => this.props.history.push(`/home/${user.id}/presentation`)}>
                 <span className={'table-title'}>
                   <Icon iconName={'ContactCard'}
                         style={{
