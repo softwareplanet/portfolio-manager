@@ -230,5 +230,5 @@ class ExtendedSchoolSerializer(SkillSerializer):
     def get_employees_from_school(obj):
         return EmployeeFromSchoolSerializer(EmployeeSchool.objects.filter(school_id=obj.id), many=True).data
 
-    class Meta(SkillSerializer.Meta):
-        fields = SkillSerializer.Meta.fields + ('employees', )
+    class Meta(SchoolSerializer.Meta):
+        fields = SchoolSerializer.Meta.fields + ('employees', )
