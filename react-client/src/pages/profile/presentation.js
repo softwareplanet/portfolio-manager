@@ -40,9 +40,10 @@ class PresentationPage extends Component {
               </p>
               <div style={{textDecoration: 'underline', fontWeight: 700, marginBottom: 1 + 'rem'}}>Technical Summary
               </div>
-              <span>
-              <b>Skills: </b>{userSkills && (userSkills.length ? userSkills.join(', ') : 'Employee has not added any...')}
-            </span>
+              <span style={{color: '#4b709d', display: 'flex'}}>
+                <span style={{flex: 1, textAlign: 'right', paddingRight: 1 + 'rem'}}>Skills: </span>
+                <span style={{flex: 2, textAlign: 'justify'}}>{userSkills && (userSkills.length ? userSkills.join(', ') : 'Employee has not added any...')}</span>
+              </span>
               <div style={{
                 textDecoration: 'underline',
                 fontWeight: 700,
