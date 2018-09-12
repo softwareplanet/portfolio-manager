@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader} from "../../components";
+import {Loader, PrivatePageRedirect} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {IconButton, Rating, SelectionMode} from "office-ui-fabric-react";
 import {getSkill} from "../../actions/skills";
@@ -113,6 +113,7 @@ class EmployeesWithSkillPage extends Component {
     const {skill: {employees, name, url}} = this.props;
     return (
       <div className={'page-container'}>
+        <PrivatePageRedirect/>
         <span
           className={'page-title'}>{'Employees with skill: ' + (name ? name : '')}</span>
         <p className={'page-description'}>&emsp;{'    ' + url}</p>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader} from "../../components";
+import {Loader, PrivatePageRedirect} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {IconButton, SelectionMode} from "office-ui-fabric-react";
 import {getProject} from "../../actions/projects";
@@ -116,6 +116,7 @@ class ProjectTeamPage extends Component {
     const {project: {team, name, description}} = this.props;
     return (
       <div className={'page-container'} key={'employeeProjects'}>
+        <PrivatePageRedirect/>
         <span
           className={'page-title'}>{'Project ' + (name ? name : '')}</span>
         <p className={'page-description'}>&emsp;{'    ' + description}</p>

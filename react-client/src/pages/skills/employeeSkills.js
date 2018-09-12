@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {AddButton, Loader, PageTitle, SkillsForm} from "../../components";
+import {AddButton, Loader, PageTitle, PrivatePageRedirect, SkillsForm} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserSkill, getUserSkills} from "../../actions/userSkills";
 import {
@@ -172,6 +172,7 @@ class SkillsPage extends Component {
     const {skillToEdit, showPanel, hideDialog, skillToDelete} = this.state;
     return (
       <div className={'page-container'}>
+        <PrivatePageRedirect employeeId={this.props.employeeId}/>
         <PageTitle title="Skills"/>
         <div className={'add-button'}>
           <AddButton title="Add a Skill" onClick={this._setShowPanel(true)}/>

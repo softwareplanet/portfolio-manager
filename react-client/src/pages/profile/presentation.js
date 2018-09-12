@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader, Project, UserAvatar} from "../../components";
+import {Loader, PrivatePageRedirect, Project, UserAvatar} from "../../components";
 import {getEmployee} from "../../actions/user";
 import {getUserProjects} from "../../actions/userProjects";
 import {getUserSkills} from "../../actions/userSkills";
@@ -21,6 +21,7 @@ class PresentationPage extends Component {
     if (!employee) employee = {};
     return (
       <div className={'page-container'}>
+        <PrivatePageRedirect/>
         <span className={'page-title'}>Candidate Presentation</span>
         <div className={'profile-container'}>
           <div className={'profile-photo-container'}>

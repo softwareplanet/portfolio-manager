@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {AddButton, Loader, PageTitle, SchoolsForm} from "../../components";
+import {AddButton, Loader, PageTitle, PrivatePageRedirect, SchoolsForm} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserSchool, getUserSchools} from "../../actions/userSchools";
 import {
@@ -162,6 +162,7 @@ class SchoolsPage extends Component {
     const {schoolToEdit, showPanel, hideDialog, schoolToDelete} = this.state;
     return (
       <div className={'page-container'}>
+        <PrivatePageRedirect employeeId={this.props.employeeId}/>
         <PageTitle title="Schools"/>
         <div className={'add-button'}>
           <AddButton title="Add a School" onClick={this._setShowPanel(true)}/>

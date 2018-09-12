@@ -1,6 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {ErrorLabel, Loader, ProfileInfoLine, SummaryTable, UserAvatar, UserForm} from "../../components";
+import {
+  ErrorLabel,
+  Loader,
+  PrivatePageRedirect,
+  ProfileInfoLine,
+  SummaryTable,
+  UserAvatar,
+  UserForm
+} from "../../components";
 import {Icon, Panel, PanelType, Rating} from "office-ui-fabric-react";
 import {getEmployee, updateUserPhoto} from "../../actions/user";
 import {getUserProjects} from "../../actions/userProjects";
@@ -38,6 +46,7 @@ class ProfilePage extends Component {
     if (!currentUser) currentUser = {};
     return (
       <div className={'page-container'}>
+        <PrivatePageRedirect employeeId={this.props.employeeId}/>
         <Panel
           isBlocking={false}
           isOpen={showPanel}
@@ -95,7 +104,7 @@ class ProfilePage extends Component {
                                  noneMessage="You can add birthday"/>
                 <ProfileInfoLine text={user.email} iconName="EditMail" noneMessage="You can add E-Mail"/>
               </div>
-              {(this._shouldShowElement()) &&
+              {(this._shouldShowElement()) && isStaff &&
               <div className={'profile-description'} onClick={() => this.props.history.push(`/home/${user.id}/presentation`)}>
                 <span className={'table-title'}>
                   <Icon iconName={'ContactCard'}
