@@ -14,7 +14,7 @@ class SearchEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'firstName', 'lastName', 'image')
+        fields = ('id', 'firstName', 'lastName', 'image', 'description')
 
 
 class SearchProjectSerializer(serializers.HyperlinkedModelSerializer):
