@@ -7,6 +7,7 @@ from employee.model_views import MultipleInstanceAPIView, SingleInstanceAPIView,
     MultipleEmployeeRelatedInstanceAPIView, SingleEmployeeRelatedInstanceAPIView
 from employee.models import Employee, Project, EmployeeProject, School, Skill, EmployeeSkill, EmployeeSchool
 from employee.permissions import IsAdminOrSelf
+from employee.search_serializers import SearchEmployeeSerializer, SearchProjectSerializer, SearchSkillSerializer
 from employee.serializers import EmployeeSerializer, ProjectSerializer, EmployeeProjectSerializer, SchoolSerializer, \
     SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer, ExtendedProjectSerializer, \
     ExtendedSkillSerializer, ExtendedSchoolSerializer
@@ -133,7 +134,8 @@ class ListEmployeeSkills(MultipleEmployeeRelatedInstanceAPIView):
             data['employeeId'] = employee_id
             try:
                 EmployeeSkill.objects.get(skill_id=data['skillId'])
-                return Utils.error_response({'non_field_errors': ['You already have such skill']}, status.HTTP_400_BAD_REQUEST)
+                return Utils.error_response({'non_field_errors': ['You already have such skill']},
+                                            status.HTTP_400_BAD_REQUEST)
             except ObjectDoesNotExist:
                 serializer = self.serializer(data=data)
                 if serializer.is_valid():
@@ -174,7 +176,7 @@ class ListEmployeeSchool(SingleEmployeeRelatedInstanceAPIView):
 
 class ListMe(APIView):
     serializer = EmployeeSerializer
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
         return Response(EmployeeSerializer(request.user).data)
@@ -190,3 +192,28 @@ class ListMe(APIView):
                 return Utils.error_response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist as e:
             return Utils.error_response(e.args, status.HTTP_404_NOT_FOUND)
+
+
+class ListSearch(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        from django.db.models import Q
+        result = []
+        data = request.data['query']
+        if request.user.is_staff:
+            result.extend(SearchEmployeeSerializer(
+                Employee.objects.filter(
+                    Q(first_name__icontains=data) | Q(last_name__icontains=data) | Q(description__icontains=data)),
+                many=True).data)
+            result.extend(SearchProjectSerializer(
+                Project.objects.filter(
+                    Q(name__icontains=data) | Q(description__icontains=data)),
+                many=True).data)
+            result.extend(SearchSkillSerializer(
+                Skill.objects.filter(
+                    Q(name__icontains=data)),
+                many=True).data)
+        else:
+            pass
+        return Response(result)
