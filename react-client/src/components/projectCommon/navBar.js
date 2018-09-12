@@ -1,5 +1,5 @@
 import React from "react";
-import {SearchBox} from "office-ui-fabric-react";
+import {Search} from "./search/search";
 
 const Link = ({url, history, title}) => {
   const redirectTo = (link) => history.push(link);
@@ -28,10 +28,7 @@ export const NavBar = ({history, sideBarOpened, isStaff, userId}) => {
 
   return (
     <aside className={`nav-bar ${sideBarOpened ? '' : 'none'}`}>
-      <SearchBox
-        placeholder="Search"
-        underlined={true}
-      />
+      <Search/>
       <div className={'navbar-content'}>
         <span className={'list-title'}>
           Profile

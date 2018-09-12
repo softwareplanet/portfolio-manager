@@ -109,6 +109,16 @@ class EmployeesWithSkillPage extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    const {user, getSkill, skillId} = this.props;
+    const {skillId: nextId} = nextProps;
+    if(skillId !== nextId){
+      if (user) {
+        getSkill(nextId);
+      }
+    }
+  }
+  
   render() {
     const {skill: {employees, name, url}} = this.props;
     return (

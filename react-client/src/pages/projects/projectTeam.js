@@ -112,6 +112,16 @@ class ProjectTeamPage extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    const {user, getProject, projectId} = this.props;
+    const {projectId: nextId} = nextProps;
+    if(projectId !== nextId){
+      if (user) {
+        getProject(nextId);
+      }
+    }
+  }
+
   render() {
     const {project: {team, name, description}} = this.props;
     return (

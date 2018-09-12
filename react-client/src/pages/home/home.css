@@ -252,6 +252,59 @@
     .skill-slider-container .skill-level-description-container .skill-level-description {
       flex: 1; }
 
+.search-container {
+  position: relative; }
+  .search-container .search-found-items {
+    position: absolute;
+    background-color: white;
+    min-height: 3rem;
+    width: calc(100% - 2px);
+    border: 1px dashed #0178d4;
+    border-top: 0; }
+    .search-container .search-found-items .search-results-container {
+      max-height: 50vh;
+      overflow-y: auto;
+      flex-direction: column;
+      width: 100%; }
+      .search-container .search-found-items .search-results-container::-webkit-scrollbar {
+        width: 0.4em; }
+      .search-container .search-found-items .search-results-container::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); }
+      .search-container .search-found-items .search-results-container::-webkit-scrollbar-thumb {
+        background-color: darkgrey;
+        outline: 1px solid #5b6a7a; }
+    .search-container .search-found-items .search-item {
+      width: 100%;
+      display: flex;
+      height: 3rem;
+      border-bottom: 1px dashed #0178d4;
+      cursor: pointer; }
+      .search-container .search-found-items .search-item:hover {
+        background-color: rgba(215, 215, 215, 0.72); }
+      .search-container .search-found-items .search-item:last-child {
+        border-bottom: 0; }
+      .search-container .search-found-items .search-item .search-item-logo {
+        width: 7%;
+        font-size: 1.5rem;
+        padding: 0.75rem; }
+      .search-container .search-found-items .search-item .search-item-content {
+        width: 86%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; }
+        .search-container .search-found-items .search-item .search-item-content .search-item-promary {
+          height: 1.5rem; }
+        .search-container .search-found-items .search-item .search-item-content .search-item-secondary {
+          width: 100%;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          display: block;
+          color: #686868;
+          font-weight: 200;
+          font-size: 0.8rem; }
+
 .ms-RatingStar-back {
   color: rgba(180, 180, 180, 0.15) !important; }
 
