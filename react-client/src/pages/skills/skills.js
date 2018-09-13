@@ -36,7 +36,7 @@ class SkillsPage extends Component {
       name: 'Skill Name',
       fieldName: 'skill.name',
       minWidth: 210,
-      maxWidth: 450,
+      maxWidth: 350,
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
@@ -45,12 +45,26 @@ class SkillsPage extends Component {
       },
     },
     {
+      key: 'category',
+      name: 'Category',
+      fieldName: 'category',
+      minWidth: 90,
+      maxWidth: 260,
+      isResizable: true,
+      isPadded: true,
+      onRender: ({category}) => {
+        return (<div>
+          {category.name}
+        </div>);
+      },
+    },
+    {
       key: 'url',
       name: 'Link',
       fieldName: 'url',
       minWidth: 90,
-      maxWidth: 460,
-      isResizable: false,
+      maxWidth: 360,
+      isResizable: true,
       isPadded: true,
       onRender: ({url}) => {
         return (<div>
@@ -118,7 +132,7 @@ class SkillsPage extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (this.props.isStaff && this._columns.length === 2)
+    if (this.props.isStaff && this._columns.length === 3)
       this._columns.push(this._actions);
 
     const {skills} = this.props;

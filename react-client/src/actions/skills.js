@@ -3,7 +3,7 @@ import {
   CHANGE_SKILL,
   CREATE_SKILL_ERRORS,
   DELETE_SKILL,
-  NEW_SKILL_LOADING, SET_SKILL,
+  NEW_SKILL_LOADING, SET_SKILL, SET_SKILL_CATEGORIES,
   SET_SKILLS,
   SUCCESSFUL_EDIT_SKILL
 } from "./actionTypes";
@@ -18,11 +18,19 @@ export const setSkills = (skills = null) => {
   };
 };
 
+export const setSkillCategories = (skills = null) => {
+  return {
+    type: SET_SKILL_CATEGORIES,
+    payload: skills
+  };
+};
+
 export const getSkills = () => {
   return (dispatch) => {
     axios.get(`/api/v1/skill`)
-      .then(res => {
-        dispatch(setSkills(res.data));
+      .then(({data: {skills, categories}}) => {
+        dispatch(setSkills(skills));
+        dispatch(setSkillCategories(categories));
       })
       .catch(retryRequest(getSkills, dispatch)())
   }

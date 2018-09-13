@@ -28,7 +28,7 @@ export const NavBar = ({history, sideBarOpened, isStaff, userId}) => {
 
   return (
     <aside className={`nav-bar ${sideBarOpened ? '' : 'none'}`}>
-      <Search/>
+      {isStaff && <Search/>}
       <div className={'navbar-content'}>
         <span className={'list-title'}>
           Profile

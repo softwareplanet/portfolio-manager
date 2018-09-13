@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './home.css';
-import {CreateProjectModal, CreateSchoolModal, CreateSkillModal, Header, NavBar} from "../../components";
+import {CreateProjectModal, CreateSchoolModal, CreateSkillModal, Header, NavBar, NoPermission} from "../../components";
 import {Route, Switch} from "react-router-dom";
 import {
   EmployeeProjects,
@@ -50,6 +50,7 @@ class HomePage extends Component {
               <Route exact={true} path='/home/schools' component={Schools}/>
               <Route exact={true} path='/home/schools/:schoolId' component={EmployeesFromSchool}/>
               <Route exact={true} path='/home/employees' component={Employees}/>
+              <Route exact={true} path='/home/no_permission' component={NoPermission}/>
             </Switch>
           </div>
         </div>

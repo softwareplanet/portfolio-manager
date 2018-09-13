@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ActionButton, Modal, PrimaryButton, Spinner, SpinnerSize, TextField} from "office-ui-fabric-react";
+import {ActionButton, Dropdown, Modal, PrimaryButton, Spinner, SpinnerSize, TextField} from "office-ui-fabric-react";
 import {connect} from "react-redux";
 import {setSkillModal} from "../../actions/modals";
 import {createSkill, editSkill} from "../../actions/skills";
@@ -8,7 +8,8 @@ class CreateSkill extends Component {
 
   state = {
     name: '',
-    url: ''
+    url: '',
+    categoryId: null
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -16,14 +17,14 @@ class CreateSkill extends Component {
       this.setState({name: '', url: ''})
     }
     if (nextProps.skill && !nextProps.loading) {
-      this.setState({...nextProps.skill});
+      this.setState({...nextProps.skill, categoryId: nextProps.skill.category.id});
     }
     if (!nextProps.skill) this.setState({name: '', url: ''});
   }
 
   render() {
-    const {opened, closeModal, loading, createSkill, errors, skill, editSkill} = this.props;
-    const {name, url} = this.state;
+    const {opened, closeModal, loading, createSkill, errors, skill, editSkill, skillCategories} = this.props;
+    const {name, url, categoryId} = this.state;
     return (
       <Modal
         isOpen={opened}
@@ -35,8 +36,8 @@ class CreateSkill extends Component {
         <form onSubmit={(e) => {
           e.preventDefault();
           !skill ?
-            createSkill({name, url}) :
-            editSkill({name, url, id: skill.id});
+            createSkill({name, url, categoryId}) :
+            editSkill({name, url, id: skill.id, categoryId});
         }}>
           <TextField label="Name:" value={name}
                      onChange={(e) => this.setState({name: e.target.value})}
@@ -50,6 +51,15 @@ class CreateSkill extends Component {
                      errorMessage={(errors.url || errors.non_field_errors || []).join('<br/>')}
                      isRequired={true}
                      style={{width: 15 + 'rem'}}
+          />
+          <Dropdown
+            placeHolder="Select a category"
+            label="Skill category:"
+            options={skillCategories.map( ({id, name}) => ({key: id, text: name}))}
+            onChanged={({key}) => this.setState({categoryId: key})}
+            selectedKey={categoryId}
+            isRequired={true}
+            errorMessage={(errors.categoryId || []).join('<br/>')}
           />
           <div className={'button-group-right'}>
             <div>
@@ -68,11 +78,12 @@ class CreateSkill extends Component {
   }
 }
 
-const mapStateToProps = ({skillModal, newSkillLoading, createSkillErrors}) => {
+const mapStateToProps = ({skillModal, newSkillLoading, createSkillErrors, skillCategories}) => {
   return {
     opened: skillModal,
     loading: newSkillLoading,
-    errors: createSkillErrors
+    errors: createSkillErrors,
+    skillCategories
   };
 };
 

@@ -5,7 +5,7 @@ import {editUserErrors, editUserLoading, editUserPhotoLoading, employee, employe
 import {createUserProjectErrors, newUserProjectLoading, userProjects} from "./userProjects";
 import {sideBarOpened} from "./sidebar";
 import {createProjectErrors, newProjectLoading, project, projects} from "./projects";
-import {createSkillErrors, newSkillLoading, skill, skills} from "./skills";
+import {createSkillErrors, newSkillLoading, skill, skillCategories, skills} from "./skills";
 import {projectModal, schoolModal, skillModal} from "./modals";
 import {
   editProjectState,
@@ -32,6 +32,7 @@ export default combineReducers({
   employees,
   skill,
   skills,
+  skillCategories,
   school,
   schools,
   project,

@@ -90,6 +90,12 @@ class EmployeesPage extends Component {
                   onClick: () => this._openEmployeeProfile(item.id)
                 },
                 {
+                  key: 'presentation',
+                  text: 'Show Candidate presentation',
+                  iconProps: {iconName: 'AccountManagement', style: {color: '#000'}},
+                  onClick: () => this.props.history.push(`/home/${item.id}/presentation`)
+                },
+                {
                   key: 'delete',
                   text: 'Disable',
                   iconProps: {iconName: 'Delete', style: {color: '#000'}},
