@@ -16,7 +16,7 @@ class SearchComponent extends Component {
   search(value) {
     this.setState({loading: true});
     axios.post('/api/v1/search', {query: value})
-      .then((res) => this.setState({items: res.data}))
+      .then((res) => this.state.searchValue && this.setState({items: res.data}))
       .catch((err) => this.setState({items: err}))
       .finally(() => this.setState({loading: false}))
   }
@@ -32,7 +32,7 @@ class SearchComponent extends Component {
           onFocus={() => this.setState({openedSearch: true})}
           onChange={(newValue) => {
             this.setState({searchValue: newValue});
-            if (newValue) this.search(newValue);
+            if (newValue.length !== 0) this.search(newValue);
             else this.setState({items: null});
           }}
           onBlur={() => !items && this.setState({openedSearch: false})}
