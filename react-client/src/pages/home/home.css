@@ -310,3 +310,11 @@
 
 .ms-DetailsList {
   margin-bottom: 4rem; }
+
+@media print {
+  .header {
+    display: none; }
+  .content-container {
+    width: 100%; }
+  .nav-bar {
+    display: none; } }
