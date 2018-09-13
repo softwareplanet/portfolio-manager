@@ -5,12 +5,13 @@ from rest_framework.views import APIView
 
 from employee.model_views import MultipleInstanceAPIView, SingleInstanceAPIView, \
     MultipleEmployeeRelatedInstanceAPIView, SingleEmployeeRelatedInstanceAPIView
-from employee.models import Employee, Project, EmployeeProject, School, Skill, EmployeeSkill, EmployeeSchool
+from employee.models import Employee, Project, EmployeeProject, School, Skill, EmployeeSkill, EmployeeSchool, \
+    SkillCategory
 from employee.permissions import IsAdminOrSelf
 from employee.search_serializers import SearchEmployeeSerializer, SearchProjectSerializer, SearchSkillSerializer
 from employee.serializers import EmployeeSerializer, ProjectSerializer, EmployeeProjectSerializer, SchoolSerializer, \
     SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer, ExtendedProjectSerializer, \
-    ExtendedSkillSerializer, ExtendedSchoolSerializer
+    ExtendedSkillSerializer, ExtendedSchoolSerializer, SkillCategorySerializer
 from employee.utils import Utils
 
 
@@ -52,6 +53,14 @@ class ListProject(SingleInstanceAPIView):
 class ListSkills(MultipleInstanceAPIView):
     serializer = SkillSerializer
     model = Skill
+
+    def get(self, request):
+        skills = self.model.objects.all()
+        categories = SkillCategory.objects.all()
+        return Response({
+            'skills': self.serializer(skills, many=True).data,
+            'categories': SkillCategorySerializer(categories, many=True).data
+        })
 
 
 class ListSkill(SingleInstanceAPIView):

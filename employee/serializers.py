@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from employee.models import Employee, Project, EmployeeProject, Skill, School, EmployeeSkill, EmployeeSchool
+from employee.models import Employee, Project, EmployeeProject, Skill, School, EmployeeSkill, EmployeeSchool, \
+    SkillCategory
 
 
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
@@ -59,10 +60,24 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'startDate', 'durationMonths', 'name', 'description', 'url')
 
 
+class SkillCategorySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = SkillCategory
+        fields = ('id', 'name')
+
+
 class SkillSerializer(serializers.HyperlinkedModelSerializer):
+    category = SkillCategorySerializer(read_only=True)
+    categoryId = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=SkillCategory.objects.all(),
+        source='category',
+        required=True
+    )
+
     class Meta:
         model = Skill
-        fields = ('id', 'name', 'url')
+        fields = ('id', 'name', 'url', 'category', 'categoryId')
 
 
 class SchoolSerializer(serializers.HyperlinkedModelSerializer):

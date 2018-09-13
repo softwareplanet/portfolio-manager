@@ -5,9 +5,17 @@ from rest_framework.authtoken.models import Token
 from django.dispatch import receiver
 
 
+class SkillCategory(models.Model):
+    name = models.CharField(max_length=64)
+
+    class Meta:
+        db_table = 'skill_categories'
+
+
 class Skill(models.Model):
     name = models.CharField(max_length=150)
     url = models.CharField(max_length=255, blank=True)
+    category = models.ForeignKey(SkillCategory, on_delete=models.CASCADE, default=3)
 
     class Meta:
         db_table = 'skills'
