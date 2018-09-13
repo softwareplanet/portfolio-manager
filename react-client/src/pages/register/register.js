@@ -9,7 +9,7 @@ class RegisterPage extends Component {
   state = {
     username: '',
     password: '',
-    birthday: new Date(),
+    birthday: new Date(new Date().setFullYear(new Date().getFullYear() - 18)),
     firstName: '',
     lastName: '',
     email: ''
