@@ -4,6 +4,7 @@ import {Loader, PrivatePageRedirect, Project, UserAvatar} from "../../components
 import {getEmployee} from "../../actions/user";
 import {getUserProjects} from "../../actions/userProjects";
 import {getUserSkills} from "../../actions/userSkills";
+import {groupBy} from "../../service/utils";
 
 class PresentationPage extends Component {
 
@@ -41,10 +42,7 @@ class PresentationPage extends Component {
               </p>
               <div style={{textDecoration: 'underline', fontWeight: 700, marginBottom: 1 + 'rem'}}>Technical Summary
               </div>
-              <span style={{color: '#4b709d', display: 'flex'}}>
-                <span style={{flex: 1, textAlign: 'right', paddingRight: 1 + 'rem'}}>Skills: </span>
-                <span style={{flex: 2, textAlign: 'justify'}}>{userSkills && (userSkills.length ? userSkills.join(', ') : 'Employee has not added any...')}</span>
-              </span>
+              {userSkills ? this._renderSkills(userSkills) : <Loader title={'Loading skills...'}/>}
               <div style={{
                 textDecoration: 'underline',
                 fontWeight: 700,
@@ -60,6 +58,22 @@ class PresentationPage extends Component {
     );
   }
 
+  _renderSkills = (groupedSkills = []) => {
+    return groupedSkills.sort((a, b) => a[1][0].skill.category.id - b[1][0].skill.category.id).map((arr, index) => {
+      const skillNames = arr[1].map(({skill}) => skill.name);
+      const category = arr[0];
+      return (
+        <span style={{color: '#4b709d', display: 'flex', marginBottom: 0.5 + 'rem'}} key={'category' + index}>
+          <span style={{flex: 1, textAlign: 'right', paddingRight: 1 + 'rem'}}>{category}: </span>
+          <span style={{
+            flex: 2,
+            textAlign: 'justify'
+          }}>{skillNames && (skillNames.length ? skillNames.join(', ') : 'Employee has not added any...')}</span>
+          </span>
+      )
+    })
+  };
+
   _renderProjects = (projects = []) => {
     return projects.map((project) => <Project key={project.id} project={project}/>)
   }
@@ -73,7 +87,7 @@ const mapStateToProps = ({user, userSkills, userProjects, editUserPhotoLoading, 
     isStaff,
     photoLoading: editUserPhotoLoading,
     photoErrors: image,
-    userSkills: userSkills && userSkills.slice().sort((a, b) => a.level - b.level).reverse().map(({skill: {name}}) => (name)),
+    userSkills: userSkills && groupBy(userSkills, ({skill}) => skill.category.name),
     userProjects: userProjects && userProjects.slice().sort(({project: a}, {project: b}) => {
       let aDate = new Date(a.startDate), bDate = new Date(b.startDate);
       return aDate.setMonth(aDate.getMonth() + a.durationMonths) - bDate.setMonth(bDate.getMonth() + b.durationMonths)
