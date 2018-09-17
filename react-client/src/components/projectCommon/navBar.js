@@ -31,7 +31,7 @@ export const NavBar = ({history, sideBarOpened, isStaff, userId}) => {
       {isStaff && <Search/>}
       <div className={'navbar-content'}>
         <span className={'list-title'}>
-          Profile
+          Portfolio
         </span>
         <ul className={'links-container'}>
           {(isStaff ? staffRoutes : employeeRoutes).map((route, index) => <Link key={index}
