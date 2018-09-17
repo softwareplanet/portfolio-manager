@@ -51,6 +51,14 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
+class EmployeeForUserSerializer(EmployeeSerializer):
+    class Meta(EmployeeSerializer.Meta):
+        fields = (
+            'id', 'username', 'email', 'password', 'firstName', 'lastName', 'dob',
+            'isStaff', 'image', 'skills', 'projects'
+        )
+
+
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     durationMonths = serializers.IntegerField(source='duration_months', min_value=0)
     startDate = serializers.DateField(source='start_date')

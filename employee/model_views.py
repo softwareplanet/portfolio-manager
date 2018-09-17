@@ -29,20 +29,28 @@ class MultipleInstanceAPIView(APIView):
 
 class SingleInstanceAPIView(APIView):
     serializer = serializers.Serializer
+    serializer_for_user = None
     model = models.Model
     permission_classes = (permissions.IsAuthenticated, IsAdminOrReadOnly)
 
     def get(self, request, model_id):
         try:
             model = self.model.objects.get(id=model_id)
-            return Response(self.serializer(model).data)
+            if self.serializer_for_user is not None and not request.user.is_staff:
+                serializer = self.serializer_for_user(model)
+            else:
+                serializer = self.serializer(model)
+            return Response(serializer.data)
         except ObjectDoesNotExist as e:
             return Utils.error_response(e.args, status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, model_id):
         try:
             model = self.model.objects.get(id=model_id)
-            serializer = self.serializer(model, data=request.data, partial=True)
+            if self.serializer_for_user is not None and not request.user.is_staff:
+                serializer = self.serializer_for_user(model, data=request.data, partial=True)
+            else:
+                serializer = self.serializer(model, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status.HTTP_200_OK)

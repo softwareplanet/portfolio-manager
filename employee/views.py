@@ -1,5 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, permissions
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -9,7 +10,8 @@ from employee.models import Employee, Project, EmployeeProject, School, Skill, E
     SkillCategory
 from employee.permissions import IsAdminOrSelf
 from employee.search_serializers import SearchEmployeeSerializer, SearchProjectSerializer, SearchSkillSerializer
-from employee.serializers import EmployeeSerializer, ProjectSerializer, EmployeeProjectSerializer, SchoolSerializer, \
+from employee.serializers import EmployeeSerializer, EmployeeForUserSerializer, ProjectSerializer, \
+    EmployeeProjectSerializer, SchoolSerializer, \
     SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer, ExtendedProjectSerializer, \
     ExtendedSkillSerializer, ExtendedSchoolSerializer, SkillCategorySerializer
 from employee.utils import Utils
@@ -18,7 +20,10 @@ from employee.utils import Utils
 class ListEmployees(MultipleInstanceAPIView):
     serializer = EmployeeSerializer
     model = Employee
-    permission_classes = ()
+    permission_classes = (IsAdminUser,)
+
+    def has_permission(self, request, view):
+        return request.method == "POST" or request.method == "PATCH"
 
     def get(self, request):
         models = self.model.objects.filter(is_staff=False, is_active=1)
@@ -27,6 +32,7 @@ class ListEmployees(MultipleInstanceAPIView):
 
 class ListEmployee(SingleInstanceAPIView):
     serializer = EmployeeSerializer
+    serializer_for_user = EmployeeForUserSerializer
     model = Employee
     permission_classes = (permissions.IsAuthenticated, IsAdminOrSelf)
 
@@ -184,7 +190,7 @@ class ListEmployeeSchool(SingleEmployeeRelatedInstanceAPIView):
 
 
 class ListMe(APIView):
-    serializer = EmployeeSerializer
+    serializer = EmployeeForUserSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
