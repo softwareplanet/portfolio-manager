@@ -21,8 +21,9 @@ class ProfilePage extends Component {
   };
 
   componentDidMount() {
-    const {getUserProjects, getUserSkills, employeeId, employee, getEmployee} = this.props;
-    if (!employee || employee.id !== employeeId) {
+    const {getUserProjects, getUserSkills, employeeId, employee, getEmployee, user} = this.props;
+
+    if (user && (!employee || employee.id !== employeeId)) {
       getEmployee(employeeId);
       getUserProjects(employeeId);
       getUserSkills(employeeId)
