@@ -181,7 +181,7 @@ class SkillsPage extends Component {
             isOpen={showPanel}
             onDismiss={this._setShowPanel(false)}
             type={PanelType.smallFixedFar}
-            headerText={skillToEdit ? 'Add a Skill' : 'Edit a skill'}
+            headerText={!skillToEdit ? 'Add a Skill' : 'Edit a skill'}
             hasCloseButton={false}
           >
             <SkillsForm onClose={this._setShowPanel(false)} userSkill={skillToEdit}/>

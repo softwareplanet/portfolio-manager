@@ -171,7 +171,7 @@ class SchoolsPage extends Component {
             isOpen={showPanel}
             onDismiss={this._setShowPanel(false)}
             type={PanelType.smallFixedFar}
-            headerText={schoolToEdit ? 'Add a School' : 'Edit a school'}
+            headerText={!schoolToEdit ? 'Add a School' : 'Edit a school'}
             hasCloseButton={false}
           >
             <SchoolsForm onClose={this._setShowPanel(false)} userSchool={schoolToEdit}/>
