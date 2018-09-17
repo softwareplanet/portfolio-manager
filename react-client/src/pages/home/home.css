@@ -252,6 +252,10 @@
     .skill-slider-container .skill-level-description-container .skill-level-description {
       flex: 1; }
 
+.search-command-bar {
+  border-right: 1px dashed #0178d4;
+  border-left: 1px dashed #0178d4; }
+
 .search-container {
   position: relative; }
   .search-container .search-found-items {

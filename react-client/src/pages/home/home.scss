@@ -366,6 +366,11 @@ $selected-item-height: 2rem;
   }
 }
 
+.search-command-bar {
+  border-right: 1px dashed $theme-color-primary;
+  border-left: 1px dashed $theme-color-primary;
+}
+
 .search-container {
   position: relative;
 
@@ -388,7 +393,7 @@ $selected-item-height: 2rem;
       }
 
       &::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
       }
 
       &::-webkit-scrollbar-thumb {
@@ -462,7 +467,7 @@ $selected-item-height: 2rem;
     width: 100%;
   }
 
-  .nav-bar{
+  .nav-bar {
     display: none;
   }
 

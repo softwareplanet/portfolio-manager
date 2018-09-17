@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Loader} from "../..";
 import {SearchItem} from "./searchItem";
+import {Pivot, PivotItem} from "office-ui-fabric-react";
 
 const overlayStyle = {
   position: 'absolute',
@@ -10,17 +11,22 @@ const overlayStyle = {
   backgroundColor: 'rgba(147, 147, 147, 0.1)'
 };
 
-export const SearchResults = ({items, loading, opened, closeSearch}) => {
+export class SearchResults extends Component {
 
-  const drawItems = (items) => {
+  state = {
+    selectedKey: 'all'
+  };
+
+  drawItems = (items) => {
     if (items.length) {
+      items = this.state.selectedKey === 'all' ? items : items.filter(({type}) => type === this.state.selectedKey);
       return items.map(item => {
         const key = item.type + item.id;
         switch (item.type) {
           case 'employee':
             return (<SearchItem
               key={key}
-              onClick={closeSearch}
+              onClick={this.props.closeSearch}
               iconName="Contact"
               primaryText={item.firstName + ' ' + item.lastName}
               secondaryText={item.description}
@@ -29,7 +35,7 @@ export const SearchResults = ({items, loading, opened, closeSearch}) => {
 
           case 'project':
             return (<SearchItem
-              onClick={closeSearch}
+              onClick={this.props.closeSearch}
               key={key}
               iconName="ProjectLogo32"
               primaryText={item.name}
@@ -40,7 +46,7 @@ export const SearchResults = ({items, loading, opened, closeSearch}) => {
           case 'skill':
             return (<SearchItem
               key={key}
-              onClick={closeSearch}
+              onClick={this.props.closeSearch}
               iconName="LightningBolt"
               primaryText={item.name}
               secondaryText={''}
@@ -54,21 +60,47 @@ export const SearchResults = ({items, loading, opened, closeSearch}) => {
     }
   };
 
-  return (
-    <div className={'search-found-items'} style={opened ? {display: 'flex'} : {display: 'none'}}>
-      {loading &&
-      <div style={overlayStyle}>
-        <Loader/>
-      </div>}
-      {items && items.length ?
-        <div className={'search-results-container'}>
-          {drawItems(items)}
+  render() {
+    const {items, loading, opened} = this.props;
+    const {selectedKey} = this.state;
+    return (
+      <div style={opened ? {display: 'block'} : {display: 'none'}}>
+        <div className={'search-command-bar'}>
+          <div>
+            <Pivot
+              selectedKey={selectedKey}
+              onLinkClick={this._handleLinkClick}
+              headersOnly={true}
+            >
+              <PivotItem linkText="All" itemKey="all" itemIcon="SearchIssue"/>
+              <PivotItem linkText="Employees" itemKey="employee" itemIcon="Group"/>
+              <PivotItem linkText="Projects" itemKey="project" itemIcon="ProjectLogo32"/>
+              <PivotItem linkText="Skills" itemKey="skill" itemIcon="LightningBolt"/>
+            </Pivot>
+          </div>
         </div>
-        :
-        <div className={'centered-loading'}>
-          {!items ? 'Start typing and hit Enter for search' : 'No results found'}
+        <div className={'search-found-items'} style={opened ? {display: 'flex'} : {display: 'none'}}>
+          {loading &&
+          <div style={overlayStyle}>
+            <Loader/>
+          </div>}
+          {items && items.length ?
+            <div className={'search-results-container'}>
+              {this.drawItems(items)}
+            </div>
+            :
+            <div className={'centered-loading'}>
+              {!items ? 'Start typing and hit Enter for search' : 'No results found'}
+            </div>
+          }
         </div>
-      }
-    </div>
-  )
-};
+      </div>
+    )
+  }
+
+  _handleLinkClick = (item) => {
+    this.setState({
+      selectedKey: item.props.itemKey
+    });
+  };
+}
