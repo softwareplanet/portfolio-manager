@@ -98,7 +98,9 @@ class SkillFormComponent extends Component {
         <br/>
         <TextField
           value={description}
-          multiline
+          multiline rows={8}
+          autoAdjustHeight={true}
+          resizable={false}
           onChange={(e) => this.setState({description: e.target.value})}
           label={"Description"}
         />

@@ -60,6 +60,7 @@ class CreateProject extends Component {
             errorMessage={(errors.description || []).join('<br/>')}
             placeholder="Detailed description of this project..."
             multiline rows={12}
+            autoAdjustHeight={true}
             resizable={false}
             style={{width: 20 + 'rem'}}
           />

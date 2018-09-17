@@ -110,6 +110,8 @@ class ProjectFormComponent extends Component {
                    placeholder="Detailed description about your role on project..."
                    isRequired={true}
                    multiline rows={8}
+                   autoAdjustHeight={true}
+                   resizable={false}
         />
         <br/>
         <Label>Skills</Label>

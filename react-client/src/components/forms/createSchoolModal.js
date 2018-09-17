@@ -50,6 +50,8 @@ class CreateSchool extends Component {
                      errorMessage={(errors.description || []).join('<br/>')}
                      placeholder="Detailed description of this school/course..."
                      multiline rows={12}
+                     autoAdjustHeight={true}
+                     resizable={false}
                      style={{width: 15 + 'rem'}}
           />
           <div className={'button-group-right'}>
