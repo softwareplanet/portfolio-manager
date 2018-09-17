@@ -95,43 +95,42 @@ class ProjectsPage extends Component {
         return <span>{skills.map((skill) => skill.name).join(', ')}</span>;
       },
       isPadded: true
+    },
+    {
+      key: 'actions',
+      name: 'Actions',
+      fieldName: 'skills',
+      minWidth: 50,
+      maxWidth: 50,
+      onRender: (item) => {
+        return (<IconButton
+          style={{height: 'auto'}}
+          allowDisabledFocus={true}
+          menuIcon={{iconName: 'MoreVertical'}}
+          menuProps={{
+            items: [
+              {
+                key: 'edit',
+                text: 'Edit',
+                iconProps: {iconName: 'Edit', style: {color: '#000'}},
+                onClick: () => this.editProject(item)
+              },
+              {
+                key: 'delete',
+                text: 'Delete',
+                iconProps: {iconName: 'Delete', style: {color: '#000'}},
+                onClick: () => this._openDeleteDialog(item)
+              }
+
+            ],
+            directionalHintFixed: true
+          }}
+          split={false}
+        />);
+      },
+      isPadded: true
     }
   ];
-
-  _actions = {
-    key: 'actions',
-    name: 'Actions',
-    fieldName: 'skills',
-    minWidth: 50,
-    maxWidth: 50,
-    onRender: (item) => {
-      return (<IconButton
-        style={{height: 'auto'}}
-        allowDisabledFocus={true}
-        menuIcon={{iconName: 'MoreVertical'}}
-        menuProps={{
-          items: [
-            {
-              key: 'edit',
-              text: 'Edit',
-              iconProps: {iconName: 'Edit', style: {color: '#000'}},
-              onClick: () => this.editProject(item)
-            },
-            {
-              key: 'delete',
-              text: 'Delete',
-              iconProps: {iconName: 'Delete', style: {color: '#000'}},
-              onClick: () => this._openDeleteDialog(item)
-            }
-
-          ],
-          directionalHintFixed: true
-        }}
-        split={false}
-      />);
-    },
-    isPadded: true
-  };
 
   state = {
     showPanel: false,
@@ -143,8 +142,10 @@ class ProjectsPage extends Component {
   componentDidMount() {
     const {user, getUserProjects, projects, skills, getProjects, getSkills, employeeId, getEmployee} = this.props;
     if (user) {
-      getEmployee(employeeId);
-      getUserProjects(employeeId);
+      if((user.id === Number(employeeId) || user.isStaff)) {
+        getEmployee(employeeId);
+        getUserProjects(employeeId);
+      }
       if (!projects)
         getProjects();
       if (!skills)
@@ -153,9 +154,6 @@ class ProjectsPage extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (((this.props.isStaff) || (this.props.employee && this.props.user && this.props.employee.id === this.props.user.id)) && (this._columns.length === 5))
-      this._columns.push(this._actions);
-
     const {userProjects, editUserProjectState} = this.props;
     if ((userProjects && nextProps.userProjects && (userProjects.length !== nextProps.userProjects.length)) ||
       ((editUserProjectState && this.state.projectToEdit) &&

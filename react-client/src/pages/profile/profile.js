@@ -21,9 +21,9 @@ class ProfilePage extends Component {
   };
 
   componentDidMount() {
-    const {getUserProjects, getUserSkills, employeeId, employee, getEmployee, user} = this.props;
+    const {getUserProjects, getUserSkills, employeeId, getEmployee, user, isStaff} = this.props;
 
-    if (user && (!employee || employee.id !== employeeId)) {
+    if (user && (isStaff || user.id === Number(employeeId))) {
       getEmployee(employeeId);
       getUserProjects(employeeId);
       getUserSkills(employeeId)
@@ -31,12 +31,14 @@ class ProfilePage extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    const {getUserProjects, getUserSkills, employeeId, getEmployee} = this.props;
+    const {getUserProjects, getUserSkills, employeeId, getEmployee, isStaff, user} = this.props;
     const {employeeId: nextId} = nextProps;
     if ((nextId !== employeeId)) {
-      getEmployee(nextId, true);
-      getUserProjects(nextId);
-      getUserSkills(nextId)
+      if (user && (isStaff || user.id === Number(nextId))) {
+        getEmployee(nextId, true);
+        getUserProjects(nextId);
+        getUserSkills(nextId)
+      }
     }
   }
 
@@ -80,33 +82,34 @@ class ProfilePage extends Component {
           <div className={'info-container'}>
             {user.id === Number(employeeId) ?
               (<div className={'summary-tables-container profile-info-container'}>
-              <div className={'profile-info'}>
-                <div className={'profile-info-line profile-name'}>
+                <div className={'profile-info'}>
+                  <div className={'profile-info-line profile-name'}>
               <span>
                 <Icon iconName="Contact" style={{
                   fontSize: 1.5 + 'rem',
                   margin: 0.5 + 'rem'
                 }}/>{user.firstName + ' ' + user.lastName}
               </span>
-                  {(isStaff || user.id === currentUser.id) &&
-                  <Icon
-                    iconName={'Edit'}
-                    style={{
-                      fontSize: 1.5 + 'rem',
-                      marginLeft: 0.6 + 'rem',
-                      marginBottom: 0.6 + 'rem',
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => this.setState({showPanel: true})}
-                  />}
+                    {(isStaff || user.id === currentUser.id) &&
+                    <Icon
+                      iconName={'Edit'}
+                      style={{
+                        fontSize: 1.5 + 'rem',
+                        marginLeft: 0.6 + 'rem',
+                        marginBottom: 0.6 + 'rem',
+                        cursor: 'pointer'
+                      }}
+                      onClick={() => this.setState({showPanel: true})}
+                    />}
+                  </div>
+                  <ProfileInfoLine text={user.username} iconName="Accounts"/>
+                  <ProfileInfoLine text={new Date(user.dob || '').toDateString()} iconName="Cake"
+                                   noneMessage="You can add birthday"/>
+                  <ProfileInfoLine text={user.email} iconName="EditMail" noneMessage="You can add E-Mail"/>
                 </div>
-                <ProfileInfoLine text={user.username} iconName="Accounts"/>
-                <ProfileInfoLine text={new Date(user.dob || '').toDateString()} iconName="Cake"
-                                 noneMessage="You can add birthday"/>
-                <ProfileInfoLine text={user.email} iconName="EditMail" noneMessage="You can add E-Mail"/>
-              </div>
-              {(this._shouldShowElement()) && isStaff &&
-              <div className={'profile-description'} onClick={() => this.props.history.push(`/home/${user.id}/presentation`)}>
+                {(this._shouldShowElement()) && isStaff &&
+                <div className={'profile-description'}
+                     onClick={() => this.props.history.push(`/home/${user.id}/presentation`)}>
                 <span className={'table-title'}>
                   <Icon iconName={'ContactCard'}
                         style={{
@@ -115,9 +118,9 @@ class ProfilePage extends Component {
                         }}/>
                   Summary
                 </span>
-                <p>{user.description || "Here will be your description"}</p>
-              </div>}
-            </div>) :
+                  <p>{user.description || "Here will be your description"}</p>
+                </div>}
+              </div>) :
               <Loader title="Loading profile information..." style={{marginTop: -5 + 'rem'}}/>
             }
             {(this._shouldShowElement()) &&
