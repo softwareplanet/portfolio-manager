@@ -82,43 +82,43 @@ class SchoolsPage extends Component {
         return <span>{description}</span>;
       },
       isPadded: true
+    },
+    {
+      key: 'actions',
+      name: 'Actions',
+      fieldName: 'schools',
+      minWidth: 50,
+      maxWidth: 50,
+      onRender: (item) => {
+        return (<IconButton
+          style={{height: 'auto'}}
+          allowDisabledFocus={true}
+          menuIcon={{iconName: 'MoreVertical'}}
+          menuProps={{
+            items: [
+              {
+                key: 'edit',
+                text: 'Edit',
+                iconProps: {iconName: 'Edit', style: {color: '#000'}},
+                onClick: () => this.editSchool(item)
+              },
+              {
+                key: 'delete',
+                text: 'Delete',
+                iconProps: {iconName: 'Delete', style: {color: '#000'}},
+                onClick: () => this._openDeleteDialog(item)
+              }
+
+            ],
+            directionalHintFixed: true
+          }}
+          split={false}
+        />);
+      },
+      isPadded: true
     }
   ];
-
-  _actions = {
-    key: 'actions',
-    name: 'Actions',
-    fieldName: 'schools',
-    minWidth: 50,
-    maxWidth: 50,
-    onRender: (item) => {
-      return (<IconButton
-        style={{height: 'auto'}}
-        allowDisabledFocus={true}
-        menuIcon={{iconName: 'MoreVertical'}}
-        menuProps={{
-          items: [
-            {
-              key: 'edit',
-              text: 'Edit',
-              iconProps: {iconName: 'Edit', style: {color: '#000'}},
-              onClick: () => this.editSchool(item)
-            },
-            {
-              key: 'delete',
-              text: 'Delete',
-              iconProps: {iconName: 'Delete', style: {color: '#000'}},
-              onClick: () => this._openDeleteDialog(item)
-            }
-
-          ],
-          directionalHintFixed: true
-        }}
-        split={false}
-      />);
-    },
-    isPadded: true
-  };
+  
 
   state = {
     showPanel: false,
@@ -138,9 +138,6 @@ class SchoolsPage extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (((this.props.isStaff) || (this.props.employee && this.props.user && this.props.employee.id === this.props.user.id)) && (this._columns.length === 4))
-      this._columns.push(this._actions);
-    
     const {userSchools, editUserSchoolState} = this.props;
     if ((userSchools && nextProps.userSchools && (userSchools.length !== nextProps.userSchools.length)) ||
       ((editUserSchoolState && this.state.schoolToEdit) &&
