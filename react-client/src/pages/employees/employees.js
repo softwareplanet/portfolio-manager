@@ -130,7 +130,7 @@ class EmployeesPage extends Component {
 
   componentDidMount() {
     const {user, getEmployees} = this.props;
-    if (user) {
+    if (user && user.isStaff) {
       getEmployees();
     }
   }
