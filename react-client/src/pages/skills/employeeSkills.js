@@ -204,7 +204,7 @@ class SkillsPage extends Component {
             type: DialogType.normal,
             title: `Delete skill ${skillToDelete && skillToDelete.skill.name}`,
             subText:
-              'This can not be undone. Your this skill will be deleted from all your projects.'
+              'This can not be undone. Your skill will be deleted from all your projects.'
           }}
           modalProps={{
             titleAriaId: 'myLabelId',
