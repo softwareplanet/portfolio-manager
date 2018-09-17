@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader} from "../../components";
+import {Loader, PrivatePageRedirect} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DefaultButton,
@@ -148,6 +148,7 @@ class EmployeesPage extends Component {
     const {employees} = this.props;
     return (
       <div className={'page-container'}>
+        <PrivatePageRedirect/>
         <span className={'page-title'}>Employees</span>
         {
           employees ?
