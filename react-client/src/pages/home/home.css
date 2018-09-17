@@ -55,7 +55,8 @@
     flex: 1 2;
     width: 20%;
     padding: 0.5rem;
-    border-right: 2px solid #f1f1f1; }
+    border-right: 2px solid #f1f1f1;
+    min-width: 21rem; }
     .flex .nav-bar .navbar-content {
       margin: 1rem 2.5rem; }
     .flex .nav-bar .list-title {
