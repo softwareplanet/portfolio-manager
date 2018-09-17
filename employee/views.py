@@ -142,7 +142,7 @@ class ListEmployeeSkills(MultipleEmployeeRelatedInstanceAPIView):
             data = request.data
             data['employeeId'] = employee_id
             try:
-                EmployeeSkill.objects.get(skill_id=data['skillId'])
+                EmployeeSkill.objects.get(skill_id=data['skillId'], employee_id=data['employeeId'])
                 return Utils.error_response({'non_field_errors': ['You already have such skill']},
                                             status.HTTP_400_BAD_REQUEST)
             except ObjectDoesNotExist:
