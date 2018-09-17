@@ -24,11 +24,12 @@ export const register = (user) => {
     axios.post('/api/v1/employee', {
       username, email, password, firstName, lastName, dob: formatDate(birthday)
     }).then(() => {
-      dispatch(registerLoading(false));
+      dispatch(registerErrors({}));
       AuthService.logIn(username, password);
     }).catch(errors => {
-      dispatch(registerLoading(false));
       dispatch(registerErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+    }).finally(() => {
+      dispatch(registerLoading(false));
     })
   }
 };

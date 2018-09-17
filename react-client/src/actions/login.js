@@ -28,12 +28,13 @@ export const logIn = (username, password) => {
 
     AuthService.logIn(username, password)
       .then(() => {
-        dispatch(loginLoading(false));
         dispatch(loginErrors({}));
       })
       .catch(errors => {
-        dispatch(loginLoading(false));
         dispatch(loginErrors((errors.response && errors.response.data) || {non_field_errors: [errors.message]}));
+      })
+      .finally(() => {
+        dispatch(loginLoading(false));
       })
   }
 };
