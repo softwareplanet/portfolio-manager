@@ -124,7 +124,7 @@ class SchoolsPage extends Component {
     showPanel: false,
     hideDialog: true,
     schoolToDelete: null,
-    schoolToEdit: null
+    schoolToEdit: null,
   };
 
   componentDidMount() {
@@ -162,7 +162,7 @@ class SchoolsPage extends Component {
         <PrivatePageRedirect employeeId={this.props.employeeId}/>
         <PageTitle title="Schools"/>
         <div className={'add-button'}>
-          <AddButton title="Add a School" onClick={this._setShowPanel(true)}/>
+          <AddButton title="Add a School" onClick={this._setShowPanel(true)} disabled={showPanel}/>
           <Panel
             isBlocking={false}
             isOpen={showPanel}

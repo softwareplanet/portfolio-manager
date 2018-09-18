@@ -2,13 +2,14 @@ import React from 'react';
 import connect from "react-redux/es/connect/connect";
 import {PrimaryButton} from "office-ui-fabric-react";
 
-const AddButtonComponent = ({user, employee, isStaff, title = '', onClick}) => {
+const AddButtonComponent = ({user, employee, isStaff, title = '', onClick, disabled}) => {
   return (
     <div>
       {(isStaff || ((employee && user) && employee.id === user.id)) &&
       <PrimaryButton
         text={title}
         onClick={onClick}
+        disabled={disabled}
       />}  
     </div>
   )

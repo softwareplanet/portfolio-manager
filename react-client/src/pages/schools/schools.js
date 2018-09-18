@@ -66,39 +66,40 @@ class SchoolsPage extends Component {
     minWidth: 50,
     maxWidth: 50,
     onRender: (item) => {
-      return (<IconButton
-        style={{height: 'auto'}}
-        allowDisabledFocus={true}
-        menuIcon={{iconName: 'MoreVertical'}}
-        menuProps={{
-          items: [
-            {
-              key: 'open',
-              text: 'Employees from this school',
-              iconProps: {iconName: 'PublishCourse', style: {color: '#000'}},
-              onClick: () => {
-                this.props.setSchool(item);
-                this.props.history.push(`/home/schools/${item.id}`)
+      return (
+        <IconButton
+          style={{height: 'auto'}}
+          allowDisabledFocus={true}
+          menuIcon={{iconName: 'MoreVertical'}}
+          menuProps={{
+            items: [
+              {
+                key: 'open',
+                text: 'Employees from this school',
+                iconProps: {iconName: 'PublishCourse', style: {color: '#000'}},
+                onClick: () => {
+                  this.props.setSchool(item);
+                  this.props.history.push(`/home/schools/${item.id}`)
+                }
+              },
+              {
+                key: 'edit',
+                text: 'Edit',
+                iconProps: {iconName: 'Edit', style: {color: '#000'}},
+                onClick: () => this.editSchool(item)
+              },
+              {
+                key: 'delete',
+                text: 'Delete',
+                iconProps: {iconName: 'Delete', style: {color: '#000'}},
+                onClick: () => this._openDeleteDialog(item)
               }
-            },
-            {
-              key: 'edit',
-              text: 'Edit',
-              iconProps: {iconName: 'Edit', style: {color: '#000'}},
-              onClick: () => this.editSchool(item)
-            },
-            {
-              key: 'delete',
-              text: 'Delete',
-              iconProps: {iconName: 'Delete', style: {color: '#000'}},
-              onClick: () => this._openDeleteDialog(item)
-            }
 
-          ],
-          directionalHintFixed: true
-        }}
-        split={false}
-      />);
+            ],
+            directionalHintFixed: true
+          }}
+          split={false}
+        />);
     },
     isPadded: true
   };

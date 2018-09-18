@@ -178,7 +178,7 @@ class ProjectsPage extends Component {
         <PrivatePageRedirect employeeId={this.props.employeeId}/>
         <PageTitle title="Projects"/>
         <div className={'add-button'}>
-          <AddButton title="Add a Project" onClick={this._setShowPanel(true)}/>
+          <AddButton disabled={showPanel} title="Add a Project" onClick={this._setShowPanel(true)} />
           <Panel
             isBlocking={false}
             isOpen={showPanel}
