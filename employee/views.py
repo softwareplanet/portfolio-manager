@@ -219,15 +219,16 @@ class ListSearch(APIView):
         if request.user.is_staff:
             result.extend(SearchEmployeeSerializer(
                 Employee.objects.filter(
-                    Q(first_name__icontains=data) | Q(last_name__icontains=data) | Q(description__icontains=data)),
+                    Q(first_name__istartswith=data) | Q(last_name__istartswith=data) | Q(
+                        description__icontains=(' ' + data)) | Q(description__istartswith=data)),
                 many=True).data)
             result.extend(SearchProjectSerializer(
                 Project.objects.filter(
-                    Q(name__icontains=data) | Q(description__icontains=data)),
+                    Q(name__istartswith=data) | Q(description__icontains=(' ' + data))),
                 many=True).data)
             result.extend(SearchSkillSerializer(
                 Skill.objects.filter(
-                    Q(name__icontains=data)),
+                    Q(name__istartswith=data)),
                 many=True).data)
         else:
             pass
