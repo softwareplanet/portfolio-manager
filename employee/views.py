@@ -194,7 +194,7 @@ class ListMe(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        return Response(EmployeeSerializer(request.user).data)
+        return Response(EmployeeForUserSerializer(request.user).data)
 
     def patch(self, request):
         try:
