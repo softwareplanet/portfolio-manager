@@ -35,8 +35,8 @@ class CreateSchool extends Component {
         <form onSubmit={(e) => {
           e.preventDefault();
           !school ?
-          createSchool({name, description}) :
-          editSchool({name, description, id: school.id});
+            createSchool({name, description}) :
+            editSchool({name, description, id: school.id});
         }}>
           <TextField label="Name:" value={name}
                      onChange={(e) => this.setState({name: e.target.value})}

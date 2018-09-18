@@ -4,7 +4,7 @@ import connect from "react-redux/es/connect/connect";
 const PageTitleComponent = ({user, employee, isStaff, title = ''}) => {
   return (
     <span
-      className={'page-title'}>{title + (((isStaff || ((employee && user) && employee.id !== user.id))  && (employee.firstName || employee.lastName)) ? ` of ${employee.firstName} ${employee.lastName}` : '')}</span>
+      className={'page-title'}>{title + (((isStaff || ((employee && user) && employee.id !== user.id)) && (employee.firstName || employee.lastName)) ? ` of ${employee.firstName} ${employee.lastName}` : '')}</span>
   )
 };
 

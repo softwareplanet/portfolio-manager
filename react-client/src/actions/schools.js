@@ -4,7 +4,8 @@ import {
   CREATE_SCHOOL_ERRORS,
   DELETE_SCHOOL,
   NEW_SCHOOL_LOADING,
-  SET_SCHOOLS, SET_SCHOOL,
+  SET_SCHOOL,
+  SET_SCHOOLS,
   SUCCESSFUL_EDIT_SCHOOL
 } from "./actionTypes";
 import axios from "axios";

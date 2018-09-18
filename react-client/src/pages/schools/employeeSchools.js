@@ -118,7 +118,7 @@ class SchoolsPage extends Component {
       isPadded: true
     }
   ];
-  
+
 
   state = {
     showPanel: false,

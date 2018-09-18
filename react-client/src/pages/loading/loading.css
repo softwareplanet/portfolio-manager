@@ -1,13 +1,15 @@
 .full-frame {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden; }
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
 .centered-loading {
-  display: flex;
-  width: 100%;
-  flex: 1;
-  justify-content: center;
-  align-items: center; }
+    display: flex;
+    width: 100%;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}

@@ -10,7 +10,7 @@ const AddButtonComponent = ({user, employee, isStaff, title = '', onClick, disab
         text={title}
         onClick={onClick}
         disabled={disabled}
-      />}  
+      />}
     </div>
   )
 };

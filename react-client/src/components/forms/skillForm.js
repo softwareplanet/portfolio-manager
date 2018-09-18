@@ -63,8 +63,8 @@ class SkillFormComponent extends Component {
 
   _renderSkillLevelLabel = ({name, description}, index) => (
     <div key={index} className={'skill-level-description'}>
-      <TooltipHost content={description} id={`tip${index}`} calloutProps={{ gapSpace: 0 }}>
-        <Label onClick={() => this.setState({level: 5-index})}>{name}</Label>
+      <TooltipHost content={description} id={`tip${index}`} calloutProps={{gapSpace: 0}}>
+        <Label onClick={() => this.setState({level: 5 - index})}>{name}</Label>
       </TooltipHost>
     </div>
   );

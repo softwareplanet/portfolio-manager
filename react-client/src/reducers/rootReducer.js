@@ -22,7 +22,7 @@ export default combineReducers({
   sideBarOpened,
   isStaff,
   isAuthenticated,
-  
+
   skillModal,
   schoolModal,
   projectModal,

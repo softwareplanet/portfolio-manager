@@ -78,22 +78,22 @@ class EmployeesWithSkillPage extends Component {
           allowDisabledFocus={true}
           menuIcon={{iconName: 'MoreVertical'}}
           menuProps={{
-              items: [
-                {
-                  key: 'open',
-                  text: 'Open profile',
-                  iconProps: {iconName: 'Contact', style: {color: '#000'}},
-                  onClick: () => this._openEmployeeProfile(item.employeeId)
-                },
-                {
-                  key: 'skills',
-                  text: 'All skills',
-                  iconProps: {iconName: 'UserEvent', style: {color: '#000'}},
-                  onClick: () => this._openEmployeeSkills(item.employeeId)
-                }
-              ],
-              directionalHintFixed: true
-            }
+            items: [
+              {
+                key: 'open',
+                text: 'Open profile',
+                iconProps: {iconName: 'Contact', style: {color: '#000'}},
+                onClick: () => this._openEmployeeProfile(item.employeeId)
+              },
+              {
+                key: 'skills',
+                text: 'All skills',
+                iconProps: {iconName: 'UserEvent', style: {color: '#000'}},
+                onClick: () => this._openEmployeeSkills(item.employeeId)
+              }
+            ],
+            directionalHintFixed: true
+          }
           }
           split={false}
         />);
@@ -112,13 +112,13 @@ class EmployeesWithSkillPage extends Component {
   componentWillReceiveProps(nextProps, nextContext) {
     const {user, getSkill, skillId} = this.props;
     const {skillId: nextId} = nextProps;
-    if(skillId !== nextId){
+    if (skillId !== nextId) {
       if (user) {
         getSkill(nextId);
       }
     }
   }
-  
+
   render() {
     const {skill: {employees, name, url}} = this.props;
     return (
@@ -144,7 +144,7 @@ class EmployeesWithSkillPage extends Component {
   _openEmployeeProfile = (employeeId) => {
     this.props.history.push(`/home/${employeeId}/profile`);
   };
-  
+
   _openEmployeeSkills = (employeeId) => {
     this.props.history.push(`/home/${employeeId}/skills`);
   };

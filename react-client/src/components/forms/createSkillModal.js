@@ -55,7 +55,7 @@ class CreateSkill extends Component {
           <Dropdown
             placeHolder="Select a category"
             label="Skill category:"
-            options={skillCategories.map( ({id, name}) => ({key: id, text: name}))}
+            options={skillCategories.map(({id, name}) => ({key: id, text: name}))}
             onChanged={({key}) => this.setState({categoryId: key})}
             selectedKey={categoryId}
             isRequired={true}

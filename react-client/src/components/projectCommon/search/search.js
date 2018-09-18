@@ -39,7 +39,8 @@ class SearchComponent extends Component {
           onSearch={this.search.bind(this)}
           onEscape={() => this.setState({openedSearch: false})}
         />
-        <SearchResults opened={openedSearch} items={items} loading={loading} closeSearch={() => this.setState({openedSearch: false, items: null, searchValue: ''})}/>
+        <SearchResults opened={openedSearch} items={items} loading={loading}
+                       closeSearch={() => this.setState({openedSearch: false, items: null, searchValue: ''})}/>
       </div>
     )
   }

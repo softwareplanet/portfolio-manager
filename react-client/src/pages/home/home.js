@@ -5,8 +5,11 @@ import {Route, Switch} from "react-router-dom";
 import {
   EmployeeProjects,
   Employees,
-  EmployeeSchools, EmployeesFromSchool,
-  EmployeeSkills, EmployeesWithSkill, Presentation,
+  EmployeeSchools,
+  EmployeesFromSchool,
+  EmployeeSkills,
+  EmployeesWithSkill,
+  Presentation,
   Profile,
   Projects,
   ProjectTeam,
