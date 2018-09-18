@@ -191,7 +191,7 @@ class SchoolsPage extends Component {
             type: DialogType.normal,
             title: `Delete school ${schoolToDelete && schoolToDelete.school.name}`,
             subText:
-              'This can not be undone.'
+              'This can not be undone. You can add this school again or edit existing.'
           }}
           modalProps={{
             titleAriaId: 'myLabelId',
