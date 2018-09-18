@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {AddButton, Loader, PageTitle, PrivatePageRedirect, SchoolsForm} from "../../components";
+import {AddButton, Loader, PageTitle, PrivatePageRedirect, SchoolsForm, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserSchool, getUserSchools} from "../../actions/userSchools";
 import {
@@ -79,7 +79,7 @@ class SchoolsPage extends Component {
       isResizable: true,
       data: 'string',
       onRender: ({school: {description}}) => {
-        return <span>{description}</span>;
+        return <Tooltip text={description}>{description}</Tooltip>;
       },
       isPadded: true
     },

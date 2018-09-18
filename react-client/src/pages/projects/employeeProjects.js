@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {AddButton, Loader, PageTitle, PrivatePageRedirect, ProjectsForm} from "../../components";
+import {AddButton, Loader, PageTitle, PrivatePageRedirect, ProjectsForm, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserProject, getUserProjects} from "../../actions/userProjects";
 import {
@@ -80,7 +80,7 @@ class ProjectsPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({description}) => {
-        return <span>{description}</span>;
+        return <Tooltip text={description}>{description}</Tooltip>;
       },
     },
     {
@@ -92,7 +92,8 @@ class ProjectsPage extends Component {
       isResizable: true,
       data: 'string',
       onRender: ({skills}) => {
-        return <span>{skills.map((skill) => skill.name).join(', ')}</span>;
+        const skillsS = skills.map((skill) => skill.name).join(', ');
+        return <Tooltip text={skillsS}>{skillsS}</Tooltip>;
       },
       isPadded: true
     },

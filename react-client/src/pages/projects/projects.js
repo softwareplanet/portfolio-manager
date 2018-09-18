@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {CreateProjectModal, Loader} from "../../components";
+import {CreateProjectModal, Loader, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DefaultButton,
@@ -77,7 +77,9 @@ class ProjectsPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({description}) => {
-        return <span>{description}</span>;
+        return (
+          <Tooltip text={description}>{description}</Tooltip>
+        );
       },
     },
     {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader, PrivatePageRedirect} from "../../components";
+import {Loader, PrivatePageRedirect, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DefaultButton,
@@ -41,7 +41,10 @@ class EmployeesPage extends Component {
       isResizable: true,
       data: 'string',
       onRender: ({skills}) => {
-        return <span>{skills.map((skill) => skill).join(', ')}</span>;
+        const skillsS = skills.map((skill) => skill).join(', ');
+        return (
+          <Tooltip text={skillsS}>{skillsS}</Tooltip>
+        );
       },
       isPadded: true
     },
@@ -54,7 +57,10 @@ class EmployeesPage extends Component {
       isResizable: true,
       data: 'string',
       onRender: ({projects}) => {
-        return <span>{projects.map((project) => project).join(', ')}</span>;
+        const projectsS = projects.map((project) => project).join(', ');
+        return (
+          <Tooltip text={projectsS}>{projectsS}</Tooltip>
+        );
       },
       isPadded: true
     },

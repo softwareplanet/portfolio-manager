@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {CreateSchoolModal, Loader} from "../../components";
+import {CreateSchoolModal, Loader, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DefaultButton,
@@ -53,7 +53,7 @@ class SchoolsPage extends Component {
       isResizable: true,
       data: 'string',
       onRender: ({description}) => {
-        return <span>{description}</span>;
+        return <Tooltip text={description}>{description}</Tooltip>;
       },
       isPadded: true
     }

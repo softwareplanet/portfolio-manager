@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader, PrivatePageRedirect} from "../../components";
+import {Loader, PrivatePageRedirect, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {IconButton, Rating, SelectionMode} from "office-ui-fabric-react";
 import {getSkill} from "../../actions/skills";
@@ -63,7 +63,7 @@ class EmployeesWithSkillPage extends Component {
       isResizable: true,
       data: 'string',
       onRender: ({description}) => {
-        return <span>{description}</span>;
+        return <Tooltip text={description}>{description}</Tooltip>;
       },
       isPadded: true
     },
@@ -144,6 +144,7 @@ class EmployeesWithSkillPage extends Component {
   _openEmployeeProfile = (employeeId) => {
     this.props.history.push(`/home/${employeeId}/profile`);
   };
+  
   _openEmployeeSkills = (employeeId) => {
     this.props.history.push(`/home/${employeeId}/skills`);
   };

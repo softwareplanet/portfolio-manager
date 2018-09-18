@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Loader, PrivatePageRedirect} from "../../components";
+import {Loader, PrivatePageRedirect, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {IconButton, SelectionMode} from "office-ui-fabric-react";
 import {getProject} from "../../actions/projects";
@@ -54,7 +54,7 @@ class ProjectTeamPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({description}) => {
-        return <span>{description}</span>;
+        return <Tooltip text={description}>{description}</Tooltip>;
       },
     },
     {
@@ -66,7 +66,8 @@ class ProjectTeamPage extends Component {
       isResizable: true,
       data: 'string',
       onRender: ({skills}) => {
-        return <span>{skills.map((skill) => skill.name).join(', ')}</span>;
+        const skillsS = skills.map((skill) => skill.name).join(', ');
+        return <Tooltip text={skillsS}>{skillsS}</Tooltip>;
       },
       isPadded: true
     },

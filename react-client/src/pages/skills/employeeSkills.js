@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {AddButton, Loader, PageTitle, PrivatePageRedirect, SkillsForm} from "../../components";
+import {AddButton, Loader, PageTitle, PrivatePageRedirect, SkillsForm, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserSkill, getUserSkills} from "../../actions/userSkills";
 import {
@@ -89,7 +89,7 @@ class SkillsPage extends Component {
       isResizable: true,
       data: 'string',
       onRender: ({description}) => {
-        return <span>{description}</span>;
+        return <Tooltip text={description}>{description}</Tooltip>;
       },
       isPadded: true
     },
