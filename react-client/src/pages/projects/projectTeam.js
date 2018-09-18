@@ -129,7 +129,7 @@ class ProjectTeamPage extends Component {
         <PrivatePageRedirect/>
         <span
           className={'page-title'}>{'Project ' + (name ? name : '')}</span>
-        <p className={'page-description'}>&emsp;{'    ' + description}</p>
+        <p className={'page-description'}>{'    ' + description}</p>
         {
           team ?
             <DetailsList

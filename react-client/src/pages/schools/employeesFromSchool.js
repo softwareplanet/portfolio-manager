@@ -94,7 +94,7 @@ class EmployeesFromSchoolPage extends Component {
         <PrivatePageRedirect/>
         <span
           className={'page-title'}>{'Employees from school: ' + (name ? name : '')}</span>
-        <p className={'page-description'}>&emsp;{'    ' + description}</p>
+        <p className={'page-description'}>{'    ' + description}</p>
         {
           employees ?
             <DetailsList

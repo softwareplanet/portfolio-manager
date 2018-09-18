@@ -126,7 +126,7 @@ class EmployeesWithSkillPage extends Component {
         <PrivatePageRedirect/>
         <span
           className={'page-title'}>{'Employees with skill: ' + (name ? name : '')}</span>
-        <p className={'page-description'}>&emsp;{'    ' + url}</p>
+        <p className={'page-description'}>{'    ' + url}</p>
         {
           employees ?
             <DetailsList
