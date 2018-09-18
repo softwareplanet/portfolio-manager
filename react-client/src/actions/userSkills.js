@@ -33,6 +33,7 @@ export const removeSkillErrors = () => {
 
 export const getUserSkills = (userId) => {
   return (dispatch) => {
+    dispatch(createUserSkillErrors({}));
     axios.get(`/api/v1/employee/${userId}/skill`)
       .then(res => {
         dispatch(setUserSkills(res.data));
@@ -88,6 +89,7 @@ export const createUserSkillErrors = (errors = {}) => {
 export const editUserSkill = (userId, skill) => {
   return (dispatch) => {
     dispatch(newUserSkillLoading(true));
+    dispatch(createUserSkillErrors({}));
     axios.patch(`/api/v1/employee/${userId}/skill/${skill.id}`, skill)
       .then(res => {
         dispatch(successfulEditUserSkill(res.data.id));
@@ -105,6 +107,7 @@ export const editUserSkill = (userId, skill) => {
 export const createUserSkill = (userId, skill) => {
   return (dispatch) => {
     dispatch(newUserSkillLoading(true));
+    dispatch(createUserSkillErrors({}));
     axios.post(`/api/v1/employee/${userId}/skill`, skill)
       .then(res => {
         dispatch(addUserSkill(res.data))

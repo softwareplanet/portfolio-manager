@@ -21,6 +21,7 @@ export const setSchools = (schools = null) => {
 
 export const getSchools = () => {
   return (dispatch) => {
+    dispatch(createSchoolErrors({}));
     axios.get(`/api/v1/school`)
       .then(res => {
         dispatch(setSchools(res.data));
@@ -55,6 +56,7 @@ export const createSchoolErrors = (errors = {}) => {
 export const createSchool = (school) => {
   return (dispatch) => {
     dispatch(newSchoolLoading(true));
+    dispatch(createSchoolErrors({}));
     axios.post('/api/v1/school', school)
       .then(res => {
         dispatch(setSchoolModal(false));
@@ -101,6 +103,7 @@ export const changeSchool = (school) => {
 export const editSchool = (school) => {
   return (dispatch) => {
     dispatch(newSchoolLoading(true));
+    dispatch(createSchoolErrors({}));
     axios.patch(`/api/v1/school/${school.id}`, school)
       .then(res => {
         dispatch(setSchoolModal(false));
@@ -122,6 +125,7 @@ export const setSchool = (school = {}) => {
 
 export const getSchool = (schoolId) => {
   return (dispatch) => {
+    dispatch(createSchoolErrors({}));
     axios.get(`/api/v1/school/${schoolId}`)
       .then(res => {
         dispatch(setSchool(res.data));

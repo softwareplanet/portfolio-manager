@@ -103,6 +103,7 @@ export const getEmployees = () => {
 
 export const getEmployee = (employeeId, needsLoader = false) => {
   return (dispatch) => {
+    dispatch(editUserErrors({}));
     needsLoader && dispatch(setEmployee({}));
     axios.get(`/api/v1/employee/${employeeId}`)
       .then(res => {
@@ -114,6 +115,7 @@ export const getEmployee = (employeeId, needsLoader = false) => {
 
 export const getUser = () => {
   return (dispatch) => {
+    dispatch(editUserErrors({}));
     axios.get('/api/v1/me')
       .then(res => {
         dispatch(isStaff(res.data.isStaff));
@@ -126,6 +128,7 @@ export const getUser = () => {
 export const updateUserPhoto = (employeeId, data, currentUserId) => {
   return (dispatch) => {
     dispatch(editUserPhotoLoading(true));
+    dispatch(editUserErrors({}));
     let formData = new FormData();
     formData.append('image', data.image);
     axios.patch(`/api/v1/employee/${employeeId}`, formData)
@@ -144,6 +147,7 @@ export const updateUserPhoto = (employeeId, data, currentUserId) => {
 export const updateUser = (employeeId, data, currentUserId) => {
   return (dispatch) => {
     dispatch(editUserLoading(true));
+    dispatch(editUserErrors({}));
     axios.patch(`/api/v1/employee/${employeeId}`, data)
       .then(res => {
         dispatch(removeUserErrors());

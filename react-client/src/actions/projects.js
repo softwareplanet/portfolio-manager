@@ -21,6 +21,7 @@ export const setProjects = (projects = null) => {
 
 export const getProjects = () => {
   return (dispatch) => {
+    dispatch(createProjectErrors({}));
     axios.get(`/api/v1/project`)
       .then(res => {
         dispatch(setProjects(res.data));
@@ -52,6 +53,7 @@ export const createProjectErrors = (errors = {}) => {
 
 export const createProject = (project) => {
   return (dispatch) => {
+    dispatch(createProjectErrors({}));
     dispatch(newProjectLoading(true));
     axios.post('/api/v1/project', project)
       .then(res => {
@@ -99,6 +101,7 @@ export const changeProject = (project) => {
 export const editProject = (project) => {
   return (dispatch) => {
     dispatch(newProjectLoading(true));
+    dispatch(createProjectErrors({}));
     axios.patch(`/api/v1/project/${project.id}`, project)
       .then(res => {
         dispatch(setProjectModal(false));
@@ -120,6 +123,7 @@ export const setProject = (projects = {}) => {
 
 export const getProject = (projectId) => {
   return (dispatch) => {
+    dispatch(createProjectErrors({}));
     axios.get(`/api/v1/project/${projectId}`)
       .then(res => {
         dispatch(setProject(res.data));

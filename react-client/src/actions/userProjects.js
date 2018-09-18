@@ -26,6 +26,7 @@ export const setUserProjects = (userProjects = null) => {
 
 export const getUserProjects = (userId) => {
   return (dispatch) => {
+    dispatch(createUserProjectErrors({}));
     axios.get(`/api/v1/employee/${userId}/project`)
       .then(res => {
         dispatch(setUserProjects(res.data));
@@ -81,21 +82,25 @@ export const createUserProjectErrors = (errors = {}) => {
 export const editUserProject = (userId, project) => {
   return (dispatch) => {
     dispatch(newUserProjectLoading(true));
+    dispatch(createUserProjectErrors({}));
     axios.patch(`/api/v1/employee/${userId}/project/${project.id}`, project)
       .then(res => {
         dispatch(successfulEditUserProject(res.data.id));
         dispatch(changeUserProject(res.data))
-      }).catch(errors => {
-      dispatch(createUserProjectErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
-    }).finally(() => {
-      dispatch(newUserProjectLoading(false));
-    });
+      })
+      .catch(errors => {
+        dispatch(createUserProjectErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+      })
+      .finally(() => {
+        dispatch(newUserProjectLoading(false));
+      });
   }
 };
 
 export const createUserProject = (userId, project) => {
   return (dispatch) => {
     dispatch(newUserProjectLoading(true));
+    dispatch(createUserProjectErrors({}));
     axios.post(`/api/v1/employee/${userId}/project`, project)
       .then(res => {
         dispatch(addUserProject(res.data))

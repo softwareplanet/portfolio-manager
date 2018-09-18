@@ -29,6 +29,7 @@ export const setSkillCategories = (skills = null) => {
 
 export const getSkills = () => {
   return (dispatch) => {
+    dispatch(createSkillErrors({}));
     axios.get(`/api/v1/skill`)
       .then(({data: {skills, categories}}) => {
         dispatch(setSkills(skills));
@@ -62,6 +63,7 @@ export const createSkillErrors = (errors = {}) => {
 export const createSkill = (skill) => {
   return (dispatch) => {
     dispatch(newSkillLoading(true));
+    dispatch(createSkillErrors({}));
     axios.post('/api/v1/skill', skill)
       .then(res => {
         dispatch(setSkillModal(false));
@@ -108,6 +110,7 @@ export const changeSkill = (skill) => {
 export const editSkill = (skill) => {
   return (dispatch) => {
     dispatch(newSkillLoading(true));
+    dispatch(createSkillErrors({}));
     axios.patch(`/api/v1/skill/${skill.id}`, skill)
       .then(res => {
         dispatch(setSkillModal(false));
@@ -129,6 +132,7 @@ export const setSkill = (skill = {}) => {
 
 export const getSkill = (skillId) => {
   return (dispatch) => {
+    dispatch(createSkillErrors({}));
     axios.get(`/api/v1/skill/${skillId}`)
       .then(res => {
         dispatch(setSkill(res.data));

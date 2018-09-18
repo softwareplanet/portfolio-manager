@@ -33,6 +33,7 @@ export const removeSchoolErrors = () => {
 
 export const getUserSchools = (userId) => {
   return (dispatch) => {
+    dispatch(createUserSchoolErrors({}));
     axios.get(`/api/v1/employee/${userId}/school`)
       .then(res => {
         dispatch(setUserSchools(res.data));
@@ -88,21 +89,25 @@ export const createUserSchoolErrors = (errors = {}) => {
 export const editUserSchool = (userId, school) => {
   return (dispatch) => {
     dispatch(newUserSchoolLoading(true));
+    dispatch(createUserSchoolErrors({}));
     axios.patch(`/api/v1/employee/${userId}/school/${school.id}`, school)
       .then(res => {
         dispatch(successfulEditUserSchool(res.data.id));
         dispatch(changeUserSchool(res.data))
-      }).catch(errors => {
-      dispatch(createUserSchoolErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
-    }).finally(() => {
-      dispatch(newUserSchoolLoading(false));
-    });
+      })
+      .catch(errors => {
+        dispatch(createUserSchoolErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+      })
+      .finally(() => {
+        dispatch(newUserSchoolLoading(false));
+      });
   }
 };
 
 export const createUserSchool = (userId, school) => {
   return (dispatch) => {
     dispatch(newUserSchoolLoading(true));
+    dispatch(createUserSchoolErrors({}));
     axios.post(`/api/v1/employee/${userId}/school`, school)
       .then(res => {
         dispatch(addUserSchool(res.data))
