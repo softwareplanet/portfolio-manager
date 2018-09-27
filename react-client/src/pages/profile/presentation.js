@@ -32,14 +32,21 @@ class PresentationPage extends Component {
           </div>
           <div className={'presentation-container'}>
             <div className="info">
-              <span>
-              Name: <b>{employee ? employee.firstName + ' ' + employee.lastName : ''}</b>
-            </span>
-              <br/>
+              <div>
+                Name: <b>{employee ? employee.firstName + ' ' + employee.lastName : ''}</b>
+              </div>
+              {(employee && employee.position) ? <div style={{marginTop: 0.5 + 'rem'}}>
+                Position: {employee ? employee.position : ''}
+              </div> : <br/>}
               <br/>
               <p style={{textAlign: 'justify'}}>
                 {employee.description}
               </p>
+              <div style={{fontWeight: 700, marginBottom: 1 + 'rem'}}>Summary of qualification:<br/>
+                <div style={{fontWeight: 400, marginBottom: 2 + 'rem', marginTop: 0.5 + 'rem'}}>
+                  {this._generateSummaryOfQualification()}
+                </div>
+              </div>
               <div style={{textDecoration: 'underline', fontWeight: 700, marginBottom: 1 + 'rem'}}>Technical Summary
               </div>
               {userSkills ? this._renderSkills(userSkills) : <Loader title={'Loading skills...'}/>}
@@ -57,6 +64,12 @@ class PresentationPage extends Component {
       </div>
     );
   }
+
+  _generateSummaryOfQualification = () => {
+    const {employee: {careerStartDate, position}} = this.props;
+    const experience = new Date(new Date() - new Date(careerStartDate)).getFullYear() - 1970;
+    return `${experience || 1} year${experience > 1 ? 's' : ''} of experience as a ${position}`;
+  };
 
   _renderSkills = (groupedSkills = []) => {
     return groupedSkills.sort((a, b) => a[1][0].skill.category.id - b[1][0].skill.category.id).map((arr, index) => {
