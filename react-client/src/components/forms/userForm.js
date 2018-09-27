@@ -68,7 +68,7 @@ class UserFormComponent extends Component {
                    placeholder="example@mail.com"
         />
         <br/>
-        {isStaff && id !== user.id &&
+        {isStaff &&
         <TextField label="Summary:" value={description}
                    onChange={(e) => this.setState({description: e.target.value})}
                    errorMessage={(errors.description || []).join('<br/>')}
