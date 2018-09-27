@@ -160,7 +160,7 @@ class ProfilePage extends Component {
 
   _shouldShowElement = () => {
     const {employee, employeeId} = this.props;
-    return !employee.isStaff && (employee && employee.id === Number(employeeId));
+    return (employee && employee.id === Number(employeeId));
   };
 
   _setShowPanel = (showPanel) => {
