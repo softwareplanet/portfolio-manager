@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {removeUserErrors, updateUser} from "../../actions/user";
 import connect from "react-redux/es/connect/connect";
-import {DatePicker, TextField} from "office-ui-fabric-react";
+import {Checkbox, DatePicker, TextField} from "office-ui-fabric-react";
 import {PanelFooter} from "../projectCommon/panelFooter";
 import {formatDate} from "../../service/utils";
+import {LittleBr} from "..";
 
 class UserFormComponent extends Component {
 
@@ -11,9 +12,12 @@ class UserFormComponent extends Component {
     firstName: this.props.firstName,
     lastName: this.props.lastName,
     username: this.props.username,
+    position: this.props.position,
     dob: new Date(this.props.dob),
+    carrierStartDate: new Date(this.props.carrierStartDate),
     email: this.props.email,
-    description: this.props.description
+    description: this.props.description,
+    employeeIsStaff: this.props.employeeIsStaff
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -24,7 +28,7 @@ class UserFormComponent extends Component {
   }
 
   render() {
-    const {firstName, lastName, dob, username, email, description} = this.state;
+    const {firstName, lastName, dob, username, email, description, position, carrierStartDate, employeeIsStaff} = this.state;
     const {errors, loading, id, isStaff, user} = this.props;
     return (
       <form className={'profile-edit-form'}>
@@ -35,7 +39,7 @@ class UserFormComponent extends Component {
                    placeholder="First name"
                    required
         />
-        <br/>
+        <LittleBr/>
         <TextField label="Last name:"
                    value={lastName}
                    onChange={(e) => this.setState({lastName: e.target.value})}
@@ -43,7 +47,7 @@ class UserFormComponent extends Component {
                    placeholder="Last name"
                    required
         />
-        <br/>
+        <LittleBr/>
         <DatePicker
           value={dob}
           placeholder="Select a date..."
@@ -53,21 +57,46 @@ class UserFormComponent extends Component {
           }}
           isRequired={true}
         />
-        <br/>
+        <LittleBr/>
+        <DatePicker
+          value={carrierStartDate}
+          placeholder="Select a date..."
+          label="Carrier start date:"
+          onSelectDate={(carrierStartDate) => {
+            this.setState({carrierStartDate})
+          }}
+          isRequired={true}
+        />
+        <LittleBr/>
         <TextField label="Username:" value={username}
                    onChange={(e) => this.setState({username: e.target.value})}
                    errorMessage={(errors.username || []).join('<br/>')}
                    required
                    placeholder="Username"
         />
-        <br/>
+        <LittleBr/>
+        <TextField label="Position:" value={position}
+                   onChange={(e) => this.setState({position: e.target.value})}
+                   errorMessage={(errors.position || []).join('<br/>')}
+                   required
+                   placeholder="Username"
+        />
+        <LittleBr/>
         <TextField label="E-Mail:" value={email}
                    onChange={(e) => this.setState({email: e.target.value})}
                    errorMessage={(errors.email || []).join('<br/>')}
                    type="email"
                    placeholder="example@mail.com"
         />
-        <br/>
+        <LittleBr/>
+        {isStaff &&
+        <Checkbox
+          label="Admin"
+          checked={employeeIsStaff}
+          onChange={(e, checked) => this.setState({employeeIsStaff: checked})}
+        />
+        }
+        <LittleBr/>
         {isStaff &&
         <TextField label="Summary:" value={description}
                    onChange={(e) => this.setState({description: e.target.value})}
@@ -75,11 +104,16 @@ class UserFormComponent extends Component {
                    type="email"
                    placeholder="Your summary..."
                    multiline
-                   rows={16}
+                   rows={12}
                    resizable={false}
         />}
         <PanelFooter onClose={this._onClose.bind(this)} loading={loading}
-                     onSave={() => this.props.updateUser(id, {...this.state, dob: formatDate(dob)}, user.id)}/>
+                     onSave={() => this.props.updateUser(id, {
+                       ...this.state,
+                       dob: formatDate(dob),
+                       carrierStartDate: formatDate(carrierStartDate),
+                       isStaff: employeeIsStaff
+                     }, user.id)}/>
       </form>
     );
   }
@@ -90,16 +124,20 @@ class UserFormComponent extends Component {
   }
 }
 
-const mapStateToProps = ({user, editUserErrors, editUserLoading, editUserState, isStaff}, {employee: {id, firstName, lastName, dob, username, email, description}}) => {
+const mapStateToProps = ({user, editUserErrors, editUserLoading, editUserState, isStaff},
+                         {employee: {id, firstName, lastName, dob, username, email, description, position, carrierStartDate, isStaff: employeeIsStaff}}) => {
   return {
     user,
     id,
     firstName,
     lastName,
     dob,
+    carrierStartDate,
     username,
+    position,
     email,
     description,
+    employeeIsStaff,
     editUserState,
     errors: editUserErrors,
     loading: editUserLoading,
