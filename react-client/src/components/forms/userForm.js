@@ -79,7 +79,7 @@ class UserFormComponent extends Component {
                    onChange={(e) => this.setState({position: e.target.value})}
                    errorMessage={(errors.position || []).join('<br/>')}
                    required
-                   placeholder="Username"
+                   placeholder="Software Developer"
         />
         <LittleBr/>
         <TextField label="E-Mail:" value={email}
