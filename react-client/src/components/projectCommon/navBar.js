@@ -12,18 +12,17 @@ const Link = ({url, history, title}) => {
 export const NavBar = ({history, sideBarOpened, isStaff, userId}) => {
 
   const employeeRoutes = [
-    {title: 'General', url: `/home/${userId}/profile`},
-    {title: 'Projects', url: `/home/${userId}/projects`},
-    {title: 'Skills', url: `/home/${userId}/skills`},
-    {title: 'Schools', url: `/home/${userId}/schools`},
+    {title: 'My Profile', url: `/home/${userId}/profile`},
+    {title: 'My Projects', url: `/home/${userId}/projects`},
+    {title: 'My Skills', url: `/home/${userId}/skills`},
+    {title: 'My Schools', url: `/home/${userId}/schools`},
   ];
 
   const staffRoutes = [
-    {title: 'General', url: `/home/${userId}/profile`},
     {title: 'Employees', url: '/home/employees'},
     {title: 'Projects', url: '/home/projects'},
     {title: 'Skills', url: '/home/skills'},
-    {title: 'Schools', url: '/home/schools'},
+    {title: 'Schools', url: '/home/schools'}
   ];
 
   return (
@@ -34,9 +33,18 @@ export const NavBar = ({history, sideBarOpened, isStaff, userId}) => {
           Portfolio
         </span>
         <ul className={'links-container'}>
-          {(isStaff ? staffRoutes : employeeRoutes).map((route, index) => <Link key={index}
-                                                                                history={history} {...route}/>)}
+          {employeeRoutes.map((route, index) => <Link key={index} history={history} {...route}/>)}
         </ul>
+        {isStaff &&
+        <div>
+        <span className={'list-title'}>
+          Management
+        </span>
+          <ul className={'links-container'}>
+            {staffRoutes.map((route, index) => <Link key={index} history={history} {...route}/>)}
+          </ul>
+        </div>
+        }
       </div>
     </aside>
   );

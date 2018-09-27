@@ -65,13 +65,13 @@
       margin: 1rem 0; }
     .flex .nav-bar .links-container {
       list-style-type: none;
-      padding: 0; }
+      padding: 0;
+      display: flex;
+      flex-direction: column; }
       .flex .nav-bar .links-container .link-item {
         margin-bottom: 0.8rem;
         font-weight: 500;
-        cursor: pointer;
-        float: left;
-        clear: both; }
+        cursor: pointer; }
         .flex .nav-bar .links-container .link-item:hover {
           color: #606060; }
         .flex .nav-bar .links-container .link-item.active {
