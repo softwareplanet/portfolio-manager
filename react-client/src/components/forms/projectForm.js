@@ -78,10 +78,10 @@ class ProjectFormComponent extends Component {
           }}
           pickerSuggestionsProps={{
             onRenderNoResultFound: () =>
-              <CreateNew
-                onClick={() => createProject()}
-                text={'No such projects yet...'}
-              />
+                !selectedProject[0] ? <CreateNew
+                  onClick={() => createProject()}
+                  text={'No such projects yet...'}
+                /> : ''
           }}
           itemLimit={1}
         />
