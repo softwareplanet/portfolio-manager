@@ -85,7 +85,7 @@
     flex-wrap: wrap;
     justify-content: space-around; }
     .flex .profile-container .profile-description {
-      margin: 6.5rem 2rem 4rem;
+      margin: 1.5rem 2rem 4rem;
       display: flex;
       flex-direction: column;
       align-items: flex-start;

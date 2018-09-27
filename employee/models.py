@@ -79,7 +79,7 @@ class Employee(AbstractUser):
     school = models.ManyToManyField(School, through='EmployeeSchool')
     image = models.ImageField(upload_to='profile_images', blank=True)
     description = models.TextField(blank=True)
-    carrier_start_date = models.DateField(blank=True, max_length=30, null=True)
+    career_start_date = models.DateField(blank=True, max_length=30, null=True)
     position = models.CharField(blank=True, max_length=100)
 
     class Meta:

@@ -14,7 +14,7 @@ class UserFormComponent extends Component {
     username: this.props.username,
     position: this.props.position,
     dob: new Date(this.props.dob),
-    carrierStartDate: new Date(this.props.carrierStartDate),
+    careerStartDate: new Date(this.props.careerStartDate),
     email: this.props.email,
     description: this.props.description,
     employeeIsStaff: this.props.employeeIsStaff
@@ -28,7 +28,7 @@ class UserFormComponent extends Component {
   }
 
   render() {
-    const {firstName, lastName, dob, username, email, description, position, carrierStartDate, employeeIsStaff} = this.state;
+    const {firstName, lastName, dob, username, email, description, position, careerStartDate, employeeIsStaff} = this.state;
     const {errors, loading, id, isStaff, user} = this.props;
     return (
       <form className={'profile-edit-form'}>
@@ -59,11 +59,11 @@ class UserFormComponent extends Component {
         />
         <LittleBr/>
         <DatePicker
-          value={carrierStartDate}
+          value={careerStartDate}
           placeholder="Select a date..."
           label="Carrier start date:"
-          onSelectDate={(carrierStartDate) => {
-            this.setState({carrierStartDate})
+          onSelectDate={(careerStartDate) => {
+            this.setState({careerStartDate})
           }}
           isRequired={true}
         />
@@ -111,7 +111,7 @@ class UserFormComponent extends Component {
                      onSave={() => this.props.updateUser(id, {
                        ...this.state,
                        dob: formatDate(dob),
-                       carrierStartDate: formatDate(carrierStartDate),
+                       careerStartDate: formatDate(careerStartDate),
                        isStaff: employeeIsStaff
                      }, user.id)}/>
       </form>
@@ -125,14 +125,14 @@ class UserFormComponent extends Component {
 }
 
 const mapStateToProps = ({user, editUserErrors, editUserLoading, editUserState, isStaff},
-                         {employee: {id, firstName, lastName, dob, username, email, description, position, carrierStartDate, isStaff: employeeIsStaff}}) => {
+                         {employee: {id, firstName, lastName, dob, username, email, description, position, careerStartDate, isStaff: employeeIsStaff}}) => {
   return {
     user,
     id,
     firstName,
     lastName,
     dob,
-    carrierStartDate,
+    careerStartDate,
     username,
     position,
     email,

@@ -7,7 +7,7 @@ from employee.models import Employee, Project, EmployeeProject, Skill, School, E
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     firstName = serializers.CharField(source='first_name', required=True)
     lastName = serializers.CharField(source='last_name', required=True)
-    carrierStartDate = serializers.CharField(source='carrier_start_date', required=False)
+    careerStartDate = serializers.CharField(source='career_start_date', required=False)
     password = serializers.CharField(write_only=True, required=True)
     isStaff = serializers.BooleanField(source='is_staff')
     skills = serializers.SerializerMethodField(read_only=True)
@@ -48,7 +48,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         model = Employee
         fields = (
             'id', 'username', 'email', 'password', 'firstName', 'lastName', 'dob',
-            'isStaff', 'image', 'description', 'skills', 'projects', 'carrierStartDate', 'position'
+            'isStaff', 'image', 'description', 'skills', 'projects', 'careerStartDate', 'position'
         )
 
 
@@ -58,7 +58,7 @@ class EmployeeForUserSerializer(EmployeeSerializer):
     class Meta(EmployeeSerializer.Meta):
         fields = (
             'id', 'username', 'email', 'password', 'firstName', 'lastName', 'dob',
-            'isStaff', 'image', 'skills', 'projects', 'carrierStartDate', 'position'
+            'isStaff', 'image', 'skills', 'projects', 'careerStartDate', 'position'
         )
 
 
