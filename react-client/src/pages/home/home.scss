@@ -9,6 +9,10 @@ $theme-color-secondary: #0198ff;
   height: $header-size;
   align-items: center;
   justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
 
   .header-left-container {
     display: flex;
@@ -69,20 +73,26 @@ $theme-color-secondary: #0198ff;
   width: 100%;
   display: flex;
   flex: 1 1 0;
+  margin-top: $header-size;
 
   .content-container {
-    width: 80%;
+    width: calc(100% - 21rem);
+    margin-left: 21rem;
     &.full {
       width: 100%;
+      margin-left: 0;
     }
   }
 
   .nav-bar {
     flex: 1 2;
-    width: 20%;
+    width: 21rem;
+    height: 100%;
     padding: 0.5rem;
     border-right: 2px solid #f1f1f1;
     min-width: 21rem;
+    position: fixed;
+    overflow-y: auto;
 
     .navbar-content {
       margin: 1rem 2.5rem;
@@ -386,6 +396,7 @@ $selected-item-height: 2rem;
     .search-results-container {
       max-height: 50vh;
       overflow-y: auto;
+      overflow-x: hidden;
       flex-direction: column;
       width: 100%;
 

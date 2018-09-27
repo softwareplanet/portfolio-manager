@@ -107,7 +107,7 @@ class ProfilePage extends Component {
                                    noneMessage="You can add birthday"/>
                   <ProfileInfoLine text={user.email} iconName="EditMail" noneMessage="You can add E-Mail"/>
                   <ProfileInfoLine text={user.position} iconName="AccountManagement" noneMessage="Your position"/>
-                  <ProfileInfoLine text={new Date(user.careerStartDate || '').toDateString()} iconName="Rocket" noneMessage="Your career start date"/>
+                  <ProfileInfoLine text={user.careerStartDate ? new Date(user.careerStartDate).toDateString() : ''} iconName="Rocket" noneMessage="Your career start date"/>
                 </div>
                 {(this._shouldShowElement()) && isStaff &&
                 <div className={'profile-description'}

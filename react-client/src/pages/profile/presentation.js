@@ -36,17 +36,19 @@ class PresentationPage extends Component {
                 Name: <b>{employee ? employee.firstName + ' ' + employee.lastName : ''}</b>
               </div>
               {(employee && employee.position) ? <div style={{marginTop: 0.5 + 'rem'}}>
-                Position: {employee ? employee.position : ''}
+                Position: {employee.position}
               </div> : <br/>}
               <br/>
               <p style={{textAlign: 'justify'}}>
                 {employee.description}
               </p>
-              <div style={{fontWeight: 700, marginBottom: 1 + 'rem'}}>Summary of qualification:<br/>
-                <div style={{fontWeight: 400, marginBottom: 2 + 'rem', marginTop: 0.5 + 'rem'}}>
-                  {this._generateSummaryOfQualification()}
+              { employee && employee.careerStartDate && employee.position &&
+                <div style={{fontWeight: 700, marginBottom: 1 + 'rem'}}>Summary of qualification:<br/>
+                  <div style={{fontWeight: 400, marginBottom: 2 + 'rem', marginTop: 0.5 + 'rem'}}>
+                    {this._generateSummaryOfQualification()}
+                  </div>
                 </div>
-              </div>
+              }
               <div style={{textDecoration: 'underline', fontWeight: 700, marginBottom: 1 + 'rem'}}>Technical Summary
               </div>
               {userSkills ? this._renderSkills(userSkills) : <Loader title={'Loading skills...'}/>}

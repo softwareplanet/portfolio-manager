@@ -14,7 +14,7 @@ class UserFormComponent extends Component {
     username: this.props.username,
     position: this.props.position,
     dob: new Date(this.props.dob),
-    careerStartDate: new Date(this.props.careerStartDate),
+    careerStartDate: this.props.careerStartDate ? new Date(this.props.careerStartDate) : new Date(),
     email: this.props.email,
     description: this.props.description,
     employeeIsStaff: this.props.employeeIsStaff
