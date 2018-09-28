@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Loader, PrivatePageRedirect, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {
+  Checkbox,
   DefaultButton,
   Dialog,
   DialogFooter,
@@ -22,14 +23,14 @@ class EmployeesPage extends Component {
 
   _columns = [
     {
-      key: 'avatar',
-      maxWidth: 20,
-      minWidth: 20,
-      onRender: ({image}) => (
-        <div className={`employee-image ${image ? '' : 'missing-img'}`}
-             style={{
-               backgroundImage: 'url(' + (image ? axios.defaults.baseURL + image : '/missing-photo.svg') + ')',
-             }}
+      key: 'staff',
+      name: 'Staff',
+      maxWidth: 25,
+      minWidth: 25,
+      onRender: ({isStaff}) => (
+        <Checkbox
+          checked={isStaff}
+          disabled={true}
         />
       )
     },
@@ -41,8 +42,15 @@ class EmployeesPage extends Component {
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({firstName, lastName}) => {
-        return <span>{`${firstName} ${lastName}`}</span>;
+      onRender: ({firstName, lastName, image}) => {
+        return <span style={{display: 'flex'}}>
+          <div className={`employee-image ${image ? '' : 'missing-img'}`}
+               style={{
+                 backgroundImage: 'url(' + (image ? axios.defaults.baseURL + image : '/missing-photo.svg') + ')',
+                 marginRight: 1 + 'rem'
+               }}
+          />
+          {`${firstName} ${lastName}`}</span>;
       },
     },
     {

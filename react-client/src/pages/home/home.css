@@ -61,6 +61,7 @@
   .flex .employee-image {
     height: 28px;
     width: 28px;
+    min-width: 28px;
     margin: -4px;
     border: 0;
     border-radius: 50%;
