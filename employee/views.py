@@ -26,7 +26,7 @@ class ListEmployees(MultipleInstanceAPIView):
         return request.method == "POST" or request.method == "PATCH"
 
     def get(self, request):
-        models = self.model.objects.filter(is_staff=False, is_active=1)
+        models = self.model.objects.filter(is_active=1)
         return Response(self.serializer(models, many=True).data)
 
 
