@@ -31,7 +31,6 @@ export class SearchResultsComponent extends Component {
 
   drawItems = (items) => {
     if (items.length) {
-      items = this.state.selectedKey === 'all' ? items : items.filter(({type}) => type === this.state.selectedKey);
       return items.map(item => {
         const key = item.type + item.id;
         switch (item.type) {
@@ -75,6 +74,7 @@ export class SearchResultsComponent extends Component {
   render() {
     const {items, loading, opened} = this.props;
     const {selectedKey} = this.state;
+    const itemsToShow = items ? selectedKey === 'all' ? items : items.filter(({type}) => type === selectedKey) : [];
     return (
       <div style={opened ? {display: 'block'} : {display: 'none'}}>
         <div className={'search-command-bar'}>
@@ -96,9 +96,9 @@ export class SearchResultsComponent extends Component {
           <div style={overlayStyle}>
             <Loader/>
           </div>}
-          {items && items.length ?
+          {items && itemsToShow.length ?
             <div className={'search-results-container'}>
-              {this.drawItems(items)}
+              {this.drawItems(itemsToShow)}
             </div>
             :
             <div className={'centered-loading'}>

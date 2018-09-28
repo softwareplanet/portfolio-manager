@@ -13,6 +13,10 @@ class SearchComponent extends Component {
     searchValue: ''
   };
 
+  componentDidMount() {
+    document.getElementsByClassName('content-container')[0].addEventListener('click', () => this.setState({openedSearch: false}));
+  }
+
   search(value) {
     this.setState({loading: true});
     axios.post('/api/v1/search', {query: value})
@@ -35,7 +39,6 @@ class SearchComponent extends Component {
             if (newValue.length !== 0) this.search(newValue);
             else this.setState({items: null});
           }}
-          onBlur={() => !items && this.setState({openedSearch: false})}
           onSearch={this.search.bind(this)}
           onEscape={() => this.setState({openedSearch: false})}
         />
