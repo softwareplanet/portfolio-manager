@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {
+  ChangePasswordModal,
   ErrorLabel,
   Loader,
   PrivatePageRedirect,
@@ -13,6 +14,7 @@ import {Icon, Panel, PanelType, Rating} from "office-ui-fabric-react";
 import {getEmployee, updateUserPhoto} from "../../actions/user";
 import {getUserProjects} from "../../actions/userProjects";
 import {getUserSkills} from "../../actions/userSkills";
+import {setPasswordModal} from "../../actions/modals";
 
 class ProfilePage extends Component {
 
@@ -50,6 +52,7 @@ class ProfilePage extends Component {
     return (
       <div className={'page-container'}>
         <PrivatePageRedirect employeeId={this.props.employeeId}/>
+        <ChangePasswordModal employeeId={Number(this.props.employeeId)}/>
         <Panel
           isBlocking={false}
           isOpen={showPanel}
@@ -91,23 +94,27 @@ class ProfilePage extends Component {
                 }}/>{user.firstName + ' ' + user.lastName}
               </span>
                     {(isStaff || user.id === currentUser.id) &&
-                    <Icon
-                      iconName={'Edit'}
-                      style={{
-                        fontSize: 1.5 + 'rem',
-                        marginLeft: 0.6 + 'rem',
-                        marginBottom: 0.6 + 'rem',
-                        cursor: 'pointer'
-                      }}
-                      onClick={() => this.setState({showPanel: true})}
-                    />}
+                    <div>
+                      <Icon
+                        iconName={'Edit'}
+                        style={this.styles.icon}
+                        onClick={() => this.setState({showPanel: true})}
+                      />
+                      <Icon
+                        iconName={'AzureKeyVault'}
+                        style={this.styles.icon}
+                        onClick={() => this.props.openPasswordModal()}
+                      />
+                    </div>
+                    }
                   </div>
                   <ProfileInfoLine text={user.username} iconName="Accounts"/>
                   <ProfileInfoLine text={new Date(user.dob || '').toDateString()} iconName="Cake"
                                    noneMessage="You can add birthday"/>
                   <ProfileInfoLine text={user.email} iconName="EditMail" noneMessage="You can add E-Mail"/>
                   <ProfileInfoLine text={user.position} iconName="AccountManagement" noneMessage="Your position"/>
-                  <ProfileInfoLine text={user.careerStartDate ? new Date(user.careerStartDate).toDateString() : ''} iconName="Rocket" noneMessage="Your career start date"/>
+                  <ProfileInfoLine text={user.careerStartDate ? new Date(user.careerStartDate).toDateString() : ''}
+                                   iconName="Rocket" noneMessage="Your career start date"/>
                 </div>
                 {(this._shouldShowElement()) && isStaff &&
                 <div className={'profile-description'}
@@ -160,6 +167,15 @@ class ProfilePage extends Component {
     );
   }
 
+  styles = {
+    icon: {
+      fontSize: 1.5 + 'rem',
+      marginLeft: 0.6 + 'rem',
+      marginBottom: 0.6 + 'rem',
+      cursor: 'pointer'
+    }
+  };
+
   _shouldShowElement = () => {
     const {employee, employeeId} = this.props;
     return (employee && employee.id === Number(employeeId));
@@ -201,6 +217,7 @@ const mapDispatchToProps = (dispatch) => {
     getUserProjects: (userId) => dispatch(getUserProjects(userId)),
     getUserSkills: (userId) => dispatch(getUserSkills(userId)),
     getEmployee: (userId) => dispatch(getEmployee(userId)),
+    openPasswordModal: () => dispatch(setPasswordModal(true)),
   };
 };
 

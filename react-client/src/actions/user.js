@@ -12,6 +12,7 @@ import {
 } from "./actionTypes";
 import axios from 'axios';
 import {retryRequest} from "../service/utils";
+import {setPasswordModal} from "./modals";
 
 export const successfulEditUser = (userId) => {
   return {
@@ -153,6 +154,7 @@ export const updateUser = (employeeId, data, currentUserId) => {
         dispatch(removeUserErrors());
         dispatch(successfulEditUser(res.data.id));
         dispatch(setEmployee(res.data));
+        dispatch(setPasswordModal(false));
         if (currentUserId === employeeId) dispatch(setUser(res.data));
       })
       .catch(errors => {
@@ -160,4 +162,18 @@ export const updateUser = (employeeId, data, currentUserId) => {
       })
       .finally(() => dispatch(editUserLoading(false)))
   }
+};
+
+export const changePassword = (password) => (dispatch) => {
+  dispatch(editUserLoading(true));
+  dispatch(editUserErrors({}));
+  axios.put(`/api/v1/me`, password)
+    .then(() => {
+      dispatch(removeUserErrors());
+      dispatch(setPasswordModal(false));
+    })
+    .catch(errors => {
+      dispatch(editUserErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+    })
+    .finally(() => dispatch(editUserLoading(false)))
 };

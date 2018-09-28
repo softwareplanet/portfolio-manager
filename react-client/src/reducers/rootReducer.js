@@ -6,7 +6,7 @@ import {createUserProjectErrors, newUserProjectLoading, userProjects} from "./us
 import {sideBarOpened} from "./sidebar";
 import {createProjectErrors, newProjectLoading, project, projects} from "./projects";
 import {createSkillErrors, newSkillLoading, skill, skillCategories, skills} from "./skills";
-import {projectModal, schoolModal, skillModal} from "./modals";
+import {passwordModal, projectModal, schoolModal, skillModal} from "./modals";
 import {
   editProjectState,
   editUserProjectState,
@@ -26,6 +26,7 @@ export default combineReducers({
   skillModal,
   schoolModal,
   projectModal,
+  passwordModal,
 
   user,
   employee,
