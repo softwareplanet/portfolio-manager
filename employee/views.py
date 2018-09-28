@@ -220,7 +220,7 @@ class ListMe(APIView):
             user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Utils.error_response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class ListSearch(APIView):
