@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Loader} from "../..";
 import {SearchItem} from "./searchItem";
 import {Pivot, PivotItem} from "office-ui-fabric-react";
+import {connect} from "react-redux";
 
 const overlayStyle = {
   position: 'absolute',
@@ -11,11 +12,22 @@ const overlayStyle = {
   backgroundColor: 'rgba(147, 147, 147, 0.1)'
 };
 
-export class SearchResults extends Component {
+export class SearchResultsComponent extends Component {
 
   state = {
     selectedKey: 'all'
   };
+
+  componentWillReceiveProps({url}, nextContext) {
+    if(url !== this.props.url) {
+      (url.match('employee') || url.match('profile')) ?
+        this.setState({selectedKey: 'employee'}) :
+        (url.match('project')) ?
+          this.setState({selectedKey: 'project'}) :
+          (url.match('skill')) ?
+            this.setState({selectedKey: 'skill'}) : this.setState({selectedKey: 'all'})
+    }
+  }
 
   drawItems = (items) => {
     if (items.length) {
@@ -104,3 +116,9 @@ export class SearchResults extends Component {
     });
   };
 }
+
+const mapStateToProps = ({router: {location: {pathname: url}}}) => (
+  {url}
+);
+
+export const SearchResults = connect(mapStateToProps)(SearchResultsComponent);
