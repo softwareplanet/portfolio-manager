@@ -58,6 +58,16 @@
     .flex .content-container.full {
       width: 100%;
       margin-left: 0; }
+  .flex .employee-image {
+    height: 28px;
+    width: 28px;
+    margin: -4px;
+    border: 0;
+    border-radius: 50%;
+    background: white url("/logout.svg") no-repeat center;
+    background-size: 100%; }
+    .flex .employee-image.missing-img {
+      background-size: 90%; }
   .flex .nav-bar {
     flex: 1 2;
     width: 21rem;
@@ -330,7 +340,10 @@
 @media print {
   .header {
     display: none; }
+  .flex {
+    margin: 0; }
   .content-container {
-    width: 100%; }
+    width: 100%;
+    margin: 0; }
   .nav-bar {
     display: none; } }

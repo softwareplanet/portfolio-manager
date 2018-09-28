@@ -84,6 +84,20 @@ $theme-color-secondary: #0198ff;
     }
   }
 
+  .employee-image {
+    height: 28px;
+    width: 28px;
+    margin: -4px;
+    border: 0;
+    border-radius: 50%;
+    background: white url('/logout.svg') no-repeat center;
+    background-size: 100%;
+
+    &.missing-img {
+      background-size: 90%;
+    }
+  }
+
   .nav-bar {
     flex: 1 2;
     width: 21rem;
@@ -475,8 +489,13 @@ $selected-item-height: 2rem;
     display: none;
   }
 
+  .flex {
+    margin: 0;
+  }
+
   .content-container {
     width: 100%;
+    margin: 0;
   }
 
   .nav-bar {

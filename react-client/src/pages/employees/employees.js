@@ -12,6 +12,7 @@ import {
   SelectionMode
 } from "office-ui-fabric-react";
 import {disableEmployee, getEmployees} from "../../actions/user";
+import axios from "axios";
 
 class EmployeesPage extends Component {
 
@@ -20,6 +21,18 @@ class EmployeesPage extends Component {
   }
 
   _columns = [
+    {
+      key: 'avatar',
+      maxWidth: 20,
+      minWidth: 20,
+      onRender: ({image}) => (
+        <div className={`employee-image ${image ? '' : 'missing-img'}`}
+             style={{
+               backgroundImage: 'url(' + (image ? axios.defaults.baseURL + image : '/missing-photo.svg') + ')',
+             }}
+        />
+      )
+    },
     {
       key: 'name',
       name: 'Name',
