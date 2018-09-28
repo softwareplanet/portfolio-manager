@@ -13,7 +13,7 @@ from employee.search_serializers import SearchEmployeeSerializer, SearchProjectS
 from employee.serializers import EmployeeSerializer, EmployeeForUserSerializer, ProjectSerializer, \
     EmployeeProjectSerializer, SchoolSerializer, \
     SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer, ExtendedProjectSerializer, \
-    ExtendedSkillSerializer, ExtendedSchoolSerializer, SkillCategorySerializer
+    ExtendedSkillSerializer, ExtendedSchoolSerializer, SkillCategorySerializer, ChangePasswordSerializer
 from employee.utils import Utils
 
 
@@ -207,6 +207,20 @@ class ListMe(APIView):
                 return Utils.error_response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist as e:
             return Utils.error_response(e.args, status.HTTP_404_NOT_FOUND)
+
+    def put(self, request):
+        user = request.user
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            old_password = serializer.data.get("old_password")
+            if not user.check_password(old_password):
+                return Utils.error_response({"old_password": ["Wrong password."]}, status.HTTP_400_BAD_REQUEST)
+            user.set_password(serializer.data.get("new_password"))
+            user.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ListSearch(APIView):
