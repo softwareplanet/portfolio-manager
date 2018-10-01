@@ -9,7 +9,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     lastName = serializers.CharField(source='last_name', required=True)
     careerStartDate = serializers.CharField(source='career_start_date', required=False)
     password = serializers.CharField(write_only=True, required=True)
-    isStaff = serializers.BooleanField(source='is_staff')
+    isStaff = serializers.BooleanField(source='is_staff', required=False)
     skills = serializers.SerializerMethodField(read_only=True)
     projects = serializers.SerializerMethodField()
 

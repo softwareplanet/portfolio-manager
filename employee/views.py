@@ -1,6 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, permissions
-from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -8,7 +7,7 @@ from employee.model_views import MultipleInstanceAPIView, SingleInstanceAPIView,
     MultipleEmployeeRelatedInstanceAPIView, SingleEmployeeRelatedInstanceAPIView
 from employee.models import Employee, Project, EmployeeProject, School, Skill, EmployeeSkill, EmployeeSchool, \
     SkillCategory
-from employee.permissions import IsAdminOrSelf
+from employee.permissions import IsAdminOrSelf, IsPostOrIsAdmin
 from employee.search_serializers import SearchEmployeeSerializer, SearchProjectSerializer, SearchSkillSerializer
 from employee.serializers import EmployeeSerializer, EmployeeForUserSerializer, ProjectSerializer, \
     EmployeeProjectSerializer, SchoolSerializer, \
@@ -20,10 +19,7 @@ from employee.utils import Utils
 class ListEmployees(MultipleInstanceAPIView):
     serializer = EmployeeSerializer
     model = Employee
-    permission_classes = (IsAdminUser,)
-
-    def has_permission(self, request, view):
-        return request.method == "POST" or request.method == "PATCH"
+    permission_classes = (IsPostOrIsAdmin,)
 
     def get(self, request):
         models = self.model.objects.filter(is_active=1)
