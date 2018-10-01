@@ -9,10 +9,12 @@ import {
   DialogType,
   IconButton,
   PrimaryButton,
-  SelectionMode
+  SelectionMode,
+  TagPicker
 } from "office-ui-fabric-react";
 import {deleteProject, getProjects, setProject} from "../../actions/projects";
 import {setProjectModal} from "../../actions/modals";
+import {getSkills} from "../../actions/skills";
 
 class ProjectsPage extends Component {
 
@@ -143,13 +145,15 @@ class ProjectsPage extends Component {
   state = {
     hideDialog: true,
     projectToDelete: null,
-    projectToEdit: null
+    projectToEdit: null,
+    selectedSkills: []
   };
 
   componentDidMount() {
-    const {user, getProjects} = this.props;
+    const {user, getProjects, getSkills} = this.props;
     if (user) {
       getProjects();
+      getSkills();
     }
   }
 
@@ -158,6 +162,7 @@ class ProjectsPage extends Component {
       this._columns.push(this._actions);
 
     const {projects} = this.props;
+    if (!projects && nextProps.projects) this.setState({projects: nextProps.projects});
     if (projects && nextProps.projects && (projects.length !== nextProps.projects.length)) {
       const {hideDialog} = this.state;
       !hideDialog && this._closeDialog();
@@ -170,23 +175,57 @@ class ProjectsPage extends Component {
     createProject();
   };
 
-  render() {
-    const {projectToEdit, hideDialog, projectToDelete} = this.state;
+  filterProjects(selectedSkills) {
+    const {projects} = this.props;
+    if (projects) {
+      this.setState({
+        projects: projects.filter(({skills}) => {
+          return selectedSkills.filter(({id}) => skills.indexOf(id) !== -1).length === selectedSkills.length;
+        })
+      })
+    }
+  }
 
+  render() {
+    const {projectToEdit, hideDialog, projectToDelete, selectedSkills, projects: projectsToShow} = this.state;
+    const {skills} = this.props;
+    (!projectsToShow && this.props.projects) && this.setState({projects: this.props.projects});
     return (
       <div className={'page-container'}>
         <CreateProjectModal project={projectToEdit}/>
         <span className={'page-title'}>Projects</span>
-        <div className={'add-button'}>
-          <PrimaryButton
-            text={'Add a Project'}
-            onClick={this._openCreateModal}
-          />
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div className={'add-button'}>
+            <PrimaryButton
+              text={'Add a Project'}
+              onClick={this._openCreateModal}
+            />
+          </div>
+          <div className={'filter-picker'}>
+            <TagPicker
+              onResolveSuggestions={this._onFilterChange(skills)}
+              selectedItems={selectedSkills}
+              items={skills}
+              onChange={(selectedSkills) => {
+                this.setState({selectedSkills});
+                this.filterProjects(selectedSkills);
+              }}
+              inputProps={{
+                placeholder: 'Filter by skill',
+              }}
+              getTextFromItem={({name}) => name}
+              suggestionsClassName={'suggestions-container'}
+              pickerSuggestionsProps={{
+                suggestionsHeaderText: 'Suggested Tags',
+                noResultsFoundText: 'No Skills Found'
+              }}
+            />
+          </div>
         </div>
         {
-          this.props.projects ?
+          (this.props.projects && this.state.projects) ?
             <DetailsList
-              items={this.props.projects}
+              items={this.state.projects}
               columns={this._columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
@@ -219,18 +258,25 @@ class ProjectsPage extends Component {
     );
   }
 
+  _onFilterChange = (items) => {
+    return (filterText) => {
+      return filterText ? items.filter((tag) => !this.state.selectedSkills.includes(tag)).filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) : [];
+    }
+  };
+
   _closeDialog = () => {
     this.setState({hideDialog: true});
   };
 }
 
-const mapStateToProps = ({user, projects, isStaff, projectModal}) => {
-  return {user, projects, isStaff, projectModal};
+const mapStateToProps = ({user, projects, isStaff, projectModal, skills}) => {
+  return {user, projects, isStaff, projectModal, skills};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getProjects: () => dispatch(getProjects()),
+    getSkills: () => dispatch(getSkills()),
     deleteProject: (userId, projectId) => dispatch(deleteProject(userId, projectId)),
     createProject: () => dispatch(setProjectModal(true)),
     setProject: (project) => dispatch(setProject(project)),
