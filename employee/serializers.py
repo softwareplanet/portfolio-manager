@@ -65,10 +65,22 @@ class EmployeeForUserSerializer(EmployeeSerializer):
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     durationMonths = serializers.IntegerField(source='duration_months', min_value=0)
     startDate = serializers.DateField(source='start_date')
+    skills = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_skills(project):
+        arr = []
+        for skill in Skill.objects.raw("""
+        select * from pman.employee_projects_skills
+            where employeeproject_id in (select id from pman.employee_projects
+                                            where project_id_id=%s)""",
+                                       [project.id]):
+            arr.append(skill.skill_id)
+        return arr
 
     class Meta:
         model = Project
-        fields = ('id', 'startDate', 'durationMonths', 'name', 'description', 'url')
+        fields = ('id', 'startDate', 'durationMonths', 'name', 'description', 'url', 'skills')
 
 
 class SkillCategorySerializer(serializers.HyperlinkedModelSerializer):
@@ -203,7 +215,7 @@ class ExtendedProjectSerializer(ProjectSerializer):
         return EmployeeOnProjectSerializer(EmployeeProject.objects.filter(project_id=obj.id), many=True).data
 
     class Meta(ProjectSerializer.Meta):
-        fields = ProjectSerializer.Meta.fields + ('team', )
+        fields = ProjectSerializer.Meta.fields + ('team',)
 
 
 class EmployeeWithSkillSerializer(EmployeeSkillSerializer):
@@ -230,7 +242,7 @@ class ExtendedSkillSerializer(SkillSerializer):
         return EmployeeWithSkillSerializer(EmployeeSkill.objects.filter(skill_id=obj.id), many=True).data
 
     class Meta(SkillSerializer.Meta):
-        fields = SkillSerializer.Meta.fields + ('employees', )
+        fields = SkillSerializer.Meta.fields + ('employees',)
 
 
 class EmployeeFromSchoolSerializer(EmployeeSchoolSerializer):
@@ -257,11 +269,10 @@ class ExtendedSchoolSerializer(SkillSerializer):
         return EmployeeFromSchoolSerializer(EmployeeSchool.objects.filter(school_id=obj.id), many=True).data
 
     class Meta(SchoolSerializer.Meta):
-        fields = SchoolSerializer.Meta.fields + ('employees', )
+        fields = SchoolSerializer.Meta.fields + ('employees',)
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
