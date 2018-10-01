@@ -205,11 +205,20 @@
     font-weight: lighter; }
   .page-container .add-button {
     width: 10rem;
-    margin-bottom: 2rem; }
+    margin-bottom: 2rem;
+    margin-right: 2rem; }
   .page-container .page-title {
     font-size: 2rem;
     font-weight: 200;
     margin-bottom: 2rem; }
+
+.filter-picker {
+  font-size: 14px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif; }
+  .filter-picker > div span {
+    display: flex; }
 
 .selected-item {
   display: inline-flex;

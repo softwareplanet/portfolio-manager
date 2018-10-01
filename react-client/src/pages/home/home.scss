@@ -295,6 +295,7 @@ $theme-color-secondary: #0198ff;
   .add-button {
     width: 10rem;
     margin-bottom: 2rem;
+    margin-right: 2rem;
   }
 
   .page-title {
@@ -305,6 +306,17 @@ $theme-color-secondary: #0198ff;
 }
 
 $selected-item-height: 2rem;
+
+.filter-picker {
+  font-size: 14px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+
+  & > div span {
+    display: flex;
+  }
+}
 
 .selected-item {
   display: inline-flex;
