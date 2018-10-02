@@ -71,52 +71,51 @@ class SkillsPage extends Component {
           {url}
         </div>);
       },
+    },
+    {
+      key: 'actions',
+      name: 'Actions',
+      fieldName: 'skills',
+      minWidth: 50,
+      maxWidth: 50,
+      onRender: (item) => {
+        return (<IconButton
+          style={{height: 'auto'}}
+          allowDisabledFocus={true}
+          menuIcon={{iconName: 'MoreVertical'}}
+          menuProps={{
+            items: [
+              {
+                key: 'open',
+                text: 'Employees with this skill',
+                iconProps: {iconName: 'Group', style: {color: '#000'}},
+                onClick: () => {
+                  this.props.setSkill(item);
+                  this.props.history.push(`/home/skills/${item.id}`)
+                }
+              },
+              {
+                key: 'edit',
+                text: 'Edit',
+                iconProps: {iconName: 'Edit', style: {color: '#000'}},
+                onClick: () => this.editSkill(item)
+              },
+              {
+                key: 'delete',
+                text: 'Delete',
+                iconProps: {iconName: 'Delete', style: {color: '#000'}},
+                onClick: () => this._openDeleteDialog(item)
+              }
+
+            ],
+            directionalHintFixed: true
+          }}
+          split={false}
+        />);
+      },
+      isPadded: true
     }
   ];
-
-  _actions = {
-    key: 'actions',
-    name: 'Actions',
-    fieldName: 'skills',
-    minWidth: 50,
-    maxWidth: 50,
-    onRender: (item) => {
-      return (<IconButton
-        style={{height: 'auto'}}
-        allowDisabledFocus={true}
-        menuIcon={{iconName: 'MoreVertical'}}
-        menuProps={{
-          items: [
-            {
-              key: 'open',
-              text: 'Employees with this skill',
-              iconProps: {iconName: 'Group', style: {color: '#000'}},
-              onClick: () => {
-                this.props.setSkill(item);
-                this.props.history.push(`/home/skills/${item.id}`)
-              }
-            },
-            {
-              key: 'edit',
-              text: 'Edit',
-              iconProps: {iconName: 'Edit', style: {color: '#000'}},
-              onClick: () => this.editSkill(item)
-            },
-            {
-              key: 'delete',
-              text: 'Delete',
-              iconProps: {iconName: 'Delete', style: {color: '#000'}},
-              onClick: () => this._openDeleteDialog(item)
-            }
-
-          ],
-          directionalHintFixed: true
-        }}
-        split={false}
-      />);
-    },
-    isPadded: true
-  };
 
   state = {
     hideDialog: true,
@@ -132,9 +131,6 @@ class SkillsPage extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (this.props.isStaff && this._columns.length === 3)
-      this._columns.push(this._actions);
-
     const {skills} = this.props;
     if (skills && nextProps.skills && (skills.length !== nextProps.skills.length)) {
       const {hideDialog} = this.state;
