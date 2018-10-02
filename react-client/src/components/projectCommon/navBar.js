@@ -29,12 +29,6 @@ export const NavBar = ({history, sideBarOpened, isStaff, userId}) => {
     <aside className={`nav-bar ${sideBarOpened ? '' : 'none'}`}>
       {isStaff && <Search/>}
       <div className={'navbar-content'}>
-        <span className={'list-title'}>
-          Portfolio
-        </span>
-        <ul className={'links-container'}>
-          {employeeRoutes.map((route, index) => <Link key={index} history={history} {...route}/>)}
-        </ul>
         {isStaff &&
         <div>
         <span className={'list-title'}>
@@ -45,6 +39,12 @@ export const NavBar = ({history, sideBarOpened, isStaff, userId}) => {
           </ul>
         </div>
         }
+        <span className={'list-title'}>
+          Portfolio
+        </span>
+        <ul className={'links-container'}>
+          {employeeRoutes.map((route, index) => <Link key={index} history={history} {...route}/>)}
+        </ul>
       </div>
     </aside>
   );
