@@ -145,10 +145,10 @@ export const createProjectFile = (projectId, data) => {
     dispatch(createProjectErrors({}));
     let formData = new FormData();
     formData.append('file', data.file);
-    formData.append('groupId', data.groupId);
-    axios.patch(`/api/v1/project/${projectId}/files`, formData)
+    formData.append('groupId', data.group);
+    axios.post(`/api/v1/project/${projectId}/files`, formData)
       .then(res => {
-        dispatch(addProject(res.data));
+        dispatch(addProjectFile(res.data));
       })
       .catch(errors => {
         dispatch(createProjectErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));

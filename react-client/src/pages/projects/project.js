@@ -4,7 +4,7 @@ import Dropzone from 'react-dropzone';
 import {Loader, PrivatePageRedirect, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {IconButton, SelectionMode} from "office-ui-fabric-react";
-import {getProject} from "../../actions/projects";
+import {createProjectFile, getProject, getProjects} from "../../actions/projects";
 import axios from "axios";
 
 class ProjectTeamPage extends Component {
@@ -113,7 +113,7 @@ class ProjectTeamPage extends Component {
     name: 'Name',
     fieldName: 'fileName',
     minWidth: 110,
-    maxWidth: 250,
+    maxWidth: 1040,
     isRowHeader: true,
     isResizable: true,
     isPadded: true,
@@ -145,16 +145,9 @@ class ProjectTeamPage extends Component {
           menuProps={{
             items: [
               {
-                key: 'open',
-                text: 'Open profile',
-                iconProps: {iconName: 'Contact', style: {color: '#000'}},
-                onClick: () => this._openEmployeeProfile(item.employeeId)
-              },
-              {
-                key: 'skills',
-                text: 'All projects',
-                iconProps: {iconName: 'ProjectLogo32', style: {color: '#000'}},
-                onClick: () => this._openEmployeeProjects(item.employeeId)
+                key: 'delete',
+                text: 'Delete',
+                iconProps: {iconName: 'Trash', style: {color: '#000'}}
               }
             ],
             directionalHintFixed: true
@@ -168,9 +161,10 @@ class ProjectTeamPage extends Component {
 
 
   componentDidMount() {
-    const {user, getProject, projectId} = this.props;
+    const {user, getProject, projectId, getProjects} = this.props;
     if (user) {
       getProject(projectId);
+      getProjects();
     }
   }
 
@@ -183,6 +177,11 @@ class ProjectTeamPage extends Component {
       }
     }
   }
+
+  onDrop = (files) => {
+    console.log(files);
+    files.map( file => this.props.addProjectFile(this.props.projectId, {file, group: '2'}))
+  };
 
   render() {
     const {project: {team, name, description, files}} = this.props;
@@ -206,6 +205,7 @@ class ProjectTeamPage extends Component {
         <Dropzone
           disableClick
           style={{position: 'relative'}}
+          onDrop={this.onDrop}
         >
           <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Files</h3>
           {
@@ -237,7 +237,9 @@ const mapStateToProps = ({user, project}, {match: {params: {projectId}}}) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getProject: (projectId) => dispatch(getProject(projectId))
+    getProject: (projectId) => dispatch(getProject(projectId)),
+    getProjects: () => dispatch(getProjects()),
+    addProjectFile: (projectId, data) => dispatch(createProjectFile(projectId, data)),
   };
 };
 

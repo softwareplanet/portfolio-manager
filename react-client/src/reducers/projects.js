@@ -24,13 +24,6 @@ export const projects = (state = null, action) => {
       return [...state.slice(0, indexOfProject), action.payload, ...state.slice(indexOfProject + 1)];
     }
 
-    case ADD_PROJECT_FILE: {
-      const indexOfProject = state.findIndex(({id}) => id === action.payload.id);
-      let project = {...state[indexOfProject]};
-      project.files.push(action.payload);
-      return [...state.slice(0, indexOfProject), project, ...state.slice(indexOfProject + 1)]
-    }
-
     default:
       return state;
   }
@@ -40,6 +33,10 @@ export const project = (state = {}, action) => {
   switch (action.type) {
     case SET_PROJECT:
       return action.payload;
+
+    case ADD_PROJECT_FILE: {
+      return {...state, files: [...state.files, action.payload]}
+    }
 
     default:
       return state;
