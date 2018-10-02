@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
+import Dropzone from 'react-dropzone';
 import {Loader, PrivatePageRedirect, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {IconButton, SelectionMode} from "office-ui-fabric-react";
 import {getProject} from "../../actions/projects";
+import axios from "axios";
 
 class ProjectTeamPage extends Component {
 
-  _columns = [
+  _team_columns = [
     {
       key: 'employeeName',
       name: 'Name',
@@ -106,6 +108,65 @@ class ProjectTeamPage extends Component {
     }
   ];
 
+  _files_columns = [{
+    key: 'fileName',
+    name: 'Name',
+    fieldName: 'fileName',
+    minWidth: 110,
+    maxWidth: 250,
+    isRowHeader: true,
+    isResizable: true,
+    isPadded: true,
+    onRender: ({file}) => {
+      return <a href={axios.defaults.baseURL + file} target="_blank">{file.split('/').slice(-1)[0]}</a>;
+    },
+  },
+    {
+      key: 'group',
+      name: 'Group',
+      fieldName: 'group',
+      minWidth: 70,
+      maxWidth: 100,
+      isPadded: true,
+      onRender: ({group: {name}}) => {
+        return <span>{name}</span>;
+      },
+    },
+    {
+      key: 'actions',
+      name: 'Actions',
+      minWidth: 50,
+      maxWidth: 50,
+      onRender: (item) => {
+        return (<IconButton
+          style={{height: 'auto'}}
+          allowDisabledFocus={true}
+          menuIcon={{iconName: 'MoreVertical'}}
+          menuProps={{
+            items: [
+              {
+                key: 'open',
+                text: 'Open profile',
+                iconProps: {iconName: 'Contact', style: {color: '#000'}},
+                onClick: () => this._openEmployeeProfile(item.employeeId)
+              },
+              {
+                key: 'skills',
+                text: 'All projects',
+                iconProps: {iconName: 'ProjectLogo32', style: {color: '#000'}},
+                onClick: () => this._openEmployeeProjects(item.employeeId)
+              }
+            ],
+            directionalHintFixed: true
+          }
+          }
+          split={false}
+        />);
+      },
+      isPadded: true
+    }];
+
+
   componentDidMount() {
     const {user, getProject, projectId} = this.props;
     if (user) {
@@ -113,7 +174,7 @@ class ProjectTeamPage extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps(nextProps) {
     const {user, getProject, projectId} = this.props;
     const {projectId: nextId} = nextProps;
     if (projectId !== nextId) {
@@ -124,23 +185,40 @@ class ProjectTeamPage extends Component {
   }
 
   render() {
-    const {project: {team, name, description}} = this.props;
+    const {project: {team, name, description, files}} = this.props;
     return (
       <div className={'page-container'} key={'employeeProjects'}>
         <PrivatePageRedirect/>
         <span
           className={'page-title'}>{'Project ' + (name ? name : '')}</span>
         <p className={'page-description'}>{'    ' + description}</p>
+        <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Team</h3>
         {
           team ?
             <DetailsList
               items={team}
-              columns={this._columns}
+              columns={this._team_columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
             /> :
             <Loader title="Loading project team..."/>
         }
+        <Dropzone
+          disableClick
+          style={{position: 'relative'}}
+        >
+          <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Files</h3>
+          {
+            files ?
+              <DetailsList
+                items={files}
+                columns={this._files_columns}
+                selectionMode={SelectionMode.none}
+                layoutMode={DetailsListLayoutMode.justified}
+              /> :
+              <Loader title="Loading project team..."/>
+          }
+        </Dropzone>
       </div>
     );
   }
@@ -163,4 +241,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export const ProjectTeam = connect(mapStateToProps, mapDispatchToProps)(ProjectTeamPage);
+export const Project = connect(mapStateToProps, mapDispatchToProps)(ProjectTeamPage);

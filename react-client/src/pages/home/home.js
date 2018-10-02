@@ -12,7 +12,7 @@ import {
   Presentation,
   Profile,
   Projects,
-  ProjectTeam,
+  Project,
   Schools,
   Skills
 } from "..";
@@ -45,7 +45,7 @@ class HomePage extends Component {
               <Route exact={true} path='/home/:employeeId/presentation' component={Presentation}/>
               <Route exact={true} path='/home/:employeeId/projects' component={EmployeeProjects}/>
               <Route exact={true} path='/home/projects' component={Projects}/>
-              <Route exact={true} path='/home/projects/:projectId' component={ProjectTeam}/>
+              <Route exact={true} path='/home/projects/:projectId' component={Project}/>
               <Route exact={true} path='/home/:employeeId/skills' component={EmployeeSkills}/>
               <Route exact={true} path='/home/skills' component={Skills}/>
               <Route exact={true} path='/home/skills/:skillId' component={EmployeesWithSkill}/>
