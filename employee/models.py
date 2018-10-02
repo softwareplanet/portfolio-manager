@@ -32,7 +32,10 @@ class EmployeeSkill(models.Model):
 
 
 def project_directory_path(instance, filename):
-    return 'projects_files/{0}/{1}/{2}'.format(instance.project.id, instance.group, filename)
+    return 'projects_files/{0}.{1}/{2}/{3}'.format(instance.project.id,
+                                                   instance.project.name,
+                                                   instance.group.name,
+                                                   filename)
 
 
 class FilesGroup(models.Model):
