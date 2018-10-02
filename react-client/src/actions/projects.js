@@ -6,7 +6,8 @@ import {
   NEW_PROJECT_LOADING,
   SET_PROJECT,
   SET_PROJECTS,
-  SUCCESSFUL_EDIT_PROJECT
+  SUCCESSFUL_EDIT_PROJECT,
+  ADD_PROJECT_FILE
 } from "./actionTypes";
 import axios from "axios";
 import {setProjectModal} from "./modals";
@@ -129,5 +130,28 @@ export const getProject = (projectId) => {
         dispatch(setProject(res.data));
       })
       .catch(retryRequest(getProject, dispatch)(projectId))
+  }
+};
+
+export const addProjectFile = (file = {}) => ({
+  type: ADD_PROJECT_FILE,
+  payload: file
+});
+
+
+
+export const createProjectFile = (projectId, data) => {
+  return (dispatch) => {
+    dispatch(createProjectErrors({}));
+    let formData = new FormData();
+    formData.append('file', data.file);
+    formData.append('groupId', data.groupId);
+    axios.patch(`/api/v1/project/${projectId}/files`, formData)
+      .then(res => {
+        dispatch(addProject(res.data));
+      })
+      .catch(errors => {
+        dispatch(createProjectErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+      })
   }
 };

@@ -1,5 +1,5 @@
 import {
-  ADD_PROJECT,
+  ADD_PROJECT, ADD_PROJECT_FILE,
   CHANGE_PROJECT,
   CREATE_PROJECT_ERRORS,
   DELETE_PROJECT,
@@ -22,6 +22,13 @@ export const projects = (state = null, action) => {
     case CHANGE_PROJECT: {
       const indexOfProject = state.findIndex(({id}) => id === action.payload.id);
       return [...state.slice(0, indexOfProject), action.payload, ...state.slice(indexOfProject + 1)];
+    }
+
+    case ADD_PROJECT_FILE: {
+      const indexOfProject = state.findIndex(({id}) => id === action.payload.id);
+      let project = {...state[indexOfProject]};
+      project.files.push(action.payload);
+      return [...state.slice(0, indexOfProject), project, ...state.slice(indexOfProject + 1)]
     }
 
     default:
