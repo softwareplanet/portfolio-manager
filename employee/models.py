@@ -1,8 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
-from rest_framework.authtoken.models import Token
 from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 
 class SkillCategory(models.Model):
@@ -29,6 +29,26 @@ class EmployeeSkill(models.Model):
 
     class Meta:
         db_table = 'employee_skills'
+
+
+def project_directory_path(instance, filename):
+    return 'projects_files/{0}/{1}/{2}'.format(instance.project.id, instance.group, filename)
+
+
+class FilesGroup(models.Model):
+    name = models.CharField(max_length=64)
+
+    class Meta:
+        db_table = 'files_groups'
+
+
+class ProjectFile(models.Model):
+    project = models.ForeignKey('Project', on_delete=models.CASCADE)
+    group = models.ForeignKey('FilesGroup', on_delete=models.CASCADE)
+    file = models.FileField(upload_to=project_directory_path)
+
+    class Meta:
+        db_table = 'project_files'
 
 
 class Project(models.Model):
