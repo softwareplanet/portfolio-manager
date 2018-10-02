@@ -43,7 +43,7 @@ class FilesGroup(models.Model):
 
 
 class ProjectFile(models.Model):
-    project = models.ForeignKey('Project', on_delete=models.CASCADE)
+    project = models.ForeignKey('Project', related_name='project_files', on_delete=models.CASCADE)
     group = models.ForeignKey('FilesGroup', on_delete=models.CASCADE)
     file = models.FileField(upload_to=project_directory_path)
 
