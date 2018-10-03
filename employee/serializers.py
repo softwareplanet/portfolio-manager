@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from employee.models import Employee, Project, EmployeeProject, Skill, School, EmployeeSkill, EmployeeSchool, \
-    SkillCategory
+    SkillCategory, ProjectFile, FilesGroup
 
 
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
@@ -207,15 +207,37 @@ class EmployeeOnProjectSerializer(EmployeeProjectSerializer):
         fields = ('id', 'startDate', 'durationMonths', 'skills', 'description', 'employeeName', 'employeeId')
 
 
+class FilesGroupSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = FilesGroup
+        fields = ('id', 'name')
+
+
+class ProjectFileSerializer(serializers.HyperlinkedModelSerializer):
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
+    group = FilesGroupSerializer(read_only=True)
+    groupId = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=FilesGroup.objects.all(),
+        source='group',
+        required=True
+    )
+
+    class Meta:
+        model = ProjectFile
+        fields = ('project', 'file', 'groupId', 'group')
+
+
 class ExtendedProjectSerializer(ProjectSerializer):
     team = serializers.SerializerMethodField(method_name='get_project_team', read_only=True)
+    files = ProjectFileSerializer(many=True, read_only=True, source='project_files')
 
     @staticmethod
     def get_project_team(obj):
         return EmployeeOnProjectSerializer(EmployeeProject.objects.filter(project_id=obj.id), many=True).data
 
     class Meta(ProjectSerializer.Meta):
-        fields = ProjectSerializer.Meta.fields + ('team',)
+        fields = ProjectSerializer.Meta.fields + ('team', 'files')
 
 
 class EmployeeWithSkillSerializer(EmployeeSkillSerializer):

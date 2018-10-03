@@ -1,5 +1,5 @@
 import {
-  ADD_PROJECT,
+  ADD_PROJECT, ADD_PROJECT_FILE,
   CHANGE_PROJECT,
   CREATE_PROJECT_ERRORS,
   DELETE_PROJECT,
@@ -33,6 +33,10 @@ export const project = (state = {}, action) => {
   switch (action.type) {
     case SET_PROJECT:
       return action.payload;
+
+    case ADD_PROJECT_FILE: {
+      return {...state, files: [...state.files, action.payload]}
+    }
 
     default:
       return state;

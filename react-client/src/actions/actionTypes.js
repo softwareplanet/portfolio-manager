@@ -54,6 +54,7 @@ export const ADD_PROJECT = 'ADD_PROJECT';
 export const ADD_USER_PROJECT = 'ADD_USER_PROJECT';
 export const ADD_USER_SKILL = 'ADD_USER_SKILL';
 export const ADD_USER_SCHOOL = 'ADD_USER_SCHOOL';
+export const ADD_PROJECT_FILE = 'ADD_PROJECT_FILE';
 
 //Delete actions
 export const DELETE_USER_PROJECT = 'DELETE_USER_PROJECT';
