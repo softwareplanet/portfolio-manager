@@ -77,13 +77,13 @@ class SchoolFormComponent extends Component {
           }}
           itemLimit={1}
         />
-        <ErrorLabel title={(this.state.errors.school || errors.non_field_errors || []).join('<br/>')}/>
+        <ErrorLabel title={(this.state.errors.school || errors.non_field_errors || []).join('\r\n')}/>
         <br/>
         <NumberTextField
           label="Duration, year"
           value={durationYears}
           onChange={(durationYears) => this.setState({durationYears})}
-          errorMessage={(errors.durationYears || []).join('<br/>')}
+          errorMessage={(errors.durationYears || []).join('\r\n')}
         />
         <br/>
         <DatePicker
@@ -93,7 +93,7 @@ class SchoolFormComponent extends Component {
           onSelectDate={(startDate) => {
             this.setState({startDate})
           }}
-          errorMessage={(errors.startDate || []).join('<br/>')}
+          errorMessage={(errors.startDate || []).join('\r\n')}
         />
         <br/>
         <PanelFooter onClose={this._onClose.bind(this)} loading={loading}

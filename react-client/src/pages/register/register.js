@@ -35,13 +35,13 @@ class RegisterPage extends Component {
           }}>
             <TextField label="First name:" value={firstName}
                        onChange={(e) => this.setState({firstName: e.target.value})}
-                       errorMessage={(errors.firstName || []).join('<br/>')}
+                       errorMessage={(errors.firstName || []).join('\n\r')}
                        required
                        placeholder="First name"
             />
             <TextField label="Last Name:" value={lastName}
                        onChange={(e) => this.setState({lastName: e.target.value})}
-                       errorMessage={(errors.lastName || []).join('<br/>')}
+                       errorMessage={(errors.lastName || []).join('\r\n')}
                        required
                        placeholder="Last name"
             />
@@ -56,20 +56,20 @@ class RegisterPage extends Component {
             />
             <TextField label="Username:" value={username}
                        onChange={(e) => this.setState({username: e.target.value})}
-                       errorMessage={(errors.username || []).join('<br/>')}
+                       errorMessage={(errors.username || []).join('\r\n')}
                        required
                        placeholder="Username"
             />
             <TextField label="E-Mail:" value={email}
                        onChange={(e) => this.setState({email: e.target.value})}
-                       errorMessage={(errors.email || []).join('<br/>')}
+                       errorMessage={(errors.email || []).join('\n\r')}
                        type="email"
                        placeholder="example@mail.com"
             />
             <TextField label="Password:" value={password}
                        onChange={(e) => this.setState({password: e.target.value})}
                        type="password"
-                       errorMessage={(errors.password || errors.non_field_errors || []).join('<br/>')}
+                       errorMessage={(errors.password || errors.non_field_errors || []).join('\n\r')}
                        required
                        placeholder="Password"
             />

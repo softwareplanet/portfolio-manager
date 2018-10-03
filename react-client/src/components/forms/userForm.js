@@ -20,7 +20,7 @@ class UserFormComponent extends Component {
     employeeIsStaff: this.props.employeeIsStaff
   };
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps(nextProps) {
     const {editUserState} = nextProps;
     if (editUserState) {
       this._onClose();
@@ -35,7 +35,7 @@ class UserFormComponent extends Component {
         <TextField label="First name:"
                    value={firstName}
                    onChange={(e) => this.setState({firstName: e.target.value})}
-                   errorMessage={(errors.firstName || []).join('<br/>')}
+                   errorMessage={(errors.firstName || []).join('\r\n')}
                    placeholder="First name"
                    required
         />
@@ -43,7 +43,7 @@ class UserFormComponent extends Component {
         <TextField label="Last name:"
                    value={lastName}
                    onChange={(e) => this.setState({lastName: e.target.value})}
-                   errorMessage={(errors.lastName || []).join('<br/>')}
+                   errorMessage={(errors.lastName || []).join('\r\n')}
                    placeholder="Last name"
                    required
         />
@@ -70,21 +70,21 @@ class UserFormComponent extends Component {
         <LittleBr/>
         <TextField label="Username:" value={username}
                    onChange={(e) => this.setState({username: e.target.value})}
-                   errorMessage={(errors.username || []).join('<br/>')}
+                   errorMessage={(errors.username || []).join('\r\n')}
                    required
                    placeholder="Username"
         />
         <LittleBr/>
         <TextField label="Position:" value={position}
                    onChange={(e) => this.setState({position: e.target.value})}
-                   errorMessage={(errors.position || []).join('<br/>')}
+                   errorMessage={(errors.position || []).join('\r\n')}
                    required
                    placeholder="Software Developer"
         />
         <LittleBr/>
         <TextField label="E-Mail:" value={email}
                    onChange={(e) => this.setState({email: e.target.value})}
-                   errorMessage={(errors.email || []).join('<br/>')}
+                   errorMessage={(errors.email || []).join('\r\n')}
                    type="email"
                    placeholder="example@mail.com"
         />
@@ -100,7 +100,7 @@ class UserFormComponent extends Component {
         {isStaff &&
         <TextField label="Summary:" value={description}
                    onChange={(e) => this.setState({description: e.target.value})}
-                   errorMessage={(errors.description || []).join('<br/>')}
+                   errorMessage={(errors.description || []).join('\r\n')}
                    type="email"
                    placeholder="Your summary..."
                    multiline

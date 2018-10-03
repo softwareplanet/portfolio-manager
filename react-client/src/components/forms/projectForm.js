@@ -85,7 +85,7 @@ class ProjectFormComponent extends Component {
           }}
           itemLimit={1}
         />
-        <ErrorLabel title={(errors.project || []).join('<br/>')}/>
+        <ErrorLabel title={(errors.project || []).join('\r\n')}/>
         <br/>
         <DatePicker
           value={startDate}
@@ -94,19 +94,19 @@ class ProjectFormComponent extends Component {
           onSelectDate={(startDate) => {
             this.setState({startDate})
           }}
-          errorMessage={(errors.startDate || []).join('<br/>')}
+          errorMessage={(errors.startDate || []).join('\r\n')}
         />
         <br/>
         <NumberTextField
           label="Duration, month"
           value={duration}
           onChange={(duration) => this.setState({duration})}
-          errorMessage={(errors.durationMonths || []).join('<br/>')}
+          errorMessage={(errors.durationMonths || []).join('\r\n')}
         />
         <br/>
         <TextField label="Role on project:" value={description}
                    onChange={(e) => this.setState({description: e.target.value})}
-                   errorMessage={(errors.description || []).join('<br/>')}
+                   errorMessage={(errors.description || []).join('\r\n')}
                    placeholder="Detailed description about your role on project..."
                    isRequired={true}
                    multiline rows={8}
@@ -131,9 +131,9 @@ class ProjectFormComponent extends Component {
               />
           }}
         />
-        <ErrorLabel title={(errors.skills || []).join('<br/>')}/>
+        <ErrorLabel title={(errors.skills || []).join('\r\n')}/>
         <br/>
-        <ErrorLabel title={(errors.non_field_errors || []).join('<br/>')}/>
+        <ErrorLabel title={(errors.non_field_errors || []).join('\r\n')}/>
         <PanelFooter onClose={onClose} loading={loading}
                      onSave={edit ? this.editProject.bind(this) : this.createProject.bind(this)}/>
       </div>

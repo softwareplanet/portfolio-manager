@@ -12,7 +12,7 @@ class CreateSkill extends Component {
     categoryId: null
   };
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps(nextProps) {
     if (!nextProps.opened) {
       this.setState({name: '', url: ''})
     }
@@ -42,13 +42,13 @@ class CreateSkill extends Component {
           <TextField label="Name:" value={name}
                      onChange={(e) => this.setState({name: e.target.value})}
                      isRequired={true}
-                     errorMessage={(errors.name || []).join('<br/>')}
+                     errorMessage={(errors.name || []).join('\r\n')}
                      placeholder="e.i. JavaScript"
           />
           <TextField label="Url:" value={url}
                      onChange={(e) => this.setState({url: e.target.value})}
                      placeholder="Link to technology page"
-                     errorMessage={(errors.url || errors.non_field_errors || []).join('<br/>')}
+                     errorMessage={(errors.url || errors.non_field_errors || []).join('\r\n')}
                      isRequired={true}
                      style={{width: 15 + 'rem'}}
           />
@@ -59,7 +59,7 @@ class CreateSkill extends Component {
             onChanged={({key}) => this.setState({categoryId: key})}
             selectedKey={categoryId}
             isRequired={true}
-            errorMessage={(errors.categoryId || []).join('<br/>')}
+            errorMessage={(errors.categoryId || []).join('\r\n')}
           />
           <div className={'button-group-right'}>
             <div>

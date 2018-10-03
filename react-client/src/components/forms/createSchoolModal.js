@@ -11,7 +11,7 @@ class CreateSchool extends Component {
     description: ''
   };
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps(nextProps) {
     if (!nextProps.opened) {
       this.setState({name: '', description: ''})
     }
@@ -41,13 +41,13 @@ class CreateSchool extends Component {
           <TextField label="Name:" value={name}
                      onChange={(e) => this.setState({name: e.target.value})}
                      isRequired={true}
-                     errorMessage={(errors.name || []).join('<br/>')}
+                     errorMessage={(errors.name || []).join('\r\n')}
                      placeholder="inCamp S8"
           />
           <TextField label="Description:" value={description}
                      onChange={(e) => this.setState({description: e.target.value})}
                      isRequired={true}
-                     errorMessage={(errors.description || []).join('<br/>')}
+                     errorMessage={(errors.description || []).join('\r\n')}
                      placeholder="Detailed description of this school/course..."
                      multiline rows={12}
                      autoAdjustHeight={true}

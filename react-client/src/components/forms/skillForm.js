@@ -94,7 +94,7 @@ class SkillFormComponent extends Component {
           }}
           itemLimit={1}
         />
-        <ErrorLabel title={(this.state.errors.skill || errors.non_field_errors || []).join('<br/>')}/>
+        <ErrorLabel title={(this.state.errors.skill || errors.non_field_errors || []).join('\r\n')}/>
         <br/>
         <TextField
           value={description}
@@ -104,7 +104,7 @@ class SkillFormComponent extends Component {
           onChange={(e) => this.setState({description: e.target.value})}
           label={"Description"}
         />
-        <ErrorLabel title={(errors.description || []).join('<br/>')}/>
+        <ErrorLabel title={(errors.description || []).join('\r\n')}/>
         <br/>
         <Label>Skill level</Label>
         <div className={'skill-slider-container'}>
@@ -122,7 +122,7 @@ class SkillFormComponent extends Component {
             {this.skillDescriptions.map(this._renderSkillLevelLabel)}
           </div>
         </div>
-        <ErrorLabel title={(errors.level || []).join('<br/>')}/>
+        <ErrorLabel title={(errors.level || []).join('\r\n')}/>
         <br/>
         <PanelFooter onClose={this._onClose.bind(this)} loading={loading}
                      onSave={edit ? this.editSkill.bind(this) : this.createSkill.bind(this)}/>

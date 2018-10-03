@@ -18,7 +18,7 @@ class CreateProject extends Component {
 
   state = {...this.initialState};
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps(nextProps) {
     if (!nextProps.opened) {
       this.setState({...this.initialState});
     }
@@ -49,7 +49,7 @@ class CreateProject extends Component {
             label="Name:" value={name}
             onChange={(e) => this.setState({name: e.target.value})}
             isRequired={true}
-            errorMessage={(errors.name || []).join('<br/>')}
+            errorMessage={(errors.name || []).join('\r\n')}
             placeholder="Project name..."
             required
           />
@@ -57,7 +57,7 @@ class CreateProject extends Component {
             label="Description:" value={description}
             onChange={(e) => this.setState({description: e.target.value})}
             isRequired={true}
-            errorMessage={(errors.description || []).join('<br/>')}
+            errorMessage={(errors.description || []).join('\r\n')}
             placeholder="Detailed description of this project..."
             multiline rows={12}
             autoAdjustHeight={true}
@@ -71,21 +71,21 @@ class CreateProject extends Component {
             onSelectDate={(startDate) => {
               this.setState({startDate})
             }}
-            errorMessage={(errors.startDate || []).join('<br/>')}
+            errorMessage={(errors.startDate || []).join('\r\n')}
             required
           />
           <NumberTextField
             label="Duration, month:"
             value={durationMonths}
             onChange={(durationMonths) => this.setState({durationMonths})}
-            errorMessage={(errors.durationMonths || []).join('<br/>')}
+            errorMessage={(errors.durationMonths || []).join('\r\n')}
             required
           />
           <TextField
             label="Url:" value={url}
             onChange={(e) => this.setState({url: e.target.value})}
             placeholder="Link to project page"
-            errorMessage={(errors.url || errors.non_field_errors || []).join('<br/>')}
+            errorMessage={(errors.url || errors.non_field_errors || []).join('\r\n')}
             isRequired={true}
           />
           <div className={'button-group-right'}>

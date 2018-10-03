@@ -32,13 +32,13 @@ class LoginPage extends Component {
           }}>
             <TextField label="Username:" value={username}
                        onChange={(e) => this.setState({username: e.target.value})}
-                       errorMessage={(errors.username || []).join('<br/>')}
+                       errorMessage={(errors.username || []).join('\r\n')}
                        placeholder="Username"
             />
             <TextField label="Password:" value={password}
                        onChange={(e) => this.setState({password: e.target.value})}
                        type="password"
-                       errorMessage={(errors.password || errors.non_field_errors || []).join('<br/>')}
+                       errorMessage={(errors.password || errors.non_field_errors || []).join('\r\n')}
                        placeholder="Password"
             />
             <div className={'button-group-right'}>
