@@ -6,14 +6,14 @@ from rest_framework.views import APIView
 from employee.model_views import MultipleInstanceAPIView, SingleInstanceAPIView, \
     MultipleEmployeeRelatedInstanceAPIView, SingleEmployeeRelatedInstanceAPIView
 from employee.models import Employee, Project, EmployeeProject, School, Skill, EmployeeSkill, EmployeeSchool, \
-    SkillCategory, ProjectFile
+    SkillCategory, ProjectFile, FilesGroup
 from employee.permissions import IsAdminOrSelf, IsPostOrIsAdmin
 from employee.search_serializers import SearchEmployeeSerializer, SearchProjectSerializer, SearchSkillSerializer
 from employee.serializers import EmployeeSerializer, EmployeeForUserSerializer, ProjectSerializer, \
     EmployeeProjectSerializer, SchoolSerializer, \
     SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer, ExtendedProjectSerializer, \
     ExtendedSkillSerializer, ExtendedSchoolSerializer, SkillCategorySerializer, ChangePasswordSerializer, \
-    ProjectFileSerializer
+    ProjectFileSerializer, FilesGroupSerializer
 from employee.utils import Utils
 
 
@@ -48,6 +48,11 @@ class ListProjects(MultipleInstanceAPIView):
     model = Project
 
 
+class ListFilesGroups(MultipleInstanceAPIView):
+    serializer = FilesGroupSerializer
+    model = FilesGroup
+
+
 class ListProjectFiles(APIView):
     serializer = ProjectFileSerializer
     model = ProjectFile
@@ -64,6 +69,12 @@ class ListProjectFiles(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Utils.error_response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class ListProjectFile(SingleInstanceAPIView):
+    serializer = ProjectFileSerializer
+    model = ProjectFile
+    permission_classes = (permissions.IsAdminUser, )
 
 
 class ListProject(SingleInstanceAPIView):
