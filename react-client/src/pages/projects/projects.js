@@ -158,7 +158,7 @@ class ProjectsPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const {projects} = this.props;
-    if (!projects && nextProps.projects) this.setState({projects: nextProps.projects});
+    if (nextProps.projects) this.setState({projects: nextProps.projects});
     if (projects && nextProps.projects && (projects.length !== nextProps.projects.length)) {
       const {hideDialog} = this.state;
       !hideDialog && this._closeDialog();
