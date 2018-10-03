@@ -3,7 +3,7 @@ import {
   CHANGE_PROJECT,
   CREATE_PROJECT_ERRORS,
   DELETE_PROJECT,
-  NEW_PROJECT_LOADING,
+  NEW_PROJECT_LOADING, REMOVE_PROJECT_FILE,
   SET_PROJECT,
   SET_PROJECTS
 } from "../actions/actionTypes";
@@ -36,6 +36,10 @@ export const project = (state = {}, action) => {
 
     case ADD_PROJECT_FILE: {
       return {...state, files: [...state.files, action.payload]}
+    }
+
+    case REMOVE_PROJECT_FILE: {
+      return {...state, files: state.files.filter(({id}) => id !== action.payload)}
     }
 
     default:

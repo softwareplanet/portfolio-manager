@@ -112,8 +112,8 @@ class ProjectsPage extends Component {
             items: [
               {
                 key: 'open',
-                text: 'Team',
-                iconProps: {iconName: 'Group', style: {color: '#000'}},
+                text: 'Project page',
+                iconProps: {iconName: 'ProjectLogo32', style: {color: '#000'}},
                 onClick: () => {
                   this.props.setProject(item);
                   this.props.history.push(`/home/projects/${item.id}`)
@@ -156,7 +156,7 @@ class ProjectsPage extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps(nextProps) {
     const {projects} = this.props;
     if (!projects && nextProps.projects) this.setState({projects: nextProps.projects});
     if (projects && nextProps.projects && (projects.length !== nextProps.projects.length)) {
