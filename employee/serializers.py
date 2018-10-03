@@ -14,6 +14,12 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     projects = serializers.SerializerMethodField()
 
     @staticmethod
+    def validate_password(value):
+        from django.contrib.auth.password_validation import validate_password
+        validate_password(value)
+        return value
+
+    @staticmethod
     def get_skills(obj):
         skills = []
         for skill in obj.skills.all():
