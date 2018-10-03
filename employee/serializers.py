@@ -225,7 +225,7 @@ class ProjectFileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ProjectFile
-        fields = ('project', 'file', 'groupId', 'group')
+        fields = ('id', 'project', 'file', 'groupId', 'group')
 
 
 class ExtendedProjectSerializer(ProjectSerializer):
