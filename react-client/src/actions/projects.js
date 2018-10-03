@@ -7,7 +7,7 @@ import {
   SET_PROJECT,
   SET_PROJECTS,
   SUCCESSFUL_EDIT_PROJECT,
-  ADD_PROJECT_FILE
+  ADD_PROJECT_FILE, REMOVE_PROJECT_FILE
 } from "./actionTypes";
 import axios from "axios";
 import {setProjectModal} from "./modals";
@@ -152,6 +152,20 @@ export const createProjectFile = (projectId, data) => {
       })
       .catch(errors => {
         dispatch(createProjectErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+      })
+  }
+};
+
+export const removeProjectFile = (projectFileId) => ({
+  type: REMOVE_PROJECT_FILE,
+  payload: projectFileId
+});
+
+export const deleteProjectFile = (projectFileId) => {
+  return (dispatch) => {
+    axios.delete(`/api/v1/file/${projectFileId}`)
+      .then(({data: {id: projectFileId}}) => {
+        dispatch(removeProjectFile(projectFileId))
       })
   }
 };
