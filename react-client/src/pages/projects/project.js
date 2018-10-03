@@ -1,13 +1,29 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import Dropzone from 'react-dropzone';
-import {Loader, PrivatePageRedirect, Tooltip} from "../../components";
+import {DropZone, Loader, PrivatePageRedirect, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
-import {IconButton, SelectionMode} from "office-ui-fabric-react";
-import {createProjectFile, getProject, getProjects} from "../../actions/projects";
+import {
+  DefaultButton,
+  Dialog,
+  DialogFooter,
+  DialogType,
+  Dropdown,
+  IconButton,
+  PrimaryButton,
+  SelectionMode
+} from "office-ui-fabric-react";
+import {createProjectFile, deleteProjectFile, getProject, getProjects} from "../../actions/projects";
 import axios from "axios";
 
 class ProjectTeamPage extends Component {
+
+  state = {
+    hideDialog: true,
+    group: 0,
+    groups: [{key: 0, text: 'All groups'}],
+    dropzoneActive: false
+  };
 
   _team_columns = [
     {
@@ -108,19 +124,20 @@ class ProjectTeamPage extends Component {
     }
   ];
 
-  _files_columns = [{
-    key: 'fileName',
-    name: 'Name',
-    fieldName: 'fileName',
-    minWidth: 110,
-    maxWidth: 1040,
-    isRowHeader: true,
-    isResizable: true,
-    isPadded: true,
-    onRender: ({file}) => {
-      return <a href={axios.defaults.baseURL + file} target="_blank">{file.split('/').slice(-1)[0]}</a>;
+  _files_columns = [
+    {
+      key: 'fileName',
+      name: 'Name',
+      fieldName: 'fileName',
+      minWidth: 110,
+      maxWidth: 1040,
+      isRowHeader: true,
+      isResizable: true,
+      isPadded: true,
+      onRender: ({file}) => {
+        return <a href={axios.defaults.baseURL + file} download target="_blank">{file.split('/').slice(-1)[0]}</a>;
+      },
     },
-  },
     {
       key: 'group',
       name: 'Group',
@@ -147,7 +164,8 @@ class ProjectTeamPage extends Component {
               {
                 key: 'delete',
                 text: 'Delete',
-                iconProps: {iconName: 'Trash', style: {color: '#000'}}
+                iconProps: {iconName: 'Trash', style: {color: '#000'}},
+                onClick: () => this._openDeleteDialog(item)
               }
             ],
             directionalHintFixed: true
@@ -161,11 +179,29 @@ class ProjectTeamPage extends Component {
 
 
   componentDidMount() {
+    this.mounted = true;
     const {user, getProject, projectId, getProjects} = this.props;
     if (user) {
       getProject(projectId);
       getProjects();
     }
+    this.getFileGroups();
+  }
+
+  getFileGroups = () => {
+    axios.get('/api/v1/files_group').then(({data}) => {
+      this.mounted &&
+      this.setState({
+        groups: [...this.state.groups, ...data.map(({id, name}) => ({
+          key: id,
+          text: name
+        }))]
+      })
+    });
+  };
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -176,15 +212,25 @@ class ProjectTeamPage extends Component {
         getProject(nextId);
       }
     }
+    const {project} = this.props;
+    if (project && nextProps) {
+      const {files} = project;
+      if (files && nextProps.project.files && (files.length !== nextProps.project.files.length)) {
+        const {hideDialog} = this.state;
+        !hideDialog && this._closeDialog();
+      }
+    }
   }
 
   onDrop = (files) => {
-    console.log(files);
-    files.map( file => this.props.addProjectFile(this.props.projectId, {file, group: '2'}))
+    const {group} = this.state;
+    this.setState({dropzoneActive: false});
+    files.map(file => this.props.addProjectFile(this.props.projectId, {file, group: group ? group.toString() : '1'}));
   };
 
   render() {
     const {project: {team, name, description, files}} = this.props;
+    const {hideDialog, projectFileToDelete, group, groups, dropzoneActive} = this.state;
     return (
       <div className={'page-container'} key={'employeeProjects'}>
         <PrivatePageRedirect/>
@@ -206,12 +252,25 @@ class ProjectTeamPage extends Component {
           disableClick
           style={{position: 'relative'}}
           onDrop={this.onDrop}
+          onDragEnter={this._setDropZoneActive(true)}
+          onDragLeave={this._setDropZoneActive(false)}
         >
-          <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Files</h3>
+          {dropzoneActive && <DropZone/>}
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Files</h3>
+            <div style={{width: 10 + 'rem'}}>
+              <Dropdown
+                selectedKey={group}
+                onChanged={({key: group}) => this.setState({group})}
+                placeHolder="Select a Group"
+                options={groups}
+              />
+            </div>
+          </div>
           {
             files ?
               <DetailsList
-                items={files}
+                items={group ? files.filter(({group: {id}}) => id === group) : files}
                 columns={this._files_columns}
                 selectionMode={SelectionMode.none}
                 layoutMode={DetailsListLayoutMode.justified}
@@ -219,10 +278,39 @@ class ProjectTeamPage extends Component {
               <Loader title="Loading project team..."/>
           }
         </Dropzone>
+        <Dialog
+          hidden={hideDialog}
+          onDismiss={this._closeDialog}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: `Delete file ${projectFileToDelete && projectFileToDelete.file.split('/').slice(-1)[0]}`,
+            subText:
+              'This can not be undone.'
+          }}
+          modalProps={{
+            isBlocking: false
+          }}
+        >
+          <DialogFooter>
+            <PrimaryButton
+              iconProps={{iconName: 'Delete'}}
+              onClick={() => {
+                this.props.deleteProjectFile(projectFileToDelete.id);
+              }} text="Delete"/>
+            <DefaultButton onClick={this._closeDialog} text="Cancel"/>
+          </DialogFooter>
+        </Dialog>
       </div>
     );
   }
 
+  _openDeleteDialog(projectFile) {
+    this.setState({projectFileToDelete: projectFile, hideDialog: false})
+  }
+  _setDropZoneActive = (bool) => () => this.setState({dropzoneActive: bool});
+  _closeDialog = () => {
+    this.setState({hideDialog: true});
+  };
   _openEmployeeProfile = (employeeId) => {
     this.props.history.push(`/home/${employeeId}/profile`);
   };
@@ -240,6 +328,7 @@ const mapDispatchToProps = (dispatch) => {
     getProject: (projectId) => dispatch(getProject(projectId)),
     getProjects: () => dispatch(getProjects()),
     addProjectFile: (projectId, data) => dispatch(createProjectFile(projectId, data)),
+    deleteProjectFile: (projectId) => dispatch(deleteProjectFile(projectId)),
   };
 };
 
