@@ -65,7 +65,6 @@ class UserFormComponent extends Component {
           onSelectDate={(careerStartDate) => {
             this.setState({careerStartDate})
           }}
-          isRequired={true}
         />
         <LittleBr/>
         <TextField label="Username:" value={username}
@@ -78,7 +77,6 @@ class UserFormComponent extends Component {
         <TextField label="Position:" value={position}
                    onChange={(e) => this.setState({position: e.target.value})}
                    errorMessage={(errors.position || []).join('\r\n')}
-                   required
                    placeholder="Software Developer"
         />
         <LittleBr/>
