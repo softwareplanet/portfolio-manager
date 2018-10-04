@@ -145,11 +145,14 @@ class ProjectsPage extends Component {
     hideDialog: true,
     projectToDelete: null,
     projectToEdit: null,
+    projects: null,
     selectedSkills: []
   };
 
   componentDidMount() {
-    const {user, getProjects, getSkills} = this.props;
+    const {user, getProjects, getSkills, projects} = this.props;
+    const {projects: projectsToShow} = this.state;
+    (!projectsToShow && projects) && this.setState({projects: projects});
     if (user) {
       getProjects();
       getSkills();
@@ -181,11 +184,9 @@ class ProjectsPage extends Component {
       })
     }
   }
-
   render() {
-    const {projectToEdit, hideDialog, projectToDelete, selectedSkills, projects: projectsToShow} = this.state;
+    const {projectToEdit, hideDialog, projectToDelete, selectedSkills} = this.state;
     const {skills} = this.props;
-    (!projectsToShow && this.props.projects) && this.setState({projects: this.props.projects});
     return (
       <div className={'page-container'}>
         <CreateProjectModal project={projectToEdit}/>
@@ -194,7 +195,7 @@ class ProjectsPage extends Component {
           <div className={'add-button'}>
             <PrimaryButton
               text={'Add a Project'}
-              onClick={this._openCreateModal}
+              onClick={() => this._openCreateModal()}
             />
           </div>
           <div className={'filter-picker'}>
