@@ -78,6 +78,10 @@
     .flex .company-project-technologies {
       color: #4b709d;
       margin-bottom: 1rem; }
+    .flex .company-project-url a {
+      color: #0178d4;
+      text-decoration-style: solid;
+      text-decoration-color: #0198ff; }
     .flex .company-project-employee {
       margin-top: 0.5rem;
       border: 1px grey dotted;

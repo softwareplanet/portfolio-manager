@@ -113,6 +113,14 @@ $text-color-secondary: #4b709d;
       margin-bottom: 1rem;
     }
 
+    &-url {
+      a {
+        color: $theme-color-primary;
+        text-decoration-style: solid;
+        text-decoration-color: $theme-color-secondary;
+      }
+    }
+
     &-employee {
       margin-top: 0.5rem;
       border: 1px grey dotted;

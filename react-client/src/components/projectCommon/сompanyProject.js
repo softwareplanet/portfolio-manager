@@ -1,7 +1,7 @@
 import React from "react";
 import {EmployeeOnProject} from "./employeeOnProject";
 
-export const CompanyProject = ({project: {name, description, team, skills, id, startDate, durationMonths: duration}}) => {
+export const CompanyProject = ({project: {name, description, team, skills, id, startDate, durationMonths: duration, url}}) => {
   return (
     <div key={`project${id}`} className="company-project">
       <div className="company-project-head">
@@ -19,6 +19,10 @@ export const CompanyProject = ({project: {name, description, team, skills, id, s
         Technologies: <span>{skills.map((skill) => skill.name).join(', ')}</span>
       </div>
       <div className="company-project-description">{description}</div>
+      {url &&
+      <div className="company-project-url">
+        Link: <a href={url} target="_blank">{name}</a>
+      </div>}
       {team.map((employee, index) => <EmployeeOnProject key={index} employee={employee}/>)}
     </div>
   )
