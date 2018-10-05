@@ -33,6 +33,7 @@ export const getProjects = () => {
 
 export const getProjectsExtended = () => {
   return (dispatch) => {
+    dispatch(setProjects(null));
     dispatch(createProjectErrors({}));
     axios.get(`/api/v1/project/extended`)
       .then(res => {

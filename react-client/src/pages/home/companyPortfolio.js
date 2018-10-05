@@ -19,7 +19,7 @@ class CompanyPortfolioPage extends Component {
         <PrivatePageRedirect/>
         <span className={'page-title'}>Company Presentation</span>
         <div className={'presentation-container'}>
-          {projects ? this._renderProjects(projects) : <Loader title={'Loading projects...'}/>}
+          {projects ? this._renderProjects(projects) : <Loader style={{height: 100 + '%'}} title={'Loading detailed projects information...'}/>}
         </div>
       </div>
     );

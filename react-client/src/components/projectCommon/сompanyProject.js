@@ -1,5 +1,6 @@
 import React from "react";
 import {EmployeeOnProject} from "./employeeOnProject";
+import {Loader} from "..";
 
 export const CompanyProject = ({project: {name, description, team, skills, id, startDate, durationMonths: duration, url}}) => {
   return (
@@ -23,7 +24,7 @@ export const CompanyProject = ({project: {name, description, team, skills, id, s
       <div className="company-project-url">
         Link: <a href={url} target="_blank">{name}</a>
       </div>}
-      {team.map((employee, index) => <EmployeeOnProject key={index} employee={employee}/>)}
+      {team ? team.map((employee, index) => <EmployeeOnProject key={index} employee={employee}/>) : <Loader title={'Loading detailed projects information...'}/>}
     </div>
   )
 };

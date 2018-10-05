@@ -174,6 +174,10 @@ class ProjectsPage extends Component {
     createProject();
   };
 
+  _openCompanyPortfolio = () => {
+    this.props.history.push(`/home/company_portfolio`)
+  };
+
   filterProjects(selectedSkills) {
     const {projects} = this.props;
     if (projects) {
@@ -184,6 +188,7 @@ class ProjectsPage extends Component {
       })
     }
   }
+
   render() {
     const {projectToEdit, hideDialog, projectToDelete, selectedSkills} = this.state;
     const {skills} = this.props;
@@ -192,11 +197,19 @@ class ProjectsPage extends Component {
         <CreateProjectModal project={projectToEdit}/>
         <span className={'page-title'}>Projects</span>
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-          <div className={'add-button'}>
-            <PrimaryButton
-              text={'Add a Project'}
-              onClick={() => this._openCreateModal()}
-            />
+          <div style={{display: 'flex'}}>
+            <div className={'add-button'}>
+              <PrimaryButton
+                text={'Add a Project'}
+                onClick={() => this._openCreateModal()}
+              />
+            </div>
+            <div className={'portfolio-button'}>
+              <PrimaryButton
+                text={'Company Portfolio'}
+                onClick={() => this._openCompanyPortfolio()}
+              />
+            </div>
           </div>
           <div className={'filter-picker'}>
             <TagPicker
