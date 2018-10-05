@@ -14,7 +14,8 @@ import {
   Projects,
   Project,
   Schools,
-  Skills
+  Skills,
+  CompanyPortfolio
 } from "..";
 import {connect} from "react-redux";
 
@@ -54,6 +55,7 @@ class HomePage extends Component {
               <Route exact={true} path='/home/schools/:schoolId' component={EmployeesFromSchool}/>
               <Route exact={true} path='/home/employees' component={Employees}/>
               <Route exact={true} path='/home/no_permission' component={NoPermission}/>
+              <Route exact={true} path='/home/company_portfolio' component={CompanyPortfolio}/>
             </Switch>
           </div>
         </div>

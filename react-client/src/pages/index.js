@@ -1,6 +1,7 @@
 export * from './loading/loadingMain'
 export * from './login/login'
 export * from './home/home'
+export * from './home/companyPortfolio'
 export * from './register/register'
 export * from './profile/profile'
 export * from './profile/presentation'
