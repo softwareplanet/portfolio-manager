@@ -202,6 +202,14 @@ class EmployeeSchoolSerializer(serializers.HyperlinkedModelSerializer):
 class EmployeeOnProjectSerializer(EmployeeProjectSerializer):
     employeeName = serializers.SerializerMethodField(method_name='get_employee_name')
     employeeId = serializers.SerializerMethodField(method_name='get_employee_id')
+    image = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_image(obj):
+        if obj.employee_id.image:
+            return obj.employee_id.image.url
+        else:
+            return None
 
     @staticmethod
     def get_employee_name(obj):
@@ -212,7 +220,7 @@ class EmployeeOnProjectSerializer(EmployeeProjectSerializer):
         return obj.employee_id.id
 
     class Meta(EmployeeProjectSerializer.Meta):
-        fields = ('id', 'startDate', 'durationMonths', 'skills', 'description', 'employeeName', 'employeeId')
+        fields = ('id', 'startDate', 'durationMonths', 'skills', 'description', 'employeeName', 'employeeId', 'image')
 
 
 class FilesGroupSerializer(serializers.HyperlinkedModelSerializer):
