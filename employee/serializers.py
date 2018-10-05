@@ -79,7 +79,9 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         for skill in Skill.objects.raw("""
         select * from pman.employee_projects_skills
             where employeeproject_id in (select id from pman.employee_projects
-                                            where project_id_id=%s)""",
+                                            where project_id_id=%s)
+            group by skill_id
+                                            """,
                                        [project.id]):
             arr.append(skill.skill_id)
         return arr
@@ -237,6 +239,13 @@ class ProjectFileSerializer(serializers.HyperlinkedModelSerializer):
 class ExtendedProjectSerializer(ProjectSerializer):
     team = serializers.SerializerMethodField(method_name='get_project_team', read_only=True)
     files = ProjectFileSerializer(many=True, read_only=True, source='project_files')
+    skills = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_skills(project):
+        skills_list = Skill.objects.filter(employeeproject__project_id=project.id).distinct()
+        skills = SkillSerializer(skills_list, many=True)
+        return skills.data
 
     @staticmethod
     def get_project_team(obj):

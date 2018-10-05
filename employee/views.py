@@ -48,6 +48,11 @@ class ListProjects(MultipleInstanceAPIView):
     model = Project
 
 
+class ListProjectsExtended(MultipleInstanceAPIView):
+    serializer = ExtendedProjectSerializer
+    model = Project
+
+
 class ListFilesGroups(MultipleInstanceAPIView):
     serializer = FilesGroupSerializer
     model = FilesGroup

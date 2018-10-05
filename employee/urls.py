@@ -7,6 +7,7 @@ urlpatterns = [
     path('employee', views.ListEmployees.as_view()),
     path('employee/<int:model_id>', views.ListEmployee.as_view()),
     path('project', views.ListProjects.as_view()),
+    path('project/extended', views.ListProjectsExtended.as_view()),
     path('files_group', views.ListFilesGroups.as_view()),
     path('project/<int:model_id>', views.ListProject.as_view()),
     path('project/<int:model_id>/files', views.ListProjectFiles.as_view()),
