@@ -31,6 +31,17 @@ export const getProjects = () => {
   }
 };
 
+export const getProjectsExtended = () => {
+  return (dispatch) => {
+    dispatch(createProjectErrors({}));
+    axios.get(`/api/v1/project/extended`)
+      .then(res => {
+        dispatch(setProjects(res.data));
+      })
+      .catch(retryRequest(getProjectsExtended, dispatch)())
+  }
+};
+
 export const newProjectLoading = (bool = false) => {
   return {
     type: NEW_PROJECT_LOADING,
