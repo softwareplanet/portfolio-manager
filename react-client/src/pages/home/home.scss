@@ -1,6 +1,7 @@
 $header-size: 3rem;
 $theme-color-primary: #0178d4;
 $theme-color-secondary: #0198ff;
+$text-color-secondary: #4b709d;
 
 .header {
   width: 100%;
@@ -74,6 +75,80 @@ $theme-color-secondary: #0198ff;
   display: flex;
   flex: 1 1 0;
   margin-top: $header-size;
+
+  .company-project {
+    margin-bottom: 1rem;
+    border: 1px grey dashed;
+    padding: 1rem;
+    border-radius: 5px;
+    background-color: rgba(245, 245, 245, 0.17);
+    box-shadow: rgba(0, 0, 0, 0.11) 0 0 3px 1px;
+
+    &-title {
+      font-weight: 500;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    &-time {
+      font-weight: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    &-head {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &-description {
+      font-weight: 200;
+      text-align: justify;
+      margin-bottom: 1rem;
+    }
+
+    &-technologies {
+      color: $text-color-secondary;
+      margin-bottom: 1rem;
+    }
+
+    &-employee {
+      margin-top: 0.5rem;
+      border: 1px grey dotted;
+      padding: 0.5rem;
+      border-radius: 5px;
+
+      &-description {
+        font-weight: 200;
+        text-align: justify;
+      }
+
+      &-main {
+        display: flex;
+      }
+
+      &-image {
+        height: 3rem;
+        width: 3rem;
+        border: 0;
+        border-radius: 50%;
+        background: white no-repeat center;
+        background-size: 100%;
+        margin-right: 1rem;
+      }
+
+      &-technologies {
+        margin-bottom: 0.5rem;
+      }
+
+      &-name {
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+
+    }
+  }
 
   .content-container {
     width: calc(100% - 21rem);
