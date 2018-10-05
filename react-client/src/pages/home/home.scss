@@ -114,8 +114,10 @@ $text-color-secondary: #4b709d;
     }
 
     &-url {
+      font-weight: 200;
+
       a {
-        color: $theme-color-primary;
+        color: $text-color-secondary;
         text-decoration-style: solid;
         text-decoration-color: $theme-color-secondary;
       }
