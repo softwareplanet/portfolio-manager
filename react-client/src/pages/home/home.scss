@@ -84,6 +84,11 @@ $text-color-secondary: #4b709d;
     background-color: rgba(245, 245, 245, 0.17);
     box-shadow: rgba(0, 0, 0, 0.11) 0 0 3px 1px;
 
+    &-head {
+      display: flex;
+      justify-content: space-between;
+    }
+
     &-title {
       font-weight: 500;
       font-size: 1.5rem;
@@ -97,19 +102,14 @@ $text-color-secondary: #4b709d;
       align-items: flex-end;
     }
 
-    &-head {
-      display: flex;
-      justify-content: space-between;
+    &-technologies {
+      color: $text-color-secondary;
+      margin-bottom: 1rem;
     }
 
     &-description {
       font-weight: 200;
       text-align: justify;
-      margin-bottom: 1rem;
-    }
-
-    &-technologies {
-      color: $text-color-secondary;
       margin-bottom: 1rem;
     }
 
@@ -127,11 +127,6 @@ $text-color-secondary: #4b709d;
       padding: 0.5rem;
       border-radius: 5px;
 
-      &-description {
-        font-weight: 200;
-        text-align: justify;
-      }
-
       &-main {
         display: flex;
       }
@@ -146,15 +141,19 @@ $text-color-secondary: #4b709d;
         margin-right: 1rem;
       }
 
-      &-technologies {
-        margin-bottom: 0.5rem;
-      }
-
       &-name {
         font-weight: 400;
         margin-bottom: 0.5rem;
       }
 
+      &-technologies {
+        margin-bottom: 0.5rem;
+      }
+
+      &-description {
+        font-weight: 200;
+        text-align: justify;
+      }
     }
   }
 

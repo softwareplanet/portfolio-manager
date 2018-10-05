@@ -59,6 +59,9 @@
     border-radius: 5px;
     background-color: rgba(245, 245, 245, 0.17);
     box-shadow: rgba(0, 0, 0, 0.11) 0 0 3px 1px; }
+    .flex .company-project-head {
+      display: flex;
+      justify-content: space-between; }
     .flex .company-project-title {
       font-weight: 500;
       font-size: 1.5rem;
@@ -68,15 +71,12 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end; }
-    .flex .company-project-head {
-      display: flex;
-      justify-content: space-between; }
+    .flex .company-project-technologies {
+      color: #4b709d;
+      margin-bottom: 1rem; }
     .flex .company-project-description {
       font-weight: 200;
       text-align: justify;
-      margin-bottom: 1rem; }
-    .flex .company-project-technologies {
-      color: #4b709d;
       margin-bottom: 1rem; }
     .flex .company-project-url a {
       color: #0178d4;
@@ -87,9 +87,6 @@
       border: 1px grey dotted;
       padding: 0.5rem;
       border-radius: 5px; }
-      .flex .company-project-employee-description {
-        font-weight: 200;
-        text-align: justify; }
       .flex .company-project-employee-main {
         display: flex; }
       .flex .company-project-employee-image {
@@ -100,11 +97,14 @@
         background: white no-repeat center;
         background-size: 100%;
         margin-right: 1rem; }
-      .flex .company-project-employee-technologies {
-        margin-bottom: 0.5rem; }
       .flex .company-project-employee-name {
         font-weight: 400;
         margin-bottom: 0.5rem; }
+      .flex .company-project-employee-technologies {
+        margin-bottom: 0.5rem; }
+      .flex .company-project-employee-description {
+        font-weight: 200;
+        text-align: justify; }
   .flex .content-container {
     width: calc(100% - 21rem);
     margin-left: 21rem; }
