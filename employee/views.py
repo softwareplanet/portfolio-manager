@@ -79,7 +79,7 @@ class ListProjectFiles(APIView):
 class ListProjectFile(SingleInstanceAPIView):
     serializer = ProjectFileSerializer
     model = ProjectFile
-    permission_classes = (permissions.IsAdminUser, )
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class ListProject(SingleInstanceAPIView):
@@ -278,3 +278,53 @@ class ListSearch(APIView):
         else:
             pass
         return Response(result)
+
+
+class ListDocCandidatePresentation(APIView):
+    from django.http import HttpResponse
+    from io import BytesIO
+    employee = None
+    candidate_presentation = None
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request, model_id):
+        from docx import Document
+        try:
+            self.employee = Employee.objects.get(id=model_id)
+            self.candidate_presentation = Document()
+            self.candidate_presentation.add_heading('Candidate Presentation', 0)
+            self._generate_employee_summary()
+            if self.employee.position is not None and self.employee.career_start_date is not None:
+                self._generate_employee_summary_of_qualification()
+            return self._generate_file_response()
+        except ObjectDoesNotExist as e:
+            return Utils.error_response(e.args, status.HTTP_404_NOT_FOUND)
+
+    def _generate_employee_summary(self):
+        photo = self.candidate_presentation.add_picture(self.employee.image.file)
+        name = self.candidate_presentation.add_paragraph('Name: ')
+        run = name.add_run(self.employee.get_full_name())
+        run.bold = True
+        position = self.candidate_presentation.add_paragraph('Position: {0}'.format(self.employee.position))
+        description = self.candidate_presentation.add_paragraph(self.employee.description)
+
+    def _generate_employee_summary_of_qualification(self):
+        from datetime import date
+        import math
+        self.candidate_presentation.add_heading('Summary of qualification')
+        experience = self.candidate_presentation.add_paragraph('{0} years of experience as {1}'.format(
+            math.ceil((date.today() - self.employee.career_start_date).days / 365.0),
+            self.employee.position))
+
+    def _generate_file_response(self):
+        f = self.BytesIO()
+        self.candidate_presentation.save(f)
+        length = f.tell()
+        f.seek(0)
+        response = self.HttpResponse(
+            f.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+        response['Content-Disposition'] = 'attachment; filename={0}.docx'.format(self.employee.get_full_name())
+        response['Content-Length'] = length
+        return response

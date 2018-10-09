@@ -6,6 +6,7 @@ urlpatterns = [
     path('search', views.ListSearch.as_view()),
     path('employee', views.ListEmployees.as_view()),
     path('employee/<int:model_id>', views.ListEmployee.as_view()),
+    path('employee/<int:model_id>/candidate_presentation', views.ListDocCandidatePresentation.as_view()),
     path('project', views.ListProjects.as_view()),
     path('project/extended', views.ListProjectsExtended.as_view()),
     path('files_group', views.ListFilesGroups.as_view()),
