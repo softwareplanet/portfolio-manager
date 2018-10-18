@@ -296,12 +296,21 @@ class ListDocCandidatePresentation(APIView):
             self._generate_employee_summary()
             if self.employee.position is not None and self.employee.career_start_date is not None:
                 self._generate_employee_summary_of_qualification()
+            self._generate_technical_summary()
+            self._generate_professional_experience()
             return self._generate_file_response()
         except ObjectDoesNotExist as e:
             return Utils.error_response(e.args, status.HTTP_404_NOT_FOUND)
 
     def _generate_employee_summary(self):
-        photo = self.candidate_presentation.add_picture(self.employee.image.file)
+        from docx.shared import Inches
+        paragraph = self.candidate_presentation.add_paragraph()
+        paragraph.left_indent = Inches(5)
+        try:
+            photo = self.candidate_presentation.add_picture(self.employee.image.file, width=Inches(1))
+        except Exception as e:
+            from pman.settings import MEDIA_ROOT
+            photo = self.candidate_presentation.add_picture(MEDIA_ROOT + '/profile_images/missing.png', width=Inches(1))
         name = self.candidate_presentation.add_paragraph('Name: ')
         run = name.add_run(self.employee.get_full_name())
         run.bold = True
@@ -315,6 +324,27 @@ class ListDocCandidatePresentation(APIView):
         experience = self.candidate_presentation.add_paragraph('{0} years of experience as {1}'.format(
             math.ceil((date.today() - self.employee.career_start_date).days / 365.0),
             self.employee.position))
+
+    def _generate_technical_summary(self):
+        from itertools import groupby
+        self.candidate_presentation.add_heading('Technical Summary')
+        for key, skills in groupby(self.employee.skills.all().order_by('category_id'), lambda x: x.category):
+            self.candidate_presentation.add_paragraph(
+                '{0}: {1}'.format(key.name, ', '.join([skill.name for skill in list(skills)])))
+
+    def _generate_professional_experience(self):
+        self.candidate_presentation.add_heading('Professional Experience')
+        for employee_project in self.employee.employeeproject_set.all():
+            self._generate_employee_project(employee_project)
+
+    def _generate_employee_project(self, employee_project):
+        project_name = self.candidate_presentation.add_paragraph()
+        run = project_name.add_run(employee_project.project_id.name)
+        run.bold = True
+        skills = self.candidate_presentation.add_paragraph(
+            'Technologies: {0}'.format(', '.join([skill.name for skill in employee_project.skills.all()])))
+        project_description = self.candidate_presentation.add_paragraph(employee_project.project_id.description)
+        employee_description = self.candidate_presentation.add_paragraph(employee_project.description)
 
     def _generate_file_response(self):
         f = self.BytesIO()
