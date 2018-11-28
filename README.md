@@ -31,10 +31,10 @@ Portfolio Manager is a knowledge management system which allows companies to tra
 
 ## Technologies of Implementation
 
-* Python https://www.python.org
-* Django https://www.djangoproject.com
+* Python https://www.python.org/
+* Django https://www.djangoproject.com/
 * Django REST Framework https://www.django-rest-framework.org/
-* MySQL/MariaDB https://mariadb.org
+* MySQL/MariaDB https://mariadb.org/
 
 ## Customer & developer Information
 * Private customer
