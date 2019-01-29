@@ -6,14 +6,14 @@ from rest_framework.views import APIView
 from employee.model_views import MultipleInstanceAPIView, SingleInstanceAPIView, \
     MultipleEmployeeRelatedInstanceAPIView, SingleEmployeeRelatedInstanceAPIView
 from employee.models import Employee, Project, EmployeeProject, School, Skill, EmployeeSkill, EmployeeSchool, \
-    SkillCategory, ProjectFile, FilesGroup
+    SkillCategory, ProjectFile, FilesGroup, EmployeeFile
 from employee.permissions import IsAdminOrSelf, IsPostOrIsAdmin
 from employee.search_serializers import SearchEmployeeSerializer, SearchProjectSerializer, SearchSkillSerializer
 from employee.serializers import EmployeeSerializer, EmployeeForUserSerializer, ProjectSerializer, \
     EmployeeProjectSerializer, SchoolSerializer, \
     SkillSerializer, EmployeeSkillSerializer, EmployeeSchoolSerializer, ExtendedProjectSerializer, \
     ExtendedSkillSerializer, ExtendedSchoolSerializer, SkillCategorySerializer, ChangePasswordSerializer, \
-    ProjectFileSerializer, FilesGroupSerializer
+    ProjectFileSerializer, FilesGroupSerializer, EmployeeFileSerializer
 from employee.utils import Utils
 
 
@@ -61,6 +61,8 @@ class ListFilesGroups(MultipleInstanceAPIView):
 class ListProjectFiles(APIView):
     serializer = ProjectFileSerializer
     model = ProjectFile
+    permission_classes = (permissions.IsAdminUser, )
+    http_method_names = ['post', 'get']
 
     def get(self, request, model_id):
         models = self.model.objects.filter(project_id=model_id)
@@ -69,6 +71,26 @@ class ListProjectFiles(APIView):
     def post(self, request, model_id):
         data = request.data
         data['project'] = model_id
+        serializer = self.serializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Utils.error_response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class ListEmployeeFiles(APIView):
+    serializer = EmployeeFileSerializer
+    model = EmployeeFile
+    permission_classes = (permissions.IsAdminUser, )
+    http_method_names = ['post', 'get']
+
+    def get(self, request, model_id):
+        models = self.model.objects.filter(project_id=model_id)
+        return Response(self.serializer(models, many=True).data)
+
+    def post(self, request, model_id):
+        data = request.data
+        data['employee'] = model_id
         serializer = self.serializer(data=data)
         if serializer.is_valid():
             serializer.save()
