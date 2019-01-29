@@ -277,7 +277,8 @@
   -webkit-font-smoothing: antialiased;
   font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif; }
   .filter-picker > div span {
-    display: flex; }
+    display: flex;
+    flex-wrap: wrap; }
 
 .selected-item {
   display: inline-flex;
