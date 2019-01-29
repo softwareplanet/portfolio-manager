@@ -118,6 +118,7 @@ def employee_directory_path(instance, filename):
 
 class EmployeeFile(models.Model):
     employee = models.ForeignKey(Employee, related_name='employee_files', on_delete=models.CASCADE)
+    comment = models.TextField(blank=True, null=True)
     group = models.ForeignKey(FilesGroup, on_delete=models.CASCADE)
     file = models.FileField(upload_to=project_directory_path)
 
