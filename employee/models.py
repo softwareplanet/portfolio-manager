@@ -109,6 +109,22 @@ class Employee(AbstractUser):
         db_table = 'employees'
 
 
+def employee_directory_path(instance, filename):
+    return 'projects_files/{0}.{1}/{2}/{3}'.format(instance.employee.id,
+                                                   instance.employee.username,
+                                                   instance.group.name,
+                                                   filename)
+
+
+class EmployeeFile(models.Model):
+    employee = models.ForeignKey(Employee, related_name='employee_files', on_delete=models.CASCADE)
+    group = models.ForeignKey(FilesGroup, on_delete=models.CASCADE)
+    file = models.FileField(upload_to=project_directory_path)
+
+    class Meta:
+        db_table = 'employee_files'
+
+
 @receiver(post_save, sender=Employee)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
