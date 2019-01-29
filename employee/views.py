@@ -18,7 +18,7 @@ from employee.utils import Utils
 
 
 class ListEmployees(MultipleInstanceAPIView):
-    serializer = EmployeeSerializer
+    serializer = EmployeeForUserSerializer
     model = Employee
     permission_classes = (IsPostOrIsAdmin,)
 

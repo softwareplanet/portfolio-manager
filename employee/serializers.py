@@ -21,10 +21,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     @staticmethod
     def get_skills(obj):
-        skills = []
-        for skill in obj.skills.all():
-            skills.append(skill.name)
-        return skills
+        return [skill.name for skill in obj.skills.all()]
 
     @staticmethod
     def get_projects(obj):
