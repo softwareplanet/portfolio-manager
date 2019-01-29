@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from employee.models import Employee, Project, EmployeeProject, Skill, School, EmployeeSkill, EmployeeSchool, \
-    SkillCategory, ProjectFile, FilesGroup
+    SkillCategory, ProjectFile, FilesGroup, EmployeeFile
 
 
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
@@ -239,6 +239,21 @@ class ProjectFileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ProjectFile
         fields = ('id', 'project', 'file', 'groupId', 'group')
+
+
+class EmployeeFileSerializer(serializers.HyperlinkedModelSerializer):
+    employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    group = FilesGroupSerializer(read_only=True)
+    groupId = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=FilesGroup.objects.all(),
+        source='group',
+        required=True
+    )
+
+    class Meta:
+        model = EmployeeFile
+        fields = ('id', 'employee', 'file', 'groupId', 'group')
 
 
 class ExtendedProjectSerializer(ProjectSerializer):
