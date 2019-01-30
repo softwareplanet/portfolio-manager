@@ -236,7 +236,7 @@ class ProjectTeamPage extends Component {
         <PrivatePageRedirect/>
         <span
           className={'page-title'}>{'Project ' + (name ? name : '')}</span>
-        <p className={'page-description'}>{'    ' + description}</p>
+        <p className={'page-description'}>{description ? description : <b>Project has no description!</b>}</p>
         <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Team</h3>
         {
           team ?
