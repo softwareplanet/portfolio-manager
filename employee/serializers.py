@@ -253,7 +253,7 @@ class EmployeeFileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = EmployeeFile
-        fields = ('id', 'employee', 'file', 'groupId', 'group')
+        fields = ('id', 'employee', 'file', 'groupId', 'group', 'comment')
 
 
 class ExtendedProjectSerializer(ProjectSerializer):
