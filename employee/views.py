@@ -85,7 +85,7 @@ class ListEmployeeFiles(APIView):
     http_method_names = ['post', 'get']
 
     def get(self, request, model_id):
-        models = self.model.objects.filter(project_id=model_id)
+        models = self.model.objects.filter(employee_id=model_id)
         return Response(self.serializer(models, many=True).data)
 
     def post(self, request, model_id):
@@ -101,6 +101,12 @@ class ListEmployeeFiles(APIView):
 class ListProjectFile(SingleInstanceAPIView):
     serializer = ProjectFileSerializer
     model = ProjectFile
+    permission_classes = (permissions.IsAdminUser,)
+
+
+class ListEmployeeFile(SingleInstanceAPIView):
+    serializer = EmployeeFileSerializer
+    model = EmployeeFile
     permission_classes = (permissions.IsAdminUser,)
 
 
