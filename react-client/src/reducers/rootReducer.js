@@ -1,7 +1,17 @@
 import {combineReducers} from 'redux';
 import {isAuthenticated, loginErrors, loginLoading} from "./login";
 import {registerErrors, registerLoading} from "./register";
-import {editUserErrors, editUserLoading, editUserPhotoLoading, employee, employees, isStaff, user} from "./user";
+import {
+  editUserErrors,
+  editUserLoading,
+  editUserPhotoLoading,
+  employee,
+  employeeFiles, 
+  employeeFilesErrors,
+  employees,
+  isStaff,
+  user
+} from "./user";
 import {createUserProjectErrors, newUserProjectLoading, userProjects} from "./userProjects";
 import {sideBarOpened} from "./sidebar";
 import {createProjectErrors, newProjectLoading, project, projects} from "./projects";
@@ -30,6 +40,7 @@ export default combineReducers({
 
   user,
   employee,
+  employeeFiles,
   employees,
   skill,
   skills,
@@ -62,6 +73,7 @@ export default combineReducers({
   createUserSkillErrors,
   createUserSchoolErrors,
   editUserErrors,
+  employeeFilesErrors,
 
   editUserProjectState,
   editProjectState,

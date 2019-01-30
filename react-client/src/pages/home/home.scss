@@ -237,7 +237,7 @@ $text-color-secondary: #4b709d;
     justify-content: space-around;
 
     .profile-description {
-      margin: 1.5rem 2rem 4rem;
+      margin: 1.5rem 2rem 2rem;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -584,6 +584,22 @@ a {
   color: $theme-color-primary;
   text-decoration-style: dotted;
   text-decoration-color: $theme-color-secondary;
+}
+
+.employee-file-picker {
+  width: 100%;
+
+  .employee-attachments-comment {
+    flex: 1;
+    margin: 0 1rem;
+  }
+
+  .employee-attachments-disclaimer {
+    font-size: 0.9rem;
+    font-weight: 200;
+    text-align: center;
+    padding: 0 1rem;
+  }
 }
 
 .dropzone-active {

@@ -15,6 +15,7 @@ import {getEmployee, updateUserPhoto} from "../../actions/user";
 import {getUserProjects} from "../../actions/userProjects";
 import {getUserSkills} from "../../actions/userSkills";
 import {setPasswordModal} from "../../actions/modals";
+import {EmployeeFiles} from "../../components/projectCommon/employeeFiles";
 
 class ProfilePage extends Component {
 
@@ -117,9 +118,10 @@ class ProfilePage extends Component {
                                    iconName="Rocket" noneMessage="Your career start date"/>
                 </div>
                 {(this._shouldShowElement()) && isStaff &&
-                <div className={'profile-description'}
-                     onClick={() => this.props.history.push(`/home/${user.id}/presentation`)}>
-                <span className={'table-title'}>
+                <div className={'profile-description'}>
+                <span className={'table-title'}
+                      onClick={() => this.props.history.push(`/home/${user.id}/presentation`)}
+                >
                   <Icon iconName={'ContactCard'}
                         style={{
                           fontSize: 1.5 + 'rem',
@@ -162,6 +164,11 @@ class ProfilePage extends Component {
               />
             </div>}
           </div>
+          {(this._shouldShowElement()) && isStaff &&
+          <div className="employee-file-picker">
+            <EmployeeFiles employeeId={this.props.employeeId}/>
+          </div>
+          }
         </div>
       </div>
     );

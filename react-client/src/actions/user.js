@@ -1,11 +1,13 @@
 import {
+  ADD_EMPLOYEE_FILE,
   EDIT_USER_ERRORS,
   EDIT_USER_LOADING,
-  EDIT_USER_PHOTO_LOADING,
+  EDIT_USER_PHOTO_LOADING, EMPLOYEE_FILES_ERRORS,
   IS_STAFF,
-  REMOVE_EMPLOYEE,
+  REMOVE_EMPLOYEE, REMOVE_EMPLOYEE_FILE,
   REMOVE_USER_ERRORS,
   SET_EMPLOYEE,
+  SET_EMPLOYEE_FILES,
   SET_EMPLOYEES,
   SET_USER,
   SUCCESSFUL_EDIT_USER
@@ -69,6 +71,13 @@ export const setEmployee = (employees = null) => {
   };
 };
 
+export const setEmployeeFiles = (employeeFiles = null) => {
+  return {
+    type: SET_EMPLOYEE_FILES,
+    payload: employeeFiles
+  }
+};
+
 export const removeEmployee = (employeeId = null) => {
   return {
     type: REMOVE_EMPLOYEE,
@@ -111,6 +120,60 @@ export const getEmployee = (employeeId, needsLoader = false) => {
         dispatch(setEmployee(res.data));
       })
       .catch(retryRequest(getEmployees, dispatch)())
+  }
+};
+
+export const employeeFilesErrors = (errors = {}) => {
+  return {
+    type: EMPLOYEE_FILES_ERRORS,
+    payload: errors
+  };
+};
+
+export const getEmployeeFiles = (employeeId) => {
+  return (dispatch) => {
+    dispatch(editUserErrors({}));
+    axios.get(`/api/v1/employee/${employeeId}/files`)
+      .then(res => {
+        dispatch(setEmployeeFiles(res.data));
+      })
+      // .catch(retryRequest(getEmployeeFiles, dispatch)(employeeId))
+  }
+};
+
+export const addEmployeeFile = (file = {}) => ({
+  type: ADD_EMPLOYEE_FILE,
+  payload: file
+});
+
+export const createEmployeeFile = (employeeId, data) => {
+  return (dispatch) => {
+    dispatch(employeeFilesErrors({}));
+    let formData = new FormData();
+    formData.append('file', data.file);
+    formData.append('groupId', data.group);
+    formData.append('comment', data.comment);
+    axios.post(`/api/v1/employee/${employeeId}/files`, formData)
+      .then(res => {
+        dispatch(addEmployeeFile(res.data));
+      })
+      .catch(errors => {
+        dispatch(employeeFilesErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
+      })
+  }
+};
+
+export const removeEmployeeFile = (employeeFileId) => ({
+  type: REMOVE_EMPLOYEE_FILE,
+  payload: employeeFileId
+});
+
+export const deleteEmployeeFile = (employeeFileId) => {
+  return (dispatch) => {
+    axios.delete(`/api/v1/employee/file/${employeeFileId}`)
+      .then(({data: {id: employeeFileId}}) => {
+        dispatch(removeEmployeeFile(employeeFileId))
+      })
   }
 };
 
