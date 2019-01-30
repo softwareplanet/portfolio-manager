@@ -118,6 +118,7 @@ export const editProject = (project) => {
     axios.patch(`/api/v1/project/${project.id}`, project)
       .then(res => {
         dispatch(setProjectModal(false));
+        dispatch(setProject(res.data));
         dispatch(changeProject(res.data))
       }).catch(errors => {
       dispatch(createProjectErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));

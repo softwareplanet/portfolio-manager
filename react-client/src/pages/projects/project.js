@@ -1,20 +1,21 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import Dropzone from 'react-dropzone';
-import {DropZone, Loader, PrivatePageRedirect, Tooltip} from "../../components";
+import {CreateProjectModal, DropZone, Loader, PrivatePageRedirect, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DefaultButton,
   Dialog,
   DialogFooter,
   DialogType,
-  Dropdown,
+  Dropdown, Icon,
   IconButton,
   PrimaryButton,
   SelectionMode
 } from "office-ui-fabric-react";
 import {createProjectFile, deleteProjectFile, getProject, getProjects} from "../../actions/projects";
 import axios from "axios";
+import {setProjectModal} from "../../actions/modals";
 
 class ProjectTeamPage extends Component {
 
@@ -22,7 +23,8 @@ class ProjectTeamPage extends Component {
     hideDialog: true,
     group: 0,
     groups: [{key: 0, text: 'All groups'}],
-    dropzoneActive: false
+    dropzoneActive: false,
+    projectToEdit: null,
   };
 
   _team_columns = [
@@ -180,6 +182,10 @@ class ProjectTeamPage extends Component {
       isPadded: true
     }];
 
+  editProject(project) {
+    this.props.createProject();
+    this.setState({projectToEdit: project})
+  }
 
   componentDidMount() {
     this.mounted = true;
@@ -215,6 +221,7 @@ class ProjectTeamPage extends Component {
         getProject(nextId);
       }
     }
+    if (!nextProps.projectModal) this.setState({projectToEdit: null});
     const {project} = this.props;
     if (project && nextProps) {
       const {files} = project;
@@ -230,15 +237,28 @@ class ProjectTeamPage extends Component {
     this.setState({dropzoneActive: false});
     files.map(file => this.props.addProjectFile(this.props.projectId, {file, group: group ? group.toString() : '1'}));
   };
-
+  styles = {
+    icon: {
+      fontSize: 1.5 + 'rem',
+      marginLeft: 0.6 + 'rem',
+      marginBottom: 0.6 + 'rem',
+      cursor: 'pointer'
+    }
+  };
   render() {
     const {project: {team, name, description, files}} = this.props;
-    const {hideDialog, projectFileToDelete, group, groups, dropzoneActive} = this.state;
+    const {hideDialog, projectFileToDelete, group, groups, dropzoneActive, projectToEdit} = this.state;
     return (
       <div className={'page-container'} key={'employeeProjects'}>
         <PrivatePageRedirect/>
+        <CreateProjectModal project={projectToEdit}/>
         <span
-          className={'page-title'}>{'Project ' + (name ? name : '')}</span>
+          className={'page-title'}>{'Project ' + (name ? name : '')}
+          <Icon
+          iconName={'Edit'}
+          style={this.styles.icon}
+          onClick={() => this.editProject(this.props.project)}
+        /></span>
         <p className={'page-description'}>{description ? description : <b>Project has no description!</b>}</p>
         <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Team</h3>
         {
@@ -322,12 +342,13 @@ class ProjectTeamPage extends Component {
   };
 }
 
-const mapStateToProps = ({user, project}, {match: {params: {projectId}}}) => {
-  return {user, projectId, project};
+const mapStateToProps = ({user, project, projectModal}, {match: {params: {projectId}}}) => {
+  return {user, projectId, project, projectModal};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    createProject: () => dispatch(setProjectModal(true)),
     getProject: (projectId) => dispatch(getProject(projectId)),
     getProjects: () => dispatch(getProjects()),
     addProjectFile: (projectId, data) => dispatch(createProjectFile(projectId, data)),
