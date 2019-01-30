@@ -40,8 +40,14 @@ class SchoolsPage extends Component {
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({name}) => {
-        return <span>{name}</span>;
+      onRender: (item) => {
+        return <span
+          onClick={() => {
+            this.props.setSchool(item);
+            this.props.history.push(`/home/schools/${item.id}`)
+          }}
+          className="table-link"
+        >{item.name}</span>;
       },
     },
     {

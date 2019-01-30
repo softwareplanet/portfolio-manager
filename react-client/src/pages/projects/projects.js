@@ -42,8 +42,13 @@ class ProjectsPage extends Component {
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({name}) => {
-        return <span>{name}</span>;
+      onRender: (item) => {
+        return <span
+          className="table-link"
+          onClick={() => {
+          this.props.setProject(item);
+          this.props.history.push(`/home/projects/${item.id}`)
+        }}>{item.name}</span>;
       },
     },
     {

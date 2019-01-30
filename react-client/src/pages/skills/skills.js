@@ -40,8 +40,14 @@ class SkillsPage extends Component {
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({name}) => {
-        return <span>{name}</span>;
+      onRender: (item) => {
+        return <span
+          onClick={() => {
+            this.props.setSkill(item);
+            this.props.history.push(`/home/skills/${item.id}`)
+          }}
+          className="table-link"
+        >{item.name}</span>;
       },
     },
     {

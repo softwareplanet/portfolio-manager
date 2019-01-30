@@ -76,6 +76,15 @@ $text-color-secondary: #4b709d;
   flex: 1 1 0;
   margin-top: $header-size;
 
+  .table-link {
+    cursor: pointer;
+
+    &:hover {
+      font-weight: 500;
+      text-decoration: underline;
+    }
+  }
+
   .company-project {
     margin-bottom: 1rem;
     border: 1px grey dashed;

@@ -52,6 +52,11 @@
   display: flex;
   flex: 1 1 0;
   margin-top: 3rem; }
+  .flex .table-link {
+    cursor: pointer; }
+    .flex .table-link:hover {
+      font-weight: 500;
+      text-decoration: underline; }
   .flex .company-project {
     margin-bottom: 1rem;
     border: 1px grey dashed;

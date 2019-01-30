@@ -17,8 +17,11 @@ class EmployeesFromSchoolPage extends Component {
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({employeeName}) => {
-        return <span>{employeeName}</span>;
+      onRender: ({employeeName, employeeId}) => {
+        return <span
+          onClick={() => this._openEmployeeProfile(employeeId)}
+          className="table-link"
+        >{employeeName}</span>;
       },
     },
     {

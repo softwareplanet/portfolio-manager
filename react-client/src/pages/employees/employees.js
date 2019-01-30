@@ -42,8 +42,12 @@ class EmployeesPage extends Component {
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({firstName, lastName, image}) => {
-        return <span style={{display: 'flex'}}>
+      onRender: ({firstName, lastName, image, id}) => {
+        return <span
+          style={{display: 'flex'}}
+          onClick={() => this._openEmployeeProfile(id)}
+          className="table-link"
+        >
           <div className={`employee-image ${image ? '' : 'missing-img'}`}
                style={{
                  backgroundImage: 'url(' + (image ? axios.defaults.baseURL + image : '/missing-photo.svg') + ')',
