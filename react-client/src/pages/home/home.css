@@ -438,12 +438,14 @@ a {
   margin-bottom: 4rem; }
 
 @media print {
+  body {
+    width: 100%; }
+  @page {
+    margin: 1cm 0; }
   .header {
     display: none; }
-  .flex {
-    margin: 0; }
   .content-container {
-    width: 100%;
-    margin: 0; }
+    width: 100% !important;
+    margin: -1cm 0 0 0 !important; }
   .nav-bar {
     display: none; } }
