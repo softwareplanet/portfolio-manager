@@ -110,7 +110,7 @@ class Employee(AbstractUser):
 
 
 def employee_directory_path(instance, filename):
-    return 'projects_files/{0}.{1}/{2}/{3}'.format(instance.employee.id,
+    return 'employee_files/{0}.{1}/{2}/{3}'.format(instance.employee.id,
                                                    instance.employee.username,
                                                    instance.group.name,
                                                    filename)
@@ -120,7 +120,7 @@ class EmployeeFile(models.Model):
     employee = models.ForeignKey(Employee, related_name='employee_files', on_delete=models.CASCADE)
     comment = models.TextField(blank=True, null=True)
     group = models.ForeignKey(FilesGroup, on_delete=models.CASCADE)
-    file = models.FileField(upload_to=project_directory_path)
+    file = models.FileField(upload_to=employee_directory_path)
 
     class Meta:
         db_table = 'employee_files'
