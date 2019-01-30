@@ -636,6 +636,10 @@ a {
 
 @media print {
 
+  .company-project {
+    page-break-inside: avoid;
+  }
+
   body {
     width: 100%;
   }

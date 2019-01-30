@@ -443,6 +443,8 @@ a {
   margin-bottom: 4rem; }
 
 @media print {
+  .company-project {
+    page-break-inside: avoid; }
   body {
     width: 100%; }
   @page {
