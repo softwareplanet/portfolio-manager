@@ -7,6 +7,7 @@ export const IS_STAFF = 'IS_STAFF';
 export const SET_SKILL_MODAL = 'SET_SKILL_MODAL';
 export const SET_SCHOOL_MODAL = 'SET_SCHOOL_MODAL';
 export const SET_PROJECT_MODAL = 'SET_PROJECT_MODAL';
+export const SET_TEAM_MODAL = 'SET_TEAM_MODAL';
 export const SET_PASSWORD_MODAL = 'SET_PASSWORD_MODAL';
 
 //Set operations
