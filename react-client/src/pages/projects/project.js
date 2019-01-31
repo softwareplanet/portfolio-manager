@@ -246,7 +246,7 @@ class ProjectTeamPage extends Component {
     }
   };
   render() {
-    const {project: {team, name, description, files}} = this.props;
+    const {project: {team, name, description, files, skills}} = this.props;
     const {hideDialog, projectFileToDelete, group, groups, dropzoneActive, projectToEdit} = this.state;
     return (
       <div className={'page-container'} key={'employeeProjects'}>
@@ -260,6 +260,7 @@ class ProjectTeamPage extends Component {
           onClick={() => this.editProject(this.props.project)}
         /></span>
         <p className={'page-description'}>{description ? description : <b>Project has no description!</b>}</p>
+        <p className={'page-description'}>Skills: {skills && skills.map(({name}) => name).join(', ')}</p>
         <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Team</h3>
         {
           team ?

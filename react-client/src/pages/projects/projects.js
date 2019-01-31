@@ -187,9 +187,7 @@ class ProjectsPage extends Component {
     const {projects} = this.props;
     if (projects) {
       this.setState({
-        projects: projects.filter(({skills}) => {
-          return selectedSkills.filter(({id}) => skills.indexOf(id) !== -1).length === selectedSkills.length;
-        })
+        projects: projects.filter(({skills}) => selectedSkills.filter(({id}) => skills.indexOf(id) !== -1).length === selectedSkills.length)
       })
     }
   }
