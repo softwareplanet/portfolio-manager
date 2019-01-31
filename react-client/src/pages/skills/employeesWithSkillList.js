@@ -4,10 +4,11 @@ import {Loader, PrivatePageRedirect, Tooltip} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {IconButton, Rating, SelectionMode} from "office-ui-fabric-react";
 import {getSkill} from "../../actions/skills";
+import {getProjects, setProject} from "../../actions/projects";
 
 class EmployeesWithSkillPage extends Component {
 
-  _columns = [
+  _employees_columns = [
     {
       key: 'employeeName',
       name: 'Name',
@@ -102,10 +103,85 @@ class EmployeesWithSkillPage extends Component {
     }
   ];
 
+  _projects_columns = [
+    {
+      key: 'name',
+      name: 'Project Name',
+      fieldName: 'name',
+      minWidth: 110,
+      maxWidth: 250,
+      isRowHeader: true,
+      isResizable: true,
+      isPadded: true,
+      onRender: (item) => {
+        return <span
+          className="table-link"
+          onClick={() => {
+            this.props.setProject(item);
+            this.props.history.push(`/home/projects/${item.id}`)
+          }}>{item.name}</span>;
+      },
+    },
+    {
+      key: 'startDate',
+      name: 'Start Date',
+      fieldName: 'startDate',
+      minWidth: 70,
+      maxWidth: 100,
+      isResizable: true,
+      isPadded: true,
+      onRender: ({startDate}) => {
+        return <span>{new Date(startDate).toDateString()}</span>;
+      },
+    },
+    {
+      key: 'duration',
+      name: 'Duration',
+      fieldName: 'durationMonths',
+      minWidth: 30,
+      maxWidth: 65,
+      data: 'string',
+      onRender: ({durationMonths}) => {
+        return <span>{durationMonths + ` Month${durationMonths > 1 ? 's' : ''}`}</span>;
+      },
+      isPadded: true
+    },
+    {
+      key: 'description',
+      name: 'Description',
+      fieldName: 'description',
+      minWidth: 110,
+      maxWidth: 250,
+      isResizable: true,
+      isPadded: true,
+      onRender: ({description}) => {
+        return (
+          <Tooltip text={description}>{description}</Tooltip>
+        );
+      },
+    },
+    {
+      key: 'url',
+      name: 'Link',
+      fieldName: 'url',
+      minWidth: 150,
+      maxWidth: 350,
+      isResizable: true,
+      data: 'string',
+      onRender: ({url}) => {
+        return <span>{url}</span>;
+      },
+      isPadded: true
+    },
+  ];
+
   componentDidMount() {
-    const {user, getSkill, skillId} = this.props;
+    const {user, getSkill, skillId, projects, getProjects} = this.props;
     if (user) {
       getSkill(skillId);
+      if (!projects) {
+        getProjects();
+      }
     }
   }
 
@@ -120,18 +196,30 @@ class EmployeesWithSkillPage extends Component {
   }
 
   render() {
-    const {skill: {employees, name, url}} = this.props;
+    const {skill: {employees, name, url}, projects, skillId} = this.props;
     return (
       <div className={'page-container'}>
         <PrivatePageRedirect/>
         <span
-          className={'page-title'}>{'Employees with skill: ' + (name ? name : '')}</span>
+          className={'page-title'}>Skill: {name ? name : ''}</span>
         <p className={'page-description'}>{'    ' + url}</p>
+        <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Projects with skill</h3>
+        {
+          projects ?
+            <DetailsList
+              items={projects.filter(({skills}) => skills.includes(Number(skillId)))}
+              columns={this._projects_columns}
+              selectionMode={SelectionMode.none}
+              layoutMode={DetailsListLayoutMode.justified}
+            /> :
+            <Loader title="Loading people with selected skill..."/>
+        }
+        <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Employees with skill</h3>
         {
           employees ?
             <DetailsList
               items={employees}
-              columns={this._columns}
+              columns={this._employees_columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
             /> :
@@ -150,12 +238,14 @@ class EmployeesWithSkillPage extends Component {
   };
 }
 
-const mapStateToProps = ({user, skill}, {match: {params: {skillId}}}) => {
-  return {user, skillId, skill};
+const mapStateToProps = ({user, skill, projects}, {match: {params: {skillId}}}) => {
+  return {user, skillId, skill, projects};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getProjects: () => dispatch(getProjects()),
+    setProject: (project) => dispatch(setProject(project)),
     getSkill: (skillId) => dispatch(getSkill(skillId))
   };
 };
