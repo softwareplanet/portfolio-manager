@@ -18,6 +18,7 @@ import {
   CompanyPortfolio
 } from "..";
 import {connect} from "react-redux";
+import {SPGLogo} from "../../components/projectCommon/SPGLogo";
 
 class HomePage extends Component {
   componentDidMount() {
@@ -37,6 +38,7 @@ class HomePage extends Component {
         <CreateSchoolModal/>
         <CreateProjectModal/>
         <Header/>
+        <SPGLogo/>
         <div className={'flex'}>
           <NavBar history={this.props.history} sideBarOpened={sideBarOpened} isStaff={isStaff}
                   userId={user && user.id}/>

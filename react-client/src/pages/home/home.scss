@@ -634,7 +634,35 @@ a {
   margin-bottom: 4rem;
 }
 
+.spg-logo {
+  display: none;
+  background-color: #a4edffa3;
+  position: initial !important;
+  justify-content: space-between;
+  align-items: center;
+  height: 2cm;
+
+  .title {
+    color: black;
+    padding-left: 1rem;
+    font-size: 1.4rem;
+    font-weight: 200;
+  }
+
+  .spg-logo-img {
+    width: 5.5cm;
+    height: 1.2cm;
+    margin-right: 4rem;
+    background-size: contain;
+    line-height: 1.2cm;
+  }
+}
+
 @media print {
+
+  .spg-logo {
+    display: flex !important;
+  }
 
   .company-project {
     page-break-inside: avoid;
@@ -648,13 +676,28 @@ a {
     margin: 1cm 0;
   }
 
-  .header{
+  @page :first {
+    margin: 0 0 1cm;
+  }
+
+  .header {
     display: none;
   }
 
   .content-container {
     width: 100% !important;
     margin: -1cm 0 0 0 !important;
+
+    .page-container {
+      margin-top: 0 !important;
+      .page-title {
+        display: none;
+      }
+
+      .profile-container {
+        padding-top: 0 !important;
+      }
+    }
   }
 
   .nav-bar {
