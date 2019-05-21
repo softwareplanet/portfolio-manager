@@ -1,8 +1,15 @@
-import {SET_PASSWORD_MODAL, SET_PROJECT_MODAL, SET_SCHOOL_MODAL, SET_SKILL_MODAL} from "./actionTypes";
+import {SET_PASSWORD_MODAL, SET_PROJECT_MODAL, SET_SCHOOL_MODAL, SET_SKILL_MODAL, SET_TEAM_MODAL} from "./actionTypes";
 
 export const setProjectModal = (modalState = false) => {
   return {
     type: SET_PROJECT_MODAL,
+    payload: modalState
+  };
+};
+
+export const setTeamModal = (modalState = false) => {
+  return {
+    type: SET_TEAM_MODAL,
     payload: modalState
   };
 };

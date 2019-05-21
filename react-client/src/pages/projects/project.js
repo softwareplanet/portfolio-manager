@@ -15,7 +15,8 @@ import {
 } from "office-ui-fabric-react";
 import {createProjectFile, deleteProjectFile, getProject, getProjects} from "../../actions/projects";
 import axios from "axios";
-import {setProjectModal} from "../../actions/modals";
+import {setProjectModal, setTeamModal} from "../../actions/modals";
+import {AddTeamModal} from "../../components/forms/addTeamModal";
 
 class ProjectTeamPage extends Component {
 
@@ -187,6 +188,11 @@ class ProjectTeamPage extends Component {
     this.setState({projectToEdit: project})
   }
 
+  addTeammates(project) {
+    this.props.addTeam();
+    this.setState({projectToEdit: project});
+  }
+
   componentDidMount() {
     this.mounted = true;
     const {user, getProject, projectId, getProjects} = this.props;
@@ -252,6 +258,7 @@ class ProjectTeamPage extends Component {
       <div className={'page-container'} key={'employeeProjects'}>
         <PrivatePageRedirect/>
         <CreateProjectModal project={projectToEdit}/>
+        <AddTeamModal project={projectToEdit}/>
         <span
           className={'page-title'}>{'Project ' + (name ? name : '')}
           <Icon
@@ -261,7 +268,14 @@ class ProjectTeamPage extends Component {
         /></span>
         <p className={'page-description'}>{description ? description : <b>Project has no description!</b>}</p>
         <p className={'page-description'}>Skills: {skills && skills.map(({name}) => name).join(', ')}</p>
-        <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Team</h3>
+        <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>
+          Project Team
+          <Icon
+            iconName={'Add'}
+            style={{...this.styles.icon, fontSize: 1 + 'rem'}}
+            onClick={() => this.addTeammates(this.props.project)}
+          />
+        </h3>
         {
           team ?
             <DetailsList
@@ -350,6 +364,7 @@ const mapStateToProps = ({user, project, projectModal}, {match: {params: {projec
 const mapDispatchToProps = (dispatch) => {
   return {
     createProject: () => dispatch(setProjectModal(true)),
+    addTeam: () => dispatch(setTeamModal(true)),
     getProject: (projectId) => dispatch(getProject(projectId)),
     getProjects: () => dispatch(getProjects()),
     addProjectFile: (projectId, data) => dispatch(createProjectFile(projectId, data)),
