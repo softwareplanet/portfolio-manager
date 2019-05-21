@@ -22,3 +22,20 @@ export const groupBy = (list, keyGetter) => {
   });
   return Array.from(map);
 };
+
+export class Paginator {
+  constructor(array, pageSize = 10) {
+    this.array = array;
+    this.pageSize = pageSize;
+  }
+
+  getPagesCount() {
+    if (this.array) {
+      return Math.ceil(this.array.length / this.pageSize);
+    }
+  }
+
+  getCurrentPage(pageNumber) {
+    return this.array.slice(pageNumber * this.pageSize, (pageNumber + 1) * this.pageSize)
+  }
+}
