@@ -5,7 +5,9 @@ networks:
 
 services:
   db:
-    image: mariadb
+    build:
+      context: ./
+      dockerfile: Dockerfile.db
     ports:
       - "3307:3306"
     environment:
