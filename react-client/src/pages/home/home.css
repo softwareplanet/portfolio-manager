@@ -1,3 +1,25 @@
+ul.pagination {
+  display: flex !important;
+  padding-left: 15px;
+  padding-right: 15px;
+  justify-content: flex-end; }
+  ul.pagination li {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #f4f4f4; }
+    ul.pagination li > a {
+      padding: 0.5rem 1rem;
+      color: #000; }
+    ul.pagination li.next > a, ul.pagination li.previous > a {
+      margin-bottom: -0.15rem;
+      padding: 0.5rem 1.5rem; }
+  ul.pagination .active {
+    font-weight: bold; }
+    ul.pagination .active a {
+      background-color: #f7f7f7; }
+
 .header {
   width: 100%;
   background-color: #000;
