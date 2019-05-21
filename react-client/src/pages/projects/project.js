@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import Dropzone from 'react-dropzone';
-import {CreateProjectModal, DropZone, Loader, PrivatePageRedirect, Tooltip} from "../../components";
+import {
+  CreateProjectModal,
+  DropZone,
+  Loader,
+  PrivatePageRedirect,
+  Tooltip,
+} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DefaultButton,

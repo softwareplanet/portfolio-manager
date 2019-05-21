@@ -2,6 +2,10 @@ import React, {Component} from "react";
 import {ActionButton, Modal, PrimaryButton, Spinner, SpinnerSize} from "office-ui-fabric-react";
 import {connect} from "react-redux";
 import {setTeamModal} from "../../actions/modals";
+import axios from 'axios';
+import {applyMiddleware as dispatch} from "redux";
+import {ChoiceEmployeesPicker} from "../projectCommon/suggestions/choiceEmployeesPicker";
+import {getEmployees} from "../../actions/user";
 
 class AddTeam extends Component {
 
@@ -11,6 +15,10 @@ class AddTeam extends Component {
 
   state = {...this.initialState};
 
+  componentDidMount() {
+    getEmployees();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (!nextProps.opened) {
       this.setState({...this.initialState});
@@ -19,11 +27,14 @@ class AddTeam extends Component {
       this.setState({...nextProps.project, startDate: new Date(nextProps.project.startDate)});
     }
     if (!nextProps.project) this.setState({...this.initialState});
+
+
   }
 
   render() {
-    const {opened, closeModal, loading, employees} = this.props;
-    const {selectedEmployees} = this.state;
+    const {opened, closeModal, loading} = this.props;
+    const {selectedEmployees, employees} = this.state;
+    console.log(this.state);
     return (
       <Modal
         isOpen={opened}
@@ -32,6 +43,7 @@ class AddTeam extends Component {
         containerClassName="modal-container"
       >
         <span className={'modal-header'}>Add team to the project</span>
+        <ChoiceEmployeesPicker employee={employees}/>
         <div className={'button-group-right'}>
           <div>
             <ActionButton
@@ -60,6 +72,7 @@ const mapStateToProps = ({teamModal, newProjectLoading, createProjectErrors}) =>
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getEmployees: () => dispatch(getEmployees()),
     closeModal: () => dispatch(setTeamModal(false)),
   };
 };
