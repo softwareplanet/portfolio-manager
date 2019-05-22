@@ -12,11 +12,14 @@ import {
   Panel,
   PanelType,
   PrimaryButton,
-  SelectionMode
+  SelectionMode,
+  Icon,
 } from "office-ui-fabric-react";
 import {getProjects} from "../../actions/projects";
 import {getSkills} from "../../actions/skills";
 import {getEmployee} from "../../actions/user";
+import ReactPaginate from 'react-paginate';
+import { Paginator } from '../../service/utils';
 
 class ProjectsPage extends Component {
 
@@ -31,6 +34,14 @@ class ProjectsPage extends Component {
 
   _openDeleteDialog(project) {
     this.setState({projectToDelete: project, hideDialog: false})
+  }
+
+  _setProjectsToShow(pageNumber) {
+    this.setState({ projectsToShow: this.Paginator.getCurrentPage(pageNumber), pageNumber });
+  }
+
+  handlePageClick({ selected }) {
+    this._setProjectsToShow(selected)
   }
 
   _columns = [
@@ -137,8 +148,12 @@ class ProjectsPage extends Component {
     showPanel: false,
     hideDialog: true,
     projectToDelete: null,
-    projectToEdit: null
+    projectToEdit: null,
+    projectsToShow: [],
+    pageNumber: 0,
   };
+
+  Paginator = new Paginator(this.props.userProjects);
 
   componentDidMount() {
     const {user, getUserProjects, projects, skills, getProjects, getSkills, employeeId, getEmployee} = this.props;
@@ -151,11 +166,17 @@ class ProjectsPage extends Component {
         getProjects();
       if (!skills)
         getSkills();
+      this._setProjectsToShow(this.state.pageNumber);
     }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
     const {userProjects, editUserProjectState} = this.props;
+
+    if (nextProps.userProjects) {
+      this.Paginator.array = nextProps.userProjects;
+      this._setProjectsToShow(this.state.pageNumber)
+    }
     if ((userProjects && nextProps.userProjects && (userProjects.length !== nextProps.userProjects.length)) ||
       ((editUserProjectState && this.state.projectToEdit) &&
         (editUserProjectState === this.state.projectToEdit.id))) {
@@ -193,12 +214,26 @@ class ProjectsPage extends Component {
         </div>
         {
           this.props.userProjects ?
+            <div>
             <DetailsList
-              items={this.props.userProjects}
+              items={this.state.projectsToShow}
               columns={this._columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
-            /> :
+            />
+              <ReactPaginate
+                previousLabel={(() => (<Icon iconName="ChevronLeft"/>))()}
+                nextLabel={(() => (<Icon iconName="ChevronRight"/>))()}
+                breakLabel={'...'}
+                pageCount={this.Paginator.getPagesCount()}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={this.handlePageClick.bind(this)}
+                containerClassName={'pagination'}
+                subContainerClassName={'pages pagination'}
+                activeClassName={'active'}
+              />
+            </div>:
             <Loader title="Loading your projects..."/>
         }
         <Dialog

@@ -10,15 +10,26 @@ import {
   DialogType,
   IconButton,
   PrimaryButton,
-  SelectionMode
+  SelectionMode,
+  Icon,
 } from "office-ui-fabric-react";
 import {disableEmployee, getEmployees} from "../../actions/user";
 import axios from "axios";
+import ReactPaginate from 'react-paginate';
+import { Paginator } from '../../service/utils';
 
 class EmployeesPage extends Component {
 
   _openDeleteDialog(employeeToDelete) {
     this.setState({employeeToDelete: employeeToDelete, hideDialog: false})
+  }
+
+  _setEmployeesToShow(pageNumber) {
+    this.setState({ employeesToShow: this.Paginator.getCurrentPage(pageNumber), pageNumber });
+  }
+
+  handlePageClick({ selected }) {
+    this._setEmployeesToShow(selected)
   }
 
   _columns = [
@@ -156,18 +167,28 @@ class EmployeesPage extends Component {
 
   state = {
     hideDialog: true,
-    employeeToDelete: null
+    employeeToDelete: null,
+    employeesToShow: [],
+    pageNumber: 0,
   };
+
+  Paginator = new Paginator(this.props.employees);
 
   componentDidMount() {
     const {user, getEmployees} = this.props;
     if (user && user.isStaff) {
       getEmployees();
     }
+    this._setEmployeesToShow(this.state.pageNumber);
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
     const {employees} = this.props;
+
+    if (nextProps.employees) {
+      this.Paginator.array = nextProps.employees;
+      this._setEmployeesToShow(this.state.pageNumber)
+    }
     if ((employees && nextProps.employees && (employees.length !== nextProps.employees.length))) {
       const {hideDialog} = this.state;
       !hideDialog && this._closeDialog();
@@ -175,20 +196,34 @@ class EmployeesPage extends Component {
   }
 
   render() {
-    const {hideDialog, employeeToDelete} = this.state;
+    const {hideDialog, employeeToDelete, employeesToShow} = this.state;
     const {employees} = this.props;
     return (
       <div className={'page-container'}>
         <PrivatePageRedirect/>
         <span className={'page-title'}>Employees</span>
         {
-          employees ?
+          employees && employeesToShow ?
+            <div>
             <DetailsList
-              items={employees}
+              items={employeesToShow}
               columns={this._columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
-            /> :
+            />
+              <ReactPaginate
+                previousLabel={(() => (<Icon iconName="ChevronLeft"/>))()}
+                nextLabel={(() => (<Icon iconName="ChevronRight"/>))()}
+                breakLabel={'...'}
+                pageCount={this.Paginator.getPagesCount()}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={this.handlePageClick.bind(this)}
+                containerClassName={'pagination'}
+                subContainerClassName={'pages pagination'}
+                activeClassName={'active'}
+              />
+            </div>:
             <Loader title="Loading employees..."/>
         }
         <Dialog

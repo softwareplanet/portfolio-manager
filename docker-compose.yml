@@ -27,6 +27,3 @@ services:
       - db
     networks:
       - pman
-
-volumes:
-  data:

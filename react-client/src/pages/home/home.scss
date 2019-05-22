@@ -3,6 +3,42 @@ $theme-color-primary: #0178d4;
 $theme-color-secondary: #0198ff;
 $text-color-secondary: #4b709d;
 
+ul.pagination  {
+  display: flex !important;
+  padding-left: 15px;
+  padding-right: 15px;
+  justify-content: flex-end;
+
+  & li {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(244, 244, 244);
+
+    & > a {
+      padding: 0.5rem 1rem;
+      color: #000;
+    }
+
+    &.next, &.previous {
+
+      & > a {
+        margin-bottom: -0.15rem;
+        padding: 0.5rem 1.5rem;
+      }
+    }
+  }
+
+  .active {
+    font-weight: bold;
+
+    a {
+      background-color: #f7f7f7;
+    }
+  }
+}
+
 .header {
   width: 100%;
   background-color: #000;
