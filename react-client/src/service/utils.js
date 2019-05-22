@@ -36,6 +36,6 @@ export class Paginator {
   }
 
   getCurrentPage(pageNumber) {
-    return this.array.slice(pageNumber * this.pageSize, (pageNumber + 1) * this.pageSize)
+    return this.array ? this.array.slice(pageNumber * this.pageSize, (pageNumber + 1) * this.pageSize) : [];
   }
 }
