@@ -1,0 +1,44 @@
+#!/bin/sh
+
+cd ${0%/*}
+
+end() {
+  docker-compose stop
+  echo "INFO: dev finished with exitcode=$1."
+  exit $1
+}
+
+die() {
+  echo "ERROR: $*"
+  end 1
+}
+
+case $1 in
+  'status')
+    docker-compose ps
+    ;;
+
+  'start')
+    docker-compose build || die 'Cannot build dev docker images.'
+    docker-compose up -d backend
+    ;;
+
+  'stop')
+    docker-compose stop
+    ;;
+
+  'shell')
+    docker-compose exec backend bash
+    ;;
+
+  'logs')
+    docker-compose logs -f backend
+    ;;
+
+  *)
+    echo 'Usage: ./exec { status | start | stop | shell | logs }'
+    exit 1
+    ;;
+esac
+
+exit

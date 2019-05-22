@@ -86,7 +86,7 @@ DATABASES = {
         'NAME': 'pman',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '',
         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
     }

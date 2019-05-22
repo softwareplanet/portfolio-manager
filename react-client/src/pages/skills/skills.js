@@ -9,10 +9,13 @@ import {
   DialogType,
   IconButton,
   PrimaryButton,
-  SelectionMode
+  SelectionMode,
+  Icon,
 } from "office-ui-fabric-react";
 import {deleteSkill, getSkills, setSkill} from "../../actions/skills";
 import {setSkillModal} from "../../actions/modals";
+import ReactPaginate from 'react-paginate';
+import { Paginator } from '../../service/utils';
 
 class SkillsPage extends Component {
 
@@ -28,6 +31,14 @@ class SkillsPage extends Component {
 
   _openDeleteDialog(skill) {
     this.setState({skillToDelete: skill, hideDialog: false})
+  }
+
+  _setSkillsToShow(pageNumber) {
+    this.setState({ skillsToShow: this.Paginator.getCurrentPage(pageNumber), pageNumber });
+  }
+
+  handlePageClick({ selected }) {
+    this._setSkillsToShow(selected)
   }
 
   _columns = [
@@ -126,18 +137,27 @@ class SkillsPage extends Component {
   state = {
     hideDialog: true,
     skillToDelete: null,
-    skillToEdit: null
+    skillToEdit: null,
+    skillsToShow: [],
+    pageNumber: 0,
   };
+
+  Paginator = new Paginator(this.props.skills);
 
   componentDidMount() {
     const {user, getSkills} = this.props;
     if (user) {
       getSkills();
     }
+    this._setSkillsToShow(this.state.pageNumber);
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
     const {skills} = this.props;
+    if (nextProps.skills) {
+      this.Paginator.array = nextProps.skills;
+      this._setSkillsToShow(this.state.pageNumber)
+    }
     if (skills && nextProps.skills && (skills.length !== nextProps.skills.length)) {
       const {hideDialog} = this.state;
       !hideDialog && this._closeDialog();
@@ -159,12 +179,26 @@ class SkillsPage extends Component {
         </div>
         {
           this.props.skills ?
-            <DetailsList
-              items={this.props.skills}
-              columns={this._columns}
-              selectionMode={SelectionMode.none}
-              layoutMode={DetailsListLayoutMode.justified}
-            /> :
+            <div><DetailsList
+              items={ this.state.skillsToShow }
+              columns={ this._columns }
+              selectionMode={ SelectionMode.none }
+              layoutMode={ DetailsListLayoutMode.justified }
+            />
+              <ReactPaginate
+                previousLabel={(() => (<Icon iconName="ChevronLeft"/>))()}
+                nextLabel={(() => (<Icon iconName="ChevronRight"/>))()}
+                breakLabel={'...'}
+                pageCount={this.Paginator.getPagesCount()}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={this.handlePageClick.bind(this)}
+                containerClassName={'pagination'}
+                subContainerClassName={'pages pagination'}
+                activeClassName={'active'}
+              />
+            </div>
+            :
             <Loader title="Loading skills..."/>
         }
         <Dialog

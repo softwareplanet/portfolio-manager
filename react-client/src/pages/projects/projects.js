@@ -10,11 +10,14 @@ import {
   IconButton,
   PrimaryButton,
   SelectionMode,
-  TagPicker
+  TagPicker,
+  Icon,
 } from "office-ui-fabric-react";
 import {deleteProject, getProjects, setProject} from "../../actions/projects";
 import {setProjectModal} from "../../actions/modals";
 import {getSkills} from "../../actions/skills";
+import ReactPaginate from 'react-paginate';
+import { Paginator } from '../../service/utils';
 
 class ProjectsPage extends Component {
 
@@ -30,6 +33,14 @@ class ProjectsPage extends Component {
 
   _openDeleteDialog(project) {
     this.setState({projectToDelete: project, hideDialog: false})
+  }
+
+  _setProjectsToShow(pageNumber) {
+    this.setState({ projectsToShow: this.Paginator.getCurrentPage(pageNumber), pageNumber });
+  }
+
+  handlePageClick({ selected }) {
+    this._setProjectsToShow(selected)
   }
 
   _columns = [
@@ -151,8 +162,12 @@ class ProjectsPage extends Component {
     projectToDelete: null,
     projectToEdit: null,
     projects: null,
-    selectedSkills: []
+    selectedSkills: [],
+    projectsToShow: [],
+    pageNumber: 0,
   };
+
+  Paginator = new Paginator(this.state.projects);
 
   componentDidMount() {
     const {user, getProjects, getSkills, projects} = this.props;
@@ -162,11 +177,19 @@ class ProjectsPage extends Component {
       getProjects();
       getSkills();
     }
+    this.Paginator.array = this.props.projects;
+    this._setProjectsToShow(this.state.pageNumber)
   }
 
   componentWillReceiveProps(nextProps) {
     const {projects} = this.props;
-    if (nextProps.projects) this.setState({projects: nextProps.projects});
+    if (nextProps.projects) {
+      this.Paginator.array = nextProps.projects;
+      this.setState({
+        projects: nextProps.projects,
+        projectsToShow: this.Paginator.getCurrentPage(this.state.pageNumber)
+      });
+    }
     if (projects && nextProps.projects && (projects.length !== nextProps.projects.length)) {
       const {hideDialog} = this.state;
       !hideDialog && this._closeDialog();
@@ -186,14 +209,18 @@ class ProjectsPage extends Component {
   filterProjects(selectedSkills) {
     const {projects} = this.props;
     if (projects) {
+      const pr = projects.filter(({skills}) => selectedSkills.filter(({id}) => skills.indexOf(id) !== -1).length === selectedSkills.length);
+      this.Paginator.array = pr;
       this.setState({
-        projects: projects.filter(({skills}) => selectedSkills.filter(({id}) => skills.indexOf(id) !== -1).length === selectedSkills.length)
+        projects: pr,
+        pageNumber: 0,
+        projectsToShow: this.Paginator.getCurrentPage(0),
       })
     }
   }
 
   render() {
-    const {projectToEdit, hideDialog, projectToDelete, selectedSkills} = this.state;
+    const {projectToEdit, hideDialog, projectToDelete, selectedSkills, projectsToShow} = this.state;
     const {skills} = this.props;
     return (
       <div className={'page-container'}>
@@ -237,12 +264,26 @@ class ProjectsPage extends Component {
         </div>
         {
           (this.props.projects && this.state.projects) ?
+            <div>
             <DetailsList
-              items={this.state.projects}
+              items={projectsToShow}
               columns={this._columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
-            /> :
+            />
+              <ReactPaginate
+                previousLabel={(() => (<Icon iconName="ChevronLeft"/>))()}
+                nextLabel={(() => (<Icon iconName="ChevronRight"/>))()}
+                breakLabel={'...'}
+                pageCount={this.Paginator.getPagesCount()}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={this.handlePageClick.bind(this)}
+                containerClassName={'pagination'}
+                subContainerClassName={'pages pagination'}
+                activeClassName={'active'}
+              />
+            </div>:
             <Loader title="Loading projects..."/>
         }
         <Dialog
