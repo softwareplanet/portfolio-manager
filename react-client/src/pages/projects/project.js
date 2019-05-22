@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import Dropzone from 'react-dropzone';
-import {CreateProjectModal, DropZone, Loader, PrivatePageRedirect, Tooltip} from "../../components";
+import {
+  CreateProjectModal,
+  DropZone,
+  Loader,
+  PrivatePageRedirect,
+  Tooltip,
+} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DefaultButton,
@@ -15,7 +21,9 @@ import {
 } from "office-ui-fabric-react";
 import {createProjectFile, deleteProjectFile, getProject, getProjects} from "../../actions/projects";
 import axios from "axios";
-import {setProjectModal} from "../../actions/modals";
+import {setProjectModal, setTeamModal} from "../../actions/modals";
+import {AddTeamModal} from "../../components/forms/addTeamModal";
+import {getEmployees} from "../../actions/user";
 
 class ProjectTeamPage extends Component {
 
@@ -187,12 +195,18 @@ class ProjectTeamPage extends Component {
     this.setState({projectToEdit: project})
   }
 
+  addTeammates(project) {
+    this.props.addTeam();
+    this.setState({projectToEdit: project});
+  }
+
   componentDidMount() {
     this.mounted = true;
-    const {user, getProject, projectId, getProjects} = this.props;
+    const {user, getProject, projectId, getProjects, getEmployees} = this.props;
     if (user) {
       getProject(projectId);
       getProjects();
+      getEmployees();
     }
     this.getFileGroups();
   }
@@ -214,11 +228,12 @@ class ProjectTeamPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {user, getProject, projectId} = this.props;
+    const {user, getProject, projectId, getEmployees} = this.props;
     const {projectId: nextId} = nextProps;
     if (projectId !== nextId) {
       if (user) {
         getProject(nextId);
+        getEmployees();
       }
     }
     if (!nextProps.projectModal) this.setState({projectToEdit: null});
@@ -252,6 +267,7 @@ class ProjectTeamPage extends Component {
       <div className={'page-container'} key={'employeeProjects'}>
         <PrivatePageRedirect/>
         <CreateProjectModal project={projectToEdit}/>
+        <AddTeamModal project={projectToEdit} employees={this.props.employees && this.props.employees.filter(e => team && !team.map(e => e.employeeId).includes(e.id))}/>
         <span
           className={'page-title'}>{'Project ' + (name ? name : '')}
           <Icon
@@ -261,7 +277,14 @@ class ProjectTeamPage extends Component {
         /></span>
         <p className={'page-description'}>{description ? description : <b>Project has no description!</b>}</p>
         <p className={'page-description'}>Skills: {skills && skills.map(({name}) => name).join(', ')}</p>
-        <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Team</h3>
+        <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>
+          Project Team
+          <Icon
+            iconName={'Add'}
+            style={{...this.styles.icon, fontSize: 1 + 'rem'}}
+            onClick={() => this.addTeammates(this.props.project)}
+          />
+        </h3>
         {
           team ?
             <DetailsList
@@ -343,17 +366,19 @@ class ProjectTeamPage extends Component {
   };
 }
 
-const mapStateToProps = ({user, project, projectModal}, {match: {params: {projectId}}}) => {
-  return {user, projectId, project, projectModal};
+const mapStateToProps = ({user, project, projectModal, employees}, {match: {params: {projectId}}}) => {
+  return {user, projectId, project, projectModal, employees};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     createProject: () => dispatch(setProjectModal(true)),
+    addTeam: () => dispatch(setTeamModal(true)),
     getProject: (projectId) => dispatch(getProject(projectId)),
     getProjects: () => dispatch(getProjects()),
     addProjectFile: (projectId, data) => dispatch(createProjectFile(projectId, data)),
     deleteProjectFile: (projectId) => dispatch(deleteProjectFile(projectId)),
+    getEmployees: () => dispatch(getEmployees()),
   };
 };
 

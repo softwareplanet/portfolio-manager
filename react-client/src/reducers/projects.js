@@ -1,12 +1,12 @@
 import {
-  ADD_PROJECT, ADD_PROJECT_FILE,
+  ADD_PROJECT, ADD_PROJECT_FILE, ADD_TEAM_MEMBERS,
   CHANGE_PROJECT,
   CREATE_PROJECT_ERRORS,
   DELETE_PROJECT,
   NEW_PROJECT_LOADING, REMOVE_PROJECT_FILE,
   SET_PROJECT,
-  SET_PROJECTS
-} from "../actions/actionTypes";
+  SET_PROJECTS,
+} from '../actions/actionTypes'
 
 export const projects = (state = null, action) => {
   switch (action.type) {
@@ -32,7 +32,7 @@ export const projects = (state = null, action) => {
 export const project = (state = {}, action) => {
   switch (action.type) {
     case SET_PROJECT:
-      return action.payload;
+      return { ...action.payload };
 
     case ADD_PROJECT_FILE: {
       return {...state, files: [...state.files, action.payload]}
@@ -40,6 +40,19 @@ export const project = (state = {}, action) => {
 
     case REMOVE_PROJECT_FILE: {
       return {...state, files: state.files.filter(({id}) => id !== action.payload)}
+    }
+
+    case ADD_TEAM_MEMBERS: {
+      return { ...state, team: [
+          ...state.team,
+          ...action.payload.map(({project, user}) => ({
+            ...project,
+            employeeId: user.id,
+            employeeName: user.text,
+            image: user.user.image,
+          }))
+        ]
+      };
     }
 
     default:

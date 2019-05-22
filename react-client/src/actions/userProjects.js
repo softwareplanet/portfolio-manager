@@ -1,14 +1,16 @@
 import {
+  ADD_TEAM_MEMBERS,
   ADD_USER_PROJECT,
-  CHANGE_USER_PROJECT,
+  CHANGE_USER_PROJECT, CREATE_TEAM_MEMBERS_ERRORS, CREATE_TEAM_MEMBERS_LOADING,
   CREATE_USER_PROJECT_ERRORS,
   DELETE_USER_PROJECT,
   NEW_USER_PROJECT_LOADING,
   SET_USER_PROJECTS,
-  SUCCESSFUL_EDIT_USER_PROJECT
-} from "./actionTypes";
+  SUCCESSFUL_EDIT_USER_PROJECT,
+} from './actionTypes'
 import axios from 'axios';
 import {retryRequest} from "../service/utils";
+import {setTeamModal} from "./modals";
 
 export const successfulEditUserProject = (userProjectId) => {
   return {
@@ -42,6 +44,13 @@ export const addUserProject = (project) => {
   }
 };
 
+export const addTeamMembers = (results) => {
+  return {
+    type: ADD_TEAM_MEMBERS,
+    payload: results
+  }
+};
+
 export const changeUserProject = (project) => {
   return {
     type: CHANGE_USER_PROJECT,
@@ -72,9 +81,23 @@ export const newUserProjectLoading = (bool = false) => {
   };
 };
 
+export const createTeamMembersLoading = (bool = false) => {
+  return {
+    type: CREATE_TEAM_MEMBERS_LOADING,
+    payload: bool
+  };
+};
+
 export const createUserProjectErrors = (errors = {}) => {
   return {
     type: CREATE_USER_PROJECT_ERRORS,
+    payload: errors
+  };
+};
+
+export const createTeamMemberErrors = (errors = {}) => {
+  return {
+    type: CREATE_TEAM_MEMBERS_ERRORS,
     payload: errors
   };
 };
@@ -110,4 +133,27 @@ export const createUserProject = (userId, project) => {
       dispatch(newUserProjectLoading(false));
     });
   }
+};
+
+export const createTeamMembers = (users, project) => {
+  return (dispatch) => {
+    dispatch(createTeamMembersLoading(true));
+    dispatch(createTeamMemberErrors({}));
+    Promise.all(
+      users.map(
+        user => axios.post(`/api/v1/employee/${user.id}/project`, project)
+          .then(({data}) => Promise.resolve({user, project: data})),
+      ),
+    ).then(results => {
+      dispatch(addTeamMembers(results));
+    }).catch(errors => {
+      dispatch(createTeamMemberErrors(
+        (errors.response && errors.response.data.errors) ||
+        {non_field_errors: [errors.message]}));
+    }).finally(() => {
+      dispatch(setTeamModal(false));
+      dispatch(createTeamMembersLoading(false));
+    });
+
+  };
 };

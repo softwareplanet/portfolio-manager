@@ -1,11 +1,11 @@
 import {
   ADD_USER_PROJECT,
-  CHANGE_USER_PROJECT,
+  CHANGE_USER_PROJECT, CREATE_TEAM_MEMBERS_ERRORS, CREATE_TEAM_MEMBERS_LOADING,
   CREATE_USER_PROJECT_ERRORS,
   DELETE_USER_PROJECT,
   NEW_USER_PROJECT_LOADING,
-  SET_USER_PROJECTS
-} from "../actions/actionTypes";
+  SET_USER_PROJECTS,
+} from '../actions/actionTypes'
 
 export const userProjects = (state = null, action) => {
   switch (action.type) {
@@ -39,9 +39,29 @@ export const newUserProjectLoading = (state = false, action) => {
   }
 };
 
+export const createTeamMembersLoading = (state = false, action) => {
+  switch (action.type) {
+    case CREATE_TEAM_MEMBERS_LOADING:
+      return action.payload;
+
+    default:
+      return state;
+  }
+};
+
 export const createUserProjectErrors = (state = {}, action) => {
   switch (action.type) {
     case CREATE_USER_PROJECT_ERRORS:
+      return action.payload;
+
+    default:
+      return state;
+  }
+};
+
+export const createTeamMembersErrors = (state = {}, action) => {
+  switch (action.type) {
+    case CREATE_TEAM_MEMBERS_ERRORS:
       return action.payload;
 
     default:
