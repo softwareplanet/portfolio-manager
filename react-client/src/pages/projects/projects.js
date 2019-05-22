@@ -177,14 +177,18 @@ class ProjectsPage extends Component {
       getProjects();
       getSkills();
     }
+    this.Paginator.array = this.props.projects;
+    this._setProjectsToShow(this.state.pageNumber)
   }
 
   componentWillReceiveProps(nextProps) {
     const {projects} = this.props;
     if (nextProps.projects) {
-      this.setState({projects: nextProps.projects});
       this.Paginator.array = nextProps.projects;
-      this._setProjectsToShow(this.state.pageNumber)
+      this.setState({
+        projects: nextProps.projects,
+        projectsToShow: this.Paginator.getCurrentPage(this.state.pageNumber)
+      });
     }
     if (projects && nextProps.projects && (projects.length !== nextProps.projects.length)) {
       const {hideDialog} = this.state;

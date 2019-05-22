@@ -156,7 +156,7 @@ class ProjectsPage extends Component {
   Paginator = new Paginator(this.props.userProjects);
 
   componentDidMount() {
-    const {user, getUserProjects, projects, skills, getProjects, getSkills, employeeId, getEmployee} = this.props;
+    const {user, getUserProjects, projects, skills, getProjects, getSkills, employeeId, getEmployee, userProjects} = this.props;
     if (user) {
       if ((user.id === Number(employeeId) || user.isStaff)) {
         getEmployee(employeeId);
@@ -166,6 +166,7 @@ class ProjectsPage extends Component {
         getProjects();
       if (!skills)
         getSkills();
+      this._setProjectsToShow(this.state.pageNumber);
     }
   }
 

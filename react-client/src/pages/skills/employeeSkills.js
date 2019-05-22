@@ -159,6 +159,7 @@ class SkillsPage extends Component {
       if (!skills)
         getSkills();
     }
+    this._setSkillsToShow(this.state.pageNumber);
   }
 
   componentWillReceiveProps(nextProps, nextContext) {

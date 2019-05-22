@@ -172,13 +172,14 @@ class EmployeesPage extends Component {
     pageNumber: 0,
   };
 
-  Paginator = new Paginator(this.employees);
+  Paginator = new Paginator(this.props.employees);
 
   componentDidMount() {
     const {user, getEmployees} = this.props;
     if (user && user.isStaff) {
       getEmployees();
     }
+    this._setEmployeesToShow(this.state.pageNumber);
   }
 
   componentWillReceiveProps(nextProps, nextContext) {

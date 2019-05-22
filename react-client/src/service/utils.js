@@ -32,6 +32,8 @@ export class Paginator {
   getPagesCount() {
     if (this.array) {
       return Math.ceil(this.array.length / this.pageSize);
+    } else {
+      return 0;
     }
   }
 
