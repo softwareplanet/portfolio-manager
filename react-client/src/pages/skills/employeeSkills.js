@@ -13,10 +13,13 @@ import {
   PanelType,
   PrimaryButton,
   Rating,
-  SelectionMode
+  SelectionMode,
+  Icon,
 } from "office-ui-fabric-react";
 import {getSkills} from "../../actions/skills";
 import {getEmployee} from "../../actions/user";
+import ReactPaginate from 'react-paginate';
+import { Paginator } from '../../service/utils';
 
 class SkillsPage extends Component {
 
@@ -31,6 +34,14 @@ class SkillsPage extends Component {
 
   _openDeleteDialog(skill) {
     this.setState({skillToDelete: skill, hideDialog: false})
+  }
+
+  _setSkillsToShow(pageNumber) {
+    this.setState({ skillsToShow: this.Paginator.getCurrentPage(pageNumber), pageNumber });
+  }
+
+  handlePageClick({ selected }) {
+    this._setSkillsToShow(selected)
   }
 
   _columns = [
@@ -133,8 +144,12 @@ class SkillsPage extends Component {
     showPanel: false,
     hideDialog: true,
     skillToDelete: null,
-    skillToEdit: null
+    skillToEdit: null,
+    skillsToShow: [],
+    pageNumber: 0,
   };
+
+  Paginator = new Paginator(this.props.userSkills);
 
   componentDidMount() {
     const {user, getUserSkills, skills, getSkills, employeeId, getEmployee} = this.props;
@@ -148,6 +163,12 @@ class SkillsPage extends Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     const {userSkills, editUserSkillState} = this.props;
+
+    if (nextProps.userSkills) {
+      this.Paginator.array = nextProps.userSkills;
+      this._setSkillsToShow(this.state.pageNumber);
+    }
+
     if ((userSkills && nextProps.userSkills && (userSkills.length !== nextProps.userSkills.length)) ||
       ((editUserSkillState && this.state.skillToEdit) &&
         (editUserSkillState === this.state.skillToEdit.id))) {
@@ -185,12 +206,26 @@ class SkillsPage extends Component {
         </div>
         {
           this.props.userSkills ?
+            <div>
             <DetailsList
-              items={this.props.userSkills}
+              items={this.state.skillsToShow}
               columns={this._columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
-            /> :
+            />
+              <ReactPaginate
+                previousLabel={(() => (<Icon iconName="ChevronLeft"/>))()}
+                nextLabel={(() => (<Icon iconName="ChevronRight"/>))()}
+                breakLabel={'...'}
+                pageCount={this.Paginator.getPagesCount()}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={this.handlePageClick.bind(this)}
+                containerClassName={'pagination'}
+                subContainerClassName={'pages pagination'}
+                activeClassName={'active'}
+              />
+            </div>:
             <Loader title="Loading your skills..."/>
         }
         <Dialog
