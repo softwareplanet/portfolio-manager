@@ -21,8 +21,6 @@ class AddTeam extends Component {
       this.setState({...nextProps.project, startDate: new Date(nextProps.project.startDate)});
     }
     if (!nextProps.project) this.setState({...this.initialState});
-
-
   }
 
   onTeamChange(selectedEmployees) {
@@ -61,7 +59,7 @@ class AddTeam extends Component {
               Cancel
             </ActionButton>
           </div>
-          <PrimaryButton onClick={this.saveTeam.bind(this)} disabled = {this.state.selectedEmployees < 1}>
+          <PrimaryButton onClick={this.saveTeam.bind(this)} disabled={this.state.selectedEmployees < 1}>
             {loading ? <Spinner size={SpinnerSize.medium} ariaLive="assertive"/> : 'Add'}
           </PrimaryButton>
         </div>

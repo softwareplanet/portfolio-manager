@@ -28,7 +28,12 @@ export class ChoiceEmployeesPicker extends React.Component {
     const {employees} = this.props;
     if (employees) {
       let people = employees.map(e => {
-        return {text: `${e.firstName} ${e.lastName}`, secondaryText: e.position, id: e.id, user: e, imageUrl: axios.defaults.baseURL + e.image};
+        return {
+          text: `${e.firstName} ${e.lastName}`,
+          secondaryText: e.position, id: e.id,
+          user: e,
+          imageUrl: axios.defaults.baseURL + e.image
+        };
       });
       this.setState({peopleList: people});
     }
