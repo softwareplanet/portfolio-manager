@@ -12,7 +12,13 @@ import {
   isStaff,
   user
 } from "./user";
-import {createUserProjectErrors, newUserProjectLoading, userProjects} from "./userProjects";
+import {
+  createTeamMembersErrors,
+  createTeamMembersLoading,
+  createUserProjectErrors,
+  newUserProjectLoading,
+  userProjects,
+} from './userProjects'
 import {sideBarOpened} from "./sidebar";
 import {createProjectErrors, newProjectLoading, project, projects} from "./projects";
 import {createSkillErrors, newSkillLoading, skill, skillCategories, skills} from "./skills";
@@ -64,6 +70,7 @@ export default combineReducers({
   newUserSchoolLoading,
   editUserLoading,
   editUserPhotoLoading,
+  createTeamMembersLoading,
 
   loginErrors,
   registerErrors,
@@ -75,6 +82,7 @@ export default combineReducers({
   createUserSchoolErrors,
   editUserErrors,
   employeeFilesErrors,
+  createTeamMembersErrors,
 
   editUserProjectState,
   editProjectState,

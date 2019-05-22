@@ -2,10 +2,8 @@ import React, {Component} from "react";
 import {ActionButton, Modal, PrimaryButton, Spinner, SpinnerSize} from "office-ui-fabric-react";
 import {connect} from "react-redux";
 import {setTeamModal} from "../../actions/modals";
-import axios from 'axios';
-import {applyMiddleware as dispatch} from "redux";
 import {ChoiceEmployeesPicker} from "../projectCommon/suggestions/choiceEmployeesPicker";
-import {getEmployees} from "../../actions/user";
+import {createTeamMembers} from "../../actions/userProjects";
 
 class AddTeam extends Component {
 
@@ -14,10 +12,6 @@ class AddTeam extends Component {
   };
 
   state = {...this.initialState};
-
-  componentDidMount() {
-    getEmployees();
-  }
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.opened) {
@@ -31,10 +25,24 @@ class AddTeam extends Component {
 
   }
 
+  onTeamChange(selectedEmployees) {
+    this.setState({selectedEmployees});
+  }
+
+  saveTeam() {
+    const {selectedEmployees} = this.state;
+    const {createTeamMembers, project} = this.props;
+    createTeamMembers(selectedEmployees, {
+      description: ' ',
+      projectId: project.id,
+      durationMonths: project.durationMonths,
+      startDate: project.startDate,
+      skillIds: []
+    });
+  }
+
   render() {
-    const {opened, closeModal, loading} = this.props;
-    const {selectedEmployees, employees} = this.state;
-    console.log(this.state);
+    const {opened, closeModal, loading, employees} = this.props;
     return (
       <Modal
         isOpen={opened}
@@ -43,7 +51,7 @@ class AddTeam extends Component {
         containerClassName="modal-container"
       >
         <span className={'modal-header'}>Add team to the project</span>
-        <ChoiceEmployeesPicker employee={employees}/>
+        <ChoiceEmployeesPicker employees={employees} onChange={this.onTeamChange.bind(this)}/>
         <div className={'button-group-right'}>
           <div>
             <ActionButton
@@ -53,7 +61,7 @@ class AddTeam extends Component {
               Cancel
             </ActionButton>
           </div>
-          <PrimaryButton>
+          <PrimaryButton onClick={this.saveTeam.bind(this)} disabled = {this.state.selectedEmployees < 1}>
             {loading ? <Spinner size={SpinnerSize.medium} ariaLive="assertive"/> : 'Add'}
           </PrimaryButton>
         </div>
@@ -62,18 +70,18 @@ class AddTeam extends Component {
   }
 }
 
-const mapStateToProps = ({teamModal, newProjectLoading, createProjectErrors}) => {
+const mapStateToProps = ({teamModal, createTeamMembersLoading, createProjectErrors}) => {
   return {
     opened: teamModal,
-    loading: newProjectLoading,
-    errors: createProjectErrors
+    loading: createTeamMembersLoading,
+    errors: createProjectErrors,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getEmployees: () => dispatch(getEmployees()),
     closeModal: () => dispatch(setTeamModal(false)),
+    createTeamMembers: (users, project) => dispatch(createTeamMembers(users, project)),
   };
 };
 export const AddTeamModal = connect(mapStateToProps, mapDispatchToProps)(AddTeam);

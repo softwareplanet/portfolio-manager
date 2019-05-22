@@ -23,6 +23,7 @@ import {createProjectFile, deleteProjectFile, getProject, getProjects} from "../
 import axios from "axios";
 import {setProjectModal, setTeamModal} from "../../actions/modals";
 import {AddTeamModal} from "../../components/forms/addTeamModal";
+import {getEmployees} from "../../actions/user";
 
 class ProjectTeamPage extends Component {
 
@@ -201,10 +202,11 @@ class ProjectTeamPage extends Component {
 
   componentDidMount() {
     this.mounted = true;
-    const {user, getProject, projectId, getProjects} = this.props;
+    const {user, getProject, projectId, getProjects, getEmployees} = this.props;
     if (user) {
       getProject(projectId);
       getProjects();
+      getEmployees();
     }
     this.getFileGroups();
   }
@@ -226,11 +228,12 @@ class ProjectTeamPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {user, getProject, projectId} = this.props;
+    const {user, getProject, projectId, getEmployees} = this.props;
     const {projectId: nextId} = nextProps;
     if (projectId !== nextId) {
       if (user) {
         getProject(nextId);
+        getEmployees();
       }
     }
     if (!nextProps.projectModal) this.setState({projectToEdit: null});
@@ -264,7 +267,7 @@ class ProjectTeamPage extends Component {
       <div className={'page-container'} key={'employeeProjects'}>
         <PrivatePageRedirect/>
         <CreateProjectModal project={projectToEdit}/>
-        <AddTeamModal project={projectToEdit}/>
+        <AddTeamModal project={projectToEdit} employees={this.props.employees && this.props.employees.filter(e => team && !team.map(e => e.employeeId).includes(e.id))}/>
         <span
           className={'page-title'}>{'Project ' + (name ? name : '')}
           <Icon
@@ -363,8 +366,8 @@ class ProjectTeamPage extends Component {
   };
 }
 
-const mapStateToProps = ({user, project, projectModal}, {match: {params: {projectId}}}) => {
-  return {user, projectId, project, projectModal};
+const mapStateToProps = ({user, project, projectModal, employees}, {match: {params: {projectId}}}) => {
+  return {user, projectId, project, projectModal, employees};
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -375,6 +378,7 @@ const mapDispatchToProps = (dispatch) => {
     getProjects: () => dispatch(getProjects()),
     addProjectFile: (projectId, data) => dispatch(createProjectFile(projectId, data)),
     deleteProjectFile: (projectId) => dispatch(deleteProjectFile(projectId)),
+    getEmployees: () => dispatch(getEmployees()),
   };
 };
 

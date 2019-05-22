@@ -1,122 +1,132 @@
 import * as React from "react";
-import {IBasePickerSuggestionsProps, ListPeoplePicker} from "office-ui-fabric-react";
-import {connect} from "react-redux";
+import {ListPeoplePicker} from "office-ui-fabric-react";
+import axios from 'axios';
 
-const suggestionProps: IBasePickerSuggestionsProps = {
-    suggestionsHeaderText: 'Suggested People',
-    mostRecentlyUsedHeaderText: 'Suggested Contacts',
-    noResultsFoundText: 'No results found',
-    loadingText: 'Loading',
-    showRemoveButtons: true,
-    suggestionsAvailableAlertText: 'People Picker Suggestions available',
-    suggestionsContainerAriaLabel: 'Suggested contacts'
+const suggestionProps = {
+  suggestionsHeaderText: 'Suggested Employees',
+  mostRecentlyUsedHeaderText: 'Suggested Employees',
+  noResultsFoundText: 'No results found',
+  loadingText: 'Loading',
+  showRemoveButtons: false,
 };
 
-const people = [{text: 'Oleksii Bondar', secondaryText: 'Software Developer'}, {
-    text: 'Lex Botcher',
-    secondaryText: 'Software Developer'
-}];
 
-class choiceEmployees extends React.Component {
+export class ChoiceEmployeesPicker extends React.Component {
 
-    constructor(props: {}) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            currentPicker: 0,
-            delayResults: false,
-            peopleList: people,
-            currentSelectedItems: [],
-            isPickerDisabled: false
-        };
-    }
-
-    render() {
-        return (
-            <ListPeoplePicker
-                onResolveSuggestions={this._onFilterChanged}
-                onEmptyInputFocus={this._returnMostRecentlyUsed}
-                getTextFromItem={this._getTextFromItem}
-                className={'ms-PeoplePicker'}
-                pickerSuggestionsProps={suggestionProps}
-                key={'list'}
-                onRemoveSuggestion={this._onRemoveSuggestion}
-                onValidateInput={this._validateInput}
-                inputProps={{
-                    onBlur: (ev: React.FocusEvent<HTMLInputElement>) => console.log('onBlur called'),
-                    onFocus: (ev: React.FocusEvent<HTMLInputElement>) => console.log('onFocus called'),
-                    'aria-label': 'People Picker'
-                }}
-                componentRef={this._picker}
-                resolveDelay={300}
-                disabled={this.state.isPickerDisabled}
-            />
-        );
-    }
-
-    _onRemoveSuggestion = (item): void => {
-        const {peopleList, mostRecentlyUsed: mruState} = this.state;
-        const indexPeopleList: number = peopleList.indexOf(item);
-        const indexMostRecentlyUsed: number = mruState.indexOf(item);
-
-        if (indexPeopleList >= 0) {
-            const newPeople: any[] = peopleList.slice(0, indexPeopleList).concat(peopleList.slice(indexPeopleList + 1));
-            this.setState({peopleList: newPeople});
-        }
-
-        if (indexMostRecentlyUsed >= 0) {
-            const newSuggestedPeople: [] = mruState
-                .slice(0, indexMostRecentlyUsed)
-                .concat(mruState.slice(indexMostRecentlyUsed + 1));
-            this.setState({mostRecentlyUsed: newSuggestedPeople});
-        }
+    this.state = {
+      currentPicker: 0,
+      delayResults: false,
+      currentSelectedItems: [],
+      isPickerDisabled: false
     };
+  }
 
-    _onFilterChanged = (
-        filterText,
-        currentPersonas,
-        limitResults) => {
-        if (filterText) {
-            let filteredPersonas: [] = this._filterPersonasByText(filterText);
+  componentDidMount() {
+    const {employees} = this.props;
+    if (employees) {
+      let people = employees.map(e => {
+        return {text: `${e.firstName} ${e.lastName}`, secondaryText: e.position, id: e.id, user: e, imageUrl: axios.defaults.baseURL + e.image};
+      });
+      this.setState({peopleList: people});
+    }
+  }
 
-            filteredPersonas = this._removeDuplicates(filteredPersonas, currentPersonas);
-            filteredPersonas = limitResults ? filteredPersonas.splice(0, limitResults) : filteredPersonas;
-            return this._filterPromise(filteredPersonas);
-        } else {
-            return [];
-        }
-    };
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextProps.employees) {
+      this.setState({
+        peopleList: nextProps.employees.map(e => ({
+            text: `${e.firstName} ${e.lastName}`,
+            secondaryText: e.position,
+          id: e.id,
+            user: e,
+          })
+        )
+      });
+    }
+  }
 
-    _returnMostRecentlyUsed = (currentPersonas) => {
-        let mostRecentlyUsed = [{text: 'Oleksii Bondar', secondaryText: 'Software Developer'}];
-        mostRecentlyUsed = this._removeDuplicates(mostRecentlyUsed, currentPersonas);
-        return this._filterPromise(mostRecentlyUsed);
-    };
+  render() {
+    return (
+      <ListPeoplePicker
+        onResolveSuggestions={this._onFilterChanged}
+        onEmptyInputFocus={this._returnMostRecentlyUsed}
+        getTextFromItem={this._getTextFromItem}
+        className={'ms-PeoplePicker'}
+        pickerSuggestionsProps={suggestionProps}
+        onRemoveSuggestion={this._onRemoveSuggestion}
+        onValidateInput={this._validateInput}
+        componentRef={this._picker}
+        resolveDelay={300}
+        disabled={this.state.isPickerDisabled}
+        onChange={this._onChange}
+      />
+    );
+  }
 
+  _onRemoveSuggestion = (item) => {
+    const {peopleList, mostRecentlyUsed: mruState} = this.state;
+    const indexPeopleList = peopleList.indexOf(item);
+    const indexMostRecentlyUsed = mruState.indexOf(item);
 
-    _filterPromise(personasToReturn): any[] | Promise<any[]> {
-        return personasToReturn;
+    if (indexPeopleList >= 0) {
+      const newPeople = peopleList.slice(0, indexPeopleList).concat(peopleList.slice(indexPeopleList + 1));
+      this.setState({peopleList: newPeople});
     }
 
-    _listContainsPersona(persona, personas) {
-        if (!personas || !personas.length || personas.length === 0) {
-            return false;
-        }
-        return personas.filter(item => item.text === persona.text).length > 0;
+    if (indexMostRecentlyUsed >= 0) {
+      const newSuggestedPeople = mruState
+        .slice(0, indexMostRecentlyUsed)
+        .concat(mruState.slice(indexMostRecentlyUsed + 1));
+      this.setState({mostRecentlyUsed: newSuggestedPeople});
     }
+  };
+
+  _onChange = (items) => {
+    this.props.onChange(items);
+  };
+
+  _onFilterChanged = (
+    filterText,
+    currentPersons) => {
+    if (filterText) {
+      let filteredPersons = this._filterPersonsByText(filterText);
+      filteredPersons = this._removeDuplicates(filteredPersons, currentPersons);
+      filteredPersons = filteredPersons.slice(0, 5);
+      console.log(this.state);
+      return filteredPersons;
+    } else {
+      return [];
+    }
+  };
+
+  _returnMostRecentlyUsed = (currentPersons) => {
+    let mostRecentlyUsed = this.state.peopleList ? this.state.peopleList.slice(0, 5) : [];
+    mostRecentlyUsed = this._removeDuplicates(mostRecentlyUsed, currentPersons);
+    return mostRecentlyUsed;
+  };
+
+  _listContainsPersona(persona, persons) {
+    if (!persons || !persons.length || persons.length === 0) {
+      return false;
+    }
+    return persons.filter(item => item.text === persona.text).length > 0;
+  }
 
 
-    _filterPersonasByText(filterText: string): any[] {
-        return this.state.peopleList.filter(item => this._doesTextStartWith(item.text, filterText));
-    }
+  _filterPersonsByText(filterText) {
+    return this.state.peopleList.filter(item => this._doesTextStartWith(item.text, filterText));
+  }
 
-    _doesTextStartWith(text: string, filterText: string): boolean {
-        return text.toLowerCase().indexOf(filterText.toLowerCase()) === 0;
-    }
+  _doesTextStartWith(text, filterText) {
+    return text.toLowerCase().indexOf(filterText.toLowerCase()) === 0;
+  }
 
-    _removeDuplicates(personas: [], possibleDupes: []) {
-        return personas.filter(persona => !this._listContainsPersona(persona, possibleDupes));
-    }
+  _removeDuplicates(persons, possibleDupes) {
+    return persons.filter(persona => !this._listContainsPersona(persona, possibleDupes));
+  }
+
+
 }
-
-export const ChoiceEmployeesPicker = connect()(choiceEmployees);
