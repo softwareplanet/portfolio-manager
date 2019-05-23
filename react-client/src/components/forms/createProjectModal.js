@@ -110,6 +110,7 @@ class CreateProject extends Component {
             errorMessage={(errors.startDate || []).join('\r\n')}
             required
           />
+          <br/>
           <Checkbox label="Project is finished now?" defaultChecked={isFinished} onChange={(ev, isChecked) => {
             this.setState({isFinished: isChecked});}}/>
           {numberTextField}
