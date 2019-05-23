@@ -371,6 +371,15 @@ ul.pagination  {
         align-items: center;
         justify-content: center;
       }
+
+      .navigation-container {
+        margin-top: 0.75rem;
+
+        Icon {
+          margin: 0 0.5rem 0 0.5rem
+        }
+
+      }
     }
 
     .profile-info-line {
