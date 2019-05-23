@@ -25,7 +25,16 @@ export const getProjects = () => {
     dispatch(createProjectErrors({}));
     axios.get(`/api/v1/project`)
       .then(res => {
-        dispatch(setProjects(res.data));
+        let projects = res.data;
+        projects = projects.map(project => {
+          if (!project.isFinished) {
+            const today = new Date();
+            const startDate = new Date(project.startDate);
+            project.durationMonths = Math.floor((today - startDate)/1000/60/60/24/30);
+          }
+          return project;
+        });
+        dispatch(setProjects(projects));
       })
       .catch(retryRequest(getProjects, dispatch)())
   }

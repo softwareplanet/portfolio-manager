@@ -1,5 +1,14 @@
 import React, {Component} from "react";
-import {ActionButton, DatePicker, Modal, PrimaryButton, Spinner, SpinnerSize, TextField} from "office-ui-fabric-react";
+import {
+  ActionButton,
+  Checkbox,
+  DatePicker,
+  Modal,
+  PrimaryButton,
+  Spinner,
+  SpinnerSize,
+  TextField
+} from "office-ui-fabric-react";
 import {connect} from "react-redux";
 import {setProjectModal} from "../../actions/modals";
 import {createProject, editProject} from "../../actions/projects";
@@ -13,7 +22,8 @@ class CreateProject extends Component {
     url: '',
     description: '',
     startDate: new Date(),
-    durationMonths: ''
+    durationMonths: '',
+    isFinished: false
   };
 
   state = {...this.initialState};
@@ -30,7 +40,18 @@ class CreateProject extends Component {
 
   render() {
     const {opened, closeModal, loading, errors, createProject, project, editProject} = this.props;
-    const {name, url, description, durationMonths, startDate} = this.state;
+    const {name, url, description, durationMonths, startDate, isFinished} = this.state;
+
+    const durationMonthsForSave = durationMonths === '' ?  1 : durationMonths;
+
+    const numberTextField = isFinished ?
+      <NumberTextField
+        label="Duration, month:"
+        value={durationMonths}
+        onChange={(durationMonths) => this.setState({durationMonths})}
+        errorMessage={(errors.durationMonths || []).join('\r\n')}
+      />
+      :'';
     return (
       <Modal
         isOpen={opened}
@@ -42,8 +63,8 @@ class CreateProject extends Component {
         <form onSubmit={(e) => {
           e.preventDefault();
           !project ?
-            createProject({name, url, description, durationMonths, startDate: formatDate(startDate)}) :
-            editProject({name, url, description, durationMonths, startDate: formatDate(startDate), id: project.id});
+            createProject({name, url, description, durationMonths: durationMonthsForSave, startDate: formatDate(startDate), isFinished}) :
+            editProject({name, url, description, durationMonths: durationMonthsForSave, startDate: formatDate(startDate), id: project.id, isFinished});
         }}>
           <TextField
             label="Name:" value={name}
@@ -69,18 +90,17 @@ class CreateProject extends Component {
             placeholder="Select a date..."
             label="Start date:"
             onSelectDate={(startDate) => {
-              this.setState({startDate})
+              this.setState({startDate});
             }}
             errorMessage={(errors.startDate || []).join('\r\n')}
             required
           />
-          <NumberTextField
-            label="Duration, month:"
-            value={durationMonths}
-            onChange={(durationMonths) => this.setState({durationMonths})}
-            errorMessage={(errors.durationMonths || []).join('\r\n')}
-            required
-          />
+          <Checkbox label="Project is finished now?" onChange={(ev, isChecked) => {
+            this.setState({isFinished: isChecked});
+            console.log(isChecked);
+          }
+          }/>
+          {numberTextField}
           <TextField
             label="Url:" value={url}
             onChange={(e) => this.setState({url: e.target.value})}

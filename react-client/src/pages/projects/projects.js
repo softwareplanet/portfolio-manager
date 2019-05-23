@@ -221,6 +221,7 @@ class ProjectsPage extends Component {
 
   render() {
     const {projectToEdit, hideDialog, projectToDelete, selectedSkills, projectsToShow} = this.state;
+
     const {skills} = this.props;
     return (
       <div className={'page-container'}>

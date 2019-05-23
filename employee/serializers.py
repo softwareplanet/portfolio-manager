@@ -66,8 +66,9 @@ class EmployeeForUserSerializer(EmployeeSerializer):
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-    durationMonths = serializers.IntegerField(source='duration_months', min_value=0)
+    durationMonths = serializers.IntegerField(source='duration_months')
     startDate = serializers.DateField(source='start_date')
+    isFinished = serializers.BooleanField(source='is_finished')
     skills = serializers.SerializerMethodField()
 
     @staticmethod
@@ -85,7 +86,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'startDate', 'durationMonths', 'name', 'description', 'url', 'skills')
+        fields = ('id', 'startDate', 'durationMonths', 'name', 'description', 'url', 'skills', 'isFinished')
 
 
 class SkillCategorySerializer(serializers.HyperlinkedModelSerializer):
