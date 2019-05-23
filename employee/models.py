@@ -56,10 +56,11 @@ class ProjectFile(models.Model):
 
 class Project(models.Model):
     start_date = models.DateField()
-    duration_months = models.PositiveIntegerField()
+    duration_months = models.PositiveIntegerField(null=True)
     name = models.CharField(max_length=30)
     description = models.TextField(blank=True)
     url = models.CharField(max_length=255, blank=True)
+    is_ongoing = models.BooleanField()
 
     class Meta:
         db_table = 'projects'
