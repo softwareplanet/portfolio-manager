@@ -42,7 +42,7 @@ class CreateProject extends Component {
     const {opened, closeModal, loading, errors, createProject, project, editProject} = this.props;
     const {name, url, description, durationMonths, startDate, isFinished} = this.state;
 
-    const durationMonthsForSave = durationMonths === '' ?  1 : durationMonths;
+    const durationMonthsForSave = durationMonths === '' ? -1 : durationMonths;
 
     const numberTextField = isFinished ?
       <NumberTextField
@@ -51,7 +51,7 @@ class CreateProject extends Component {
         onChange={(durationMonths) => this.setState({durationMonths})}
         errorMessage={(errors.durationMonths || []).join('\r\n')}
       />
-      :'';
+      : '';
     return (
       <Modal
         isOpen={opened}
@@ -63,8 +63,23 @@ class CreateProject extends Component {
         <form onSubmit={(e) => {
           e.preventDefault();
           !project ?
-            createProject({name, url, description, durationMonths: durationMonthsForSave, startDate: formatDate(startDate), isFinished}) :
-            editProject({name, url, description, durationMonths: durationMonthsForSave, startDate: formatDate(startDate), id: project.id, isFinished});
+            createProject({
+              name,
+              url,
+              description,
+              durationMonths: durationMonthsForSave,
+              startDate: formatDate(startDate),
+              isFinished
+            }) :
+            editProject({
+              name,
+              url,
+              description,
+              durationMonths: durationMonthsForSave,
+              startDate: formatDate(startDate),
+              id: project.id,
+              isFinished
+            });
         }}>
           <TextField
             label="Name:" value={name}
@@ -95,11 +110,8 @@ class CreateProject extends Component {
             errorMessage={(errors.startDate || []).join('\r\n')}
             required
           />
-          <Checkbox label="Project is finished now?" onChange={(ev, isChecked) => {
-            this.setState({isFinished: isChecked});
-            console.log(isChecked);
-          }
-          }/>
+          <Checkbox label="Project is finished now?" defaultChecked={isFinished} onChange={(ev, isChecked) => {
+            this.setState({isFinished: isChecked});}}/>
           {numberTextField}
           <TextField
             label="Url:" value={url}

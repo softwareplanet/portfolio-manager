@@ -31,7 +31,14 @@ export const getUserProjects = (userId) => {
     dispatch(createUserProjectErrors({}));
     axios.get(`/api/v1/employee/${userId}/project`)
       .then(res => {
-        dispatch(setUserProjects(res.data));
+        let projects = res.data;
+        projects = projects.map(project => {
+          if(!project.isFinished) {
+            project.durationMonths = getMonthDurationFromStartDate(project.startDate);
+          }
+          return project;
+        });
+        dispatch(setUserProjects(projects));
       })
       .catch(retryRequest(getUserProjects, dispatch)(userId))
   }
@@ -109,7 +116,12 @@ export const editUserProject = (userId, project) => {
     axios.patch(`/api/v1/employee/${userId}/project/${project.id}`, project)
       .then(res => {
         dispatch(successfulEditUserProject(res.data.id));
-        dispatch(changeUserProject(res.data))
+
+        const project = res.data;
+        if(!project.isFinished) {
+          project.durationMonths = getMonthDurationFromStartDate(project.startDate);
+        }
+        dispatch(changeUserProject(project))
       })
       .catch(errors => {
         dispatch(createUserProjectErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
@@ -126,7 +138,13 @@ export const createUserProject = (userId, project) => {
     dispatch(createUserProjectErrors({}));
     axios.post(`/api/v1/employee/${userId}/project`, project)
       .then(res => {
-        dispatch(addUserProject(res.data))
+
+        const projectForCreating = res.data;
+        if(!projectForCreating.isFinished) {
+          projectForCreating.durationMonths = getMonthDurationFromStartDate(projectForCreating.startDate);
+        }
+
+        dispatch(addUserProject(projectForCreating))
       }).catch(errors => {
       dispatch(createUserProjectErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
     }).finally(() => {
@@ -157,3 +175,9 @@ export const createTeamMembers = (users, project) => {
 
   };
 };
+
+export function getMonthDurationFromStartDate(dateOfStart) {
+    const today = new Date();
+    const startDate = new Date(dateOfStart);
+    return Math.floor((today - startDate)/1000/60/60/24/30);
+}

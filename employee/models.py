@@ -73,6 +73,7 @@ class EmployeeProject(models.Model):
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     skills = models.ManyToManyField(Skill)
     description = models.TextField(blank=True)
+    is_finished = models.BooleanField()
 
     class Meta:
         db_table = 'employee_projects'

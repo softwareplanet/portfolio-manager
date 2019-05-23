@@ -143,10 +143,11 @@ class EmployeeSkillSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EmployeeProjectSerializer(serializers.ModelSerializer):
-    durationMonths = serializers.IntegerField(source='duration_months', min_value=0)
+    durationMonths = serializers.IntegerField(source='duration_months')
     startDate = serializers.DateField(source='start_date')
     project = ProjectSerializer(read_only=True, source='project_id')
     skills = SkillSerializer(many=True, read_only=True)
+    isFinished = serializers.BooleanField(source='is_finished')
     skillIds = serializers.PrimaryKeyRelatedField(
         write_only=True,
         many=True,
@@ -171,7 +172,7 @@ class EmployeeProjectSerializer(serializers.ModelSerializer):
         model = EmployeeProject
         fields = (
             'id', 'startDate', 'durationMonths', 'project', 'skills',
-            'employeeId', 'projectId', 'skillIds', 'description'
+            'employeeId', 'projectId', 'skillIds', 'description', 'isFinished',
         )
 
 

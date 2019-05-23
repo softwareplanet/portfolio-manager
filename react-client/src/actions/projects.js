@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import {setProjectModal} from "./modals";
 import {retryRequest} from "../service/utils";
+import {getMonthDurationFromStartDate} from "./userProjects";
 
 export const setProjects = (projects = null) => {
   return {
@@ -27,10 +28,8 @@ export const getProjects = () => {
       .then(res => {
         let projects = res.data;
         projects = projects.map(project => {
-          if (!project.isFinished) {
-            const today = new Date();
-            const startDate = new Date(project.startDate);
-            project.durationMonths = Math.floor((today - startDate)/1000/60/60/24/30);
+          if(!project.isFinished) {
+            project.durationMonths = getMonthDurationFromStartDate(project.startDate);
           }
           return project;
         });
@@ -46,7 +45,14 @@ export const getProjectsExtended = () => {
     dispatch(createProjectErrors({}));
     axios.get(`/api/v1/project/extended`)
       .then(res => {
-        dispatch(setProjects(res.data));
+        let projects = res.data;
+        projects = projects.map(project => {
+          if(!project.isFinished) {
+            project.durationMonths = getMonthDurationFromStartDate(project.startDate);
+          }
+          return project;
+        });
+        dispatch(setProjects(projects));
       })
       .catch(retryRequest(getProjectsExtended, dispatch)())
   }
@@ -80,7 +86,11 @@ export const createProject = (project) => {
     axios.post('/api/v1/project', project)
       .then(res => {
         dispatch(setProjectModal(false));
-        dispatch(addProject(res.data));
+        const projectForEditing = res.data;
+        if (!projectForEditing.isFinished) {
+          projectForEditing.durationMonths = getMonthDurationFromStartDate(projectForEditing.startDate)
+        }
+        dispatch(addProject(projectForEditing));
       })
       .catch(errors => {
         dispatch(createProjectErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
@@ -127,8 +137,12 @@ export const editProject = (project) => {
     axios.patch(`/api/v1/project/${project.id}`, project)
       .then(res => {
         dispatch(setProjectModal(false));
-        dispatch(setProject(res.data));
-        dispatch(changeProject(res.data))
+        const projectForEditing = res.data;
+        if (!projectForEditing.isFinished) {
+          projectForEditing.durationMonths = getMonthDurationFromStartDate(projectForEditing.startDate)
+        }
+        dispatch(setProject(projectForEditing));
+        dispatch(changeProject(projectForEditing))
       }).catch(errors => {
       dispatch(createProjectErrors((errors.response && errors.response.data.errors) || {non_field_errors: [errors.message]}));
     }).finally(() => {
@@ -149,7 +163,11 @@ export const getProject = (projectId) => {
     dispatch(createProjectErrors({}));
     axios.get(`/api/v1/project/${projectId}`)
       .then(res => {
-        dispatch(setProject(res.data));
+        const project = res.data;
+        if (!project.isFinished) {
+          project.durationMonths = getMonthDurationFromStartDate(project.startDate)
+        }
+        dispatch(setProject(project));
       })
       .catch(retryRequest(getProject, dispatch)(projectId))
   }
