@@ -43,6 +43,27 @@ class ProjectsPage extends Component {
     this._setProjectsToShow(selected)
   }
 
+  _onColumnClick = (ev, column) => {
+    const { projectsToShow: items, columns} = this.state;
+    const newColumns = columns.slice();
+    const currColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
+    console.log(column);
+    newColumns.forEach((newCol) => {
+      if (newCol === currColumn) {
+        currColumn.isSortedDescending = !currColumn.isSortedDescending;
+        currColumn.isSorted = true;
+      } else {
+        newCol.isSorted = false;
+        newCol.isSortedDescending = true;
+      }
+    });
+    const newItems = _copyAndSort(items, currColumn.fieldName, currColumn.isSortedDescending);
+    this.setState({
+      columns: newColumns,
+      projectsToShow: newItems
+    });
+  };
+
   _columns = [
     {
       key: 'name',
@@ -52,6 +73,7 @@ class ProjectsPage extends Component {
       maxWidth: 250,
       isRowHeader: true,
       isResizable: true,
+      onColumnClick: this._onColumnClick,
       isPadded: true,
       onRender: (item) => {
         return <span
@@ -69,6 +91,7 @@ class ProjectsPage extends Component {
       minWidth: 70,
       maxWidth: 100,
       isResizable: true,
+      onColumnClick: this._onColumnClick,
       isPadded: true,
       onRender: ({startDate}) => {
         return <span>{new Date(startDate).toDateString()}</span>;
@@ -81,6 +104,7 @@ class ProjectsPage extends Component {
       minWidth: 30,
       maxWidth: 65,
       data: 'string',
+      onColumnClick: this._onColumnClick,
       onRender: ({durationMonths}) => {
         return <span>{durationMonths + ` Month${durationMonths > 1 ? 's' : ''}`}</span>;
       },
@@ -157,6 +181,7 @@ class ProjectsPage extends Component {
     }
   ];
 
+
   state = {
     hideDialog: true,
     projectToDelete: null,
@@ -177,6 +202,7 @@ class ProjectsPage extends Component {
       getProjects();
       getSkills();
     }
+    this.setState({columns: this._columns});
     this.Paginator.array = this.props.projects;
     this._setProjectsToShow(this.state.pageNumber)
   }
@@ -220,7 +246,7 @@ class ProjectsPage extends Component {
   }
 
   render() {
-    const {projectToEdit, hideDialog, projectToDelete, selectedSkills, projectsToShow} = this.state;
+    const {projectToEdit, hideDialog, projectToDelete, selectedSkills, projectsToShow, columns} = this.state;
     const {skills} = this.props;
     return (
       <div className={'page-container'}>
@@ -267,7 +293,7 @@ class ProjectsPage extends Component {
             <div>
             <DetailsList
               items={projectsToShow}
-              columns={this._columns}
+              columns={columns}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}
             />
@@ -336,5 +362,10 @@ const mapDispatchToProps = (dispatch) => {
     setProject: (project) => dispatch(setProject(project)),
   };
 };
+
+function _copyAndSort(items, columnKey, isSortedDescending) {
+  const key = columnKey;
+  return items.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+}
 
 export const Projects = connect(mapStateToProps, mapDispatchToProps)(ProjectsPage);
