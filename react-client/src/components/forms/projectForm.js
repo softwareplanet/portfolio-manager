@@ -152,7 +152,7 @@ class ProjectFormComponent extends Component {
   _generateProjectObject() {
     const {startDate, duration, selectedSkills, selectedProject, description, isFinished} = this.state;
 
-    const durationMonthsForSave = duration === '' ? 1 : duration;
+    const durationMonthsForSave = duration === '' ? null : duration;
 
     let errors = {};
     let valid = true;
@@ -161,7 +161,12 @@ class ProjectFormComponent extends Component {
     project.description = description ? description : (errors.description = ['Your role on this project can not be empty, what you`ve done there?']) && (valid = false);
     project.projectId = selectedProject[0] ? selectedProject[0].id : (errors.project = ['Choose your project or create a new one']) && (valid = false);
     project.skillIds = selectedSkills.length !== 0 ? selectedSkills.map(skill => skill.id) : (errors.skills = ['Choose some skills']) && (valid = false);
-    project.durationMonths = durationMonthsForSave ? durationMonthsForSave : errors.durationMonths = ['Enter valid positive number'];
+
+    if (durationMonthsForSave) {
+        project.durationMonths = durationMonthsForSave;
+    } else if (isFinished) {
+        project.durationMonths = errors.durationMonths = ['Enter valid positive number'];
+    }
     project.isFinished = isFinished;
     this.setState({errors});
     return valid ? project : null;
