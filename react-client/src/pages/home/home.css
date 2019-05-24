@@ -252,6 +252,10 @@ ul.pagination {
         display: flex;
         align-items: center;
         justify-content: center; }
+      .flex .profile-container .profile-photo-container .navigation-container {
+        margin-top: 0.75rem; }
+        .flex .profile-container .profile-photo-container .navigation-container Icon {
+          margin: 0 0.5rem 0 0.5rem; }
     .flex .profile-container .profile-info-line {
       margin: 0.5rem 0;
       display: flex;

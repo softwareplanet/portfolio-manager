@@ -29,7 +29,7 @@ class ProfilePage extends Component {
     if (user && (isStaff || user.id === Number(employeeId))) {
       getEmployee(employeeId);
       getUserProjects(employeeId);
-      getUserSkills(employeeId)
+      getUserSkills(employeeId);
     }
   }
 
@@ -40,7 +40,7 @@ class ProfilePage extends Component {
       if (user && (isStaff || user.id === Number(nextId))) {
         getEmployee(nextId, true);
         getUserProjects(nextId);
-        getUserSkills(nextId)
+        getUserSkills(nextId);
       }
     }
   }
@@ -82,6 +82,28 @@ class ProfilePage extends Component {
               <input type="file" id="user-avatar" style={{display: 'none'}}
                      onChange={({target: {files}}) => files[0] && updateUserPhoto(user.id, {image: files[0]}, currentUser.id)}/>
             </div>}
+            <div className={'navigation-container'}>
+              {(this._shouldShowElement()) && isStaff &&
+                isStaff &&
+                <Icon iconName={'ContactCard'}
+                      style={this.styles.icon}
+                      onClick={() => this.props.history.push(`/home/${user.id}/presentation`)}
+                />}
+
+              <Icon iconName={'UserEvent'}
+                    style={this.styles.icon}
+                    onClick={() => this.props.history.push(`/home/${user.id}/skills`)}
+              />
+              <Icon iconName={'ProjectLogo32'}
+                    style={this.styles.icon}
+                    onClick={() => this.props.history.push(`/home/${user.id}/projects`)}
+              />
+
+              <Icon iconName={'Education'}
+                    style={this.styles.icon}
+                    onClick={() => this.props.history.push(`/home/${user.id}/schools`)}
+              />
+            </div>
           </div>
           <div className={'info-container'}>
             {user.id === Number(employeeId) ?

@@ -112,7 +112,7 @@ class CreateProject extends Component {
           />
           <br/>
           <Checkbox label="Project is finished now?" defaultChecked={isFinished} onChange={(ev, isChecked) => {
-            this.setState({isFinished: isChecked});}}/>
+            this.setState({isFinished: isChecked})}}/>
           {numberTextField}
           <br/>
           <TextField
