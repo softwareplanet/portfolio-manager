@@ -42,7 +42,7 @@ class CreateProject extends Component {
     const {opened, closeModal, loading, errors, createProject, project, editProject} = this.props;
     const {name, url, description, durationMonths, startDate, isFinished} = this.state;
 
-    const durationMonthsForSave = durationMonths === '' ? -1 : durationMonths;
+    const durationMonthsForSave = durationMonths === '' ? null : durationMonths;
 
     const numberTextField = isFinished ?
       <NumberTextField
