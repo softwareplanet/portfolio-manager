@@ -71,8 +71,14 @@ class ProjectTeamPage extends Component {
       minWidth: 30,
       maxWidth: 55,
       data: 'string',
-      onRender: ({durationMonths}) => {
-        return <span>{durationMonths + ` Month${durationMonths > 1 ? 's' : ''}`}</span>;
+      onRender: ({durationMonths, isFinished, startDate}) => {
+        let durations;
+        if (isFinished) {
+          durations = durationMonths;
+        } else {
+          durations = Math.floor((new Date() - new Date(startDate))/1000/60/60/24/30)
+        }
+        return <span>{durations + ` Month${durations > 1 ? 's' : ''}`}</span>;
       },
       isPadded: true
     },
