@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {BasePickerListBelow, DatePicker, Label, TagPicker, TextField} from "office-ui-fabric-react";
+import {BasePickerListBelow, Checkbox, DatePicker, Label, TagPicker, TextField} from "office-ui-fabric-react";
 import {CreateNew} from "../projectCommon/suggestions/createNewSuggestion";
 import {NumberTextField} from "../common/numberTextField";
 import {SelectedItem} from "../projectCommon/suggestions/selectedItem";
@@ -23,6 +23,7 @@ class ProjectFormComponent extends Component {
     selectedSkills: [],
     selectedProject: [],
     errors: {},
+    isFinished: false,
     edit: false
   };
 
@@ -49,12 +50,13 @@ class ProjectFormComponent extends Component {
   componentWillMount() {
     const {userProject} = this.props;
     if (userProject) {
-      const {startDate, durationMonths, skills, project, description} = userProject;
+      const {startDate, durationMonths, skills, project, description, isFinished} = userProject;
       const projectToEdit = {
         startDate: new Date(startDate),
         duration: durationMonths,
         selectedSkills: skills,
         selectedProject: [project],
+        isFinished,
         description
       };
       this.setState({...this.state, ...projectToEdit, edit: true})
@@ -63,7 +65,17 @@ class ProjectFormComponent extends Component {
 
   render() {
     const {projects, skills, createSkill, createProject, onClose, loading} = this.props;
-    const {duration, startDate, selectedSkills, selectedProject, errors, edit, description} = this.state;
+    const {duration, startDate, selectedSkills, selectedProject, errors, edit, description, isFinished} = this.state;
+
+    const numberTextField = isFinished ?
+      <NumberTextField
+        label="Duration, month"
+        value={duration}
+        onChange={(duration) => this.setState({duration})}
+        errorMessage={(errors.durationMonths || []).join('\r\n')}
+      />
+      : '';
+
     return (
       <div>
         <Label>Name</Label>
@@ -97,12 +109,9 @@ class ProjectFormComponent extends Component {
           errorMessage={(errors.startDate || []).join('\r\n')}
         />
         <br/>
-        <NumberTextField
-          label="Duration, month"
-          value={duration}
-          onChange={(duration) => this.setState({duration})}
-          errorMessage={(errors.durationMonths || []).join('\r\n')}
-        />
+        <Checkbox defaultChecked={isFinished} label="You finished work on project?" onChange={(ev, isChecked) => {
+          this.setState({isFinished: isChecked});}}/>
+        {numberTextField}
         <br/>
         <TextField label="Role on project:" value={description}
                    onChange={(e) => this.setState({description: e.target.value})}
@@ -141,7 +150,10 @@ class ProjectFormComponent extends Component {
   }
 
   _generateProjectObject() {
-    const {startDate, duration, selectedSkills, selectedProject, description} = this.state;
+    const {startDate, duration, selectedSkills, selectedProject, description, isFinished} = this.state;
+
+    const durationMonthsForSave = duration === '' ? null : duration;
+
     let errors = {};
     let valid = true;
     let project = {};
@@ -149,7 +161,13 @@ class ProjectFormComponent extends Component {
     project.description = description ? description : (errors.description = ['Your role on this project can not be empty, what you`ve done there?']) && (valid = false);
     project.projectId = selectedProject[0] ? selectedProject[0].id : (errors.project = ['Choose your project or create a new one']) && (valid = false);
     project.skillIds = selectedSkills.length !== 0 ? selectedSkills.map(skill => skill.id) : (errors.skills = ['Choose some skills']) && (valid = false);
-    project.durationMonths = duration ? duration : errors.durationMonths = ['Enter valid positive number'];
+
+    if (durationMonthsForSave) {
+        project.durationMonths = durationMonthsForSave;
+    } else if (isFinished) {
+        project.durationMonths = errors.durationMonths = ['Enter valid positive number'];
+    }
+    project.isFinished = isFinished;
     this.setState({errors});
     return valid ? project : null;
   }

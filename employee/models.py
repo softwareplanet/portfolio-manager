@@ -56,10 +56,11 @@ class ProjectFile(models.Model):
 
 class Project(models.Model):
     start_date = models.DateField()
-    duration_months = models.PositiveIntegerField()
     name = models.CharField(max_length=30)
     description = models.TextField(blank=True)
+    duration_months = models.PositiveIntegerField(blank=True, null=True)
     url = models.CharField(max_length=255, blank=True)
+    is_finished = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'projects'
@@ -67,11 +68,12 @@ class Project(models.Model):
 
 class EmployeeProject(models.Model):
     start_date = models.DateField()
-    duration_months = models.PositiveIntegerField()
+    duration_months = models.PositiveIntegerField(blank=True, null=True)
     employee_id = models.ForeignKey('Employee', on_delete=models.CASCADE)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     skills = models.ManyToManyField(Skill)
     description = models.TextField(blank=True)
+    is_finished = models.BooleanField()
 
     class Meta:
         db_table = 'employee_projects'
