@@ -1,12 +1,18 @@
 import React from "react";
 import {EmployeeOnProject} from "./employeeOnProject";
 import {Loader} from "..";
+import {ProjectLogo} from "../common/projectLogo";
 
-export const CompanyProject = ({project: {name, description, team, skills, id, startDate, durationMonths: duration, url}}) => {
+export const CompanyProject = ({project: {name, description, team, skills, id, startDate, durationMonths: duration, url, image}}) => {
   return (
     <div key={`project${id}`} className="company-project">
       <div className="company-project-head">
-        <div className="company-project-title">{name}</div>
+        <div className="company-project-title" style={{display: 'flex', itemAligns: 'center'}}>
+          <div style={{width: '2rem', height: '2rem', marginRight: '1rem'}}>
+            <ProjectLogo url={image}/>
+          </div>
+          {name}
+        </div>
         <div className="company-project-time">
           <span>
             Started at: {new Date(startDate).toDateString()}

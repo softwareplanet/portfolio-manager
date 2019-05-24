@@ -61,6 +61,7 @@ class Project(models.Model):
     duration_months = models.IntegerField(blank=True, null=True)
     url = models.CharField(max_length=255, blank=True)
     is_finished = models.BooleanField()
+    image = models.ImageField(upload_to='project_image', null=True)
 
     class Meta:
         db_table = 'projects'

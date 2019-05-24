@@ -3,6 +3,7 @@ import {
   ActionButton,
   Checkbox,
   DatePicker,
+  Icon,
   Modal,
   PrimaryButton,
   Spinner,
@@ -14,6 +15,7 @@ import {setProjectModal} from "../../actions/modals";
 import {createProject, editProject} from "../../actions/projects";
 import {NumberTextField} from "../common/numberTextField";
 import {formatDate} from "../../service/utils";
+import {ErrorLabel} from "..";
 
 class CreateProject extends Component {
 
@@ -23,7 +25,8 @@ class CreateProject extends Component {
     description: '',
     startDate: new Date(),
     durationMonths: '',
-    isFinished: false
+    isFinished: false,
+    image: '',
   };
 
   state = {...this.initialState};
@@ -40,7 +43,7 @@ class CreateProject extends Component {
 
   render() {
     const {opened, closeModal, loading, errors, createProject, project, editProject} = this.props;
-    const {name, url, description, durationMonths, startDate, isFinished} = this.state;
+    const {name, url, description, durationMonths, startDate, isFinished, image} = this.state;
 
     const durationMonthsForSave = durationMonths === '' ? -1 : durationMonths;
 
@@ -69,7 +72,8 @@ class CreateProject extends Component {
               description,
               durationMonths: durationMonthsForSave,
               startDate: formatDate(startDate),
-              isFinished
+              isFinished,
+              image
             }) :
             editProject({
               name,
@@ -78,7 +82,8 @@ class CreateProject extends Component {
               durationMonths: durationMonthsForSave,
               startDate: formatDate(startDate),
               id: project.id,
-              isFinished
+              isFinished,
+              image
             });
         }}>
           <TextField
@@ -89,6 +94,16 @@ class CreateProject extends Component {
             placeholder="Project name..."
             required
           />
+          <div>
+            <ErrorLabel title={(errors.image || []).join('\r\n')}/>
+            <input type="file" id="project-logo" style={{display: 'block'}}
+                   onChange={(e) => this.setState({image: e.target.files[0]})}
+            />
+            <label htmlFor="project-logo" className={'upload-user-photo'}>
+              <Icon iconName={'Upload'} style={{marginRight: 4}}/>
+              Upload logo
+            </label>
+          </div>
           <TextField
             label="Description:" value={description}
             onChange={(e) => this.setState({description: e.target.value})}
@@ -112,7 +127,8 @@ class CreateProject extends Component {
           />
           <br/>
           <Checkbox label="Project is finished now?" defaultChecked={isFinished} onChange={(ev, isChecked) => {
-            this.setState({isFinished: isChecked});}}/>
+            this.setState({isFinished: isChecked});
+          }}/>
           {numberTextField}
           <TextField
             label="Url:" value={url}
@@ -138,6 +154,8 @@ class CreateProject extends Component {
       </Modal>
     );
   }
+
+
 }
 
 const mapStateToProps = ({projectModal, newProjectLoading, createProjectErrors}) => {

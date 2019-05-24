@@ -20,6 +20,8 @@ import {getSkills} from "../../actions/skills";
 import {getEmployee} from "../../actions/user";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
+import {ProjectLogo} from "../../components/common/projectLogo";
+import {project} from "../../reducers/projects";
 
 class ProjectsPage extends Component {
 
@@ -45,6 +47,19 @@ class ProjectsPage extends Component {
   }
 
   _columns = [
+    {
+      key: 'image',
+      name: 'Logo',
+      fieldName: 'image',
+      minWidth: 90,
+      maxWidth: 90,
+      isRowHeader: true,
+      isResizable: true,
+      isPadded: true,
+      onRender: ({project: {image}}) => {
+        return <ProjectLogo url={image}/>
+      },
+    },
     {
       key: 'projectName',
       name: 'Project Name',

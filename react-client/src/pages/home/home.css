@@ -518,3 +518,14 @@ a {
         padding-top: 0 !important; }
   .nav-bar {
     display: none; } }
+
+.project-logo {
+  border: 1px solid lightslategrey;
+  border-radius: 20%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .project-logo img {
+    height: 100%;
+    width: 100%; }

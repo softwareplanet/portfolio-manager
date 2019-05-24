@@ -7,17 +7,18 @@ import {
   Dialog,
   DialogFooter,
   DialogType,
+  Icon,
   IconButton,
   PrimaryButton,
   SelectionMode,
   TagPicker,
-  Icon,
 } from "office-ui-fabric-react";
 import {deleteProject, getProjects, setProject} from "../../actions/projects";
 import {setProjectModal} from "../../actions/modals";
 import {getSkills} from "../../actions/skills";
 import ReactPaginate from 'react-paginate';
-import { Paginator } from '../../service/utils';
+import {Paginator} from '../../service/utils';
+import {ProjectLogo} from "../../components/common/projectLogo";
 
 class ProjectsPage extends Component {
 
@@ -44,6 +45,19 @@ class ProjectsPage extends Component {
   }
 
   _columns = [
+    {
+      key: 'image',
+      name: 'Logo',
+      fieldName: 'image',
+      minWidth: 90,
+      maxWidth: 90,
+      isRowHeader: true,
+      isResizable: true,
+      isPadded: true,
+      onRender: ({image}) => {
+        return <ProjectLogo url={image}/>
+      },
+    },
     {
       key: 'name',
       name: 'Project Name',

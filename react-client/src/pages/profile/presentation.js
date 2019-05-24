@@ -106,12 +106,13 @@ const mapStateToProps = ({user, userSkills, userProjects, editUserPhotoLoading, 
     userProjects: userProjects && userProjects.slice().sort(({project: a}, {project: b}) => {
       let aDate = new Date(a.startDate), bDate = new Date(b.startDate);
       return aDate.setMonth(aDate.getMonth() + a.durationMonths) - bDate.setMonth(bDate.getMonth() + b.durationMonths)
-    }).reverse().map(({project: {name, description: projectDescription}, description: candidateDescription, id, skills}) => ({
+    }).reverse().map(({project: {name, description: projectDescription, image}, description: candidateDescription, id, skills}) => ({
       id,
       name,
       projectDescription,
       candidateDescription,
-      skills
+      skills,
+      image
     })),
   };
 };
