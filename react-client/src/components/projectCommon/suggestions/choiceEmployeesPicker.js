@@ -123,8 +123,9 @@ export class ChoiceEmployeesPicker extends React.Component {
 
 
   _filterPersonsByText(filterText) {
-    return this.state.peopleList.filter(item => this._doesTextStartWith(item.firstName, filterText) ||
-      this._doesTextStartWith(item.lastName, filterText));
+    return this.state.peopleList.filter(item =>{
+      return this._doesTextStartWith(item.user.firstName, filterText) || this._doesTextStartWith(item.user.lastName, filterText)
+    });
   }
 
   _doesTextStartWith(text, filterText) {

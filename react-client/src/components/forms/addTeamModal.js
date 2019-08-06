@@ -35,7 +35,8 @@ class AddTeam extends Component {
       projectId: project.id,
       durationMonths: project.durationMonths,
       startDate: project.startDate,
-      skillIds: []
+      skillIds: [],
+      isFinished: project.isFinished,
     });
   }
 
