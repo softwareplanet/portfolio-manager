@@ -157,6 +157,7 @@ export const createTeamMembers = (users, project) => {
   return (dispatch) => {
     dispatch(createTeamMembersLoading(true));
     dispatch(createTeamMemberErrors({}));
+    project.isFinished = false;
     Promise.all(
       users.map(
         user => axios.post(`/api/v1/employee/${user.id}/project`, project)
