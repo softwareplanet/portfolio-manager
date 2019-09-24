@@ -165,7 +165,10 @@ class ProjectFormComponent extends Component {
     if (durationMonthsForSave) {
         project.durationMonths = durationMonthsForSave;
     } else if (isFinished) {
-        project.durationMonths = errors.durationMonths = ['Enter valid positive number'];
+      if (!errors.durationMonths) {
+        valid = false;
+        errors.durationMonths = ['Enter valid positive number'];
+      }
     }
     project.isFinished = isFinished;
     this.setState({errors});
