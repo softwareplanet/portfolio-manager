@@ -114,6 +114,8 @@ ul.pagination  {
 
   .table-link {
     cursor: pointer;
+    color: inherit;
+    text-decoration: none;
 
     &:hover {
       font-weight: 500;

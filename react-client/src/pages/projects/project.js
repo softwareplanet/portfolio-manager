@@ -5,7 +5,6 @@ import {
   CreateProjectModal,
   DropZone,
   Loader,
-  PrivatePageRedirect,
   Tooltip,
 } from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
@@ -19,11 +18,18 @@ import {
   PrimaryButton,
   SelectionMode
 } from "office-ui-fabric-react";
-import {createProjectFile, deleteProjectFile, getProject, getProjects} from "../../actions/projects";
+import {
+  createProjectFile,
+  deleteProjectFile,
+  getProject,
+  getProjects,
+  setProject,
+} from '../../actions/projects';
 import axios from "axios";
 import {setProjectModal, setTeamModal} from "../../actions/modals";
 import {AddTeamModal} from "../../components/forms/addTeamModal";
 import {getEmployees} from "../../actions/user";
+import { Link } from 'react-router-dom';
 
 class ProjectTeamPage extends Component {
 
@@ -46,10 +52,13 @@ class ProjectTeamPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({employeeName, employeeId}) => {
-        return <span
-          onClick={() => this._openEmployeeProfile(employeeId)}
-          className="table-link"
-        >{employeeName}</span>;
+        const { isStaff } = this.props.user || {};
+        return isStaff
+         ? <Link
+            to={`/home/${employeeId}/profile`}
+            className="table-link"
+          >{employeeName}</Link>
+         : <span>{employeeName}</span>;
       },
     },
     {
@@ -114,7 +123,8 @@ class ProjectTeamPage extends Component {
       minWidth: 50,
       maxWidth: 50,
       onRender: (item) => {
-        return (<IconButton
+        const { isStaff } = this.props.user || {};
+        return isStaff ? (<IconButton
           style={{height: 'auto'}}
           allowDisabledFocus={true}
           menuIcon={{iconName: 'MoreVertical'}}
@@ -137,7 +147,8 @@ class ProjectTeamPage extends Component {
           }
           }
           split={false}
-        />);
+        />)
+      : <div/>;
       },
       isPadded: true
     }
@@ -206,6 +217,10 @@ class ProjectTeamPage extends Component {
     this.setState({projectToEdit: project});
   }
 
+  componentWillMount() {
+    this.props.setProject(null);
+  }
+
   componentDidMount() {
     this.mounted = true;
     const {user, getProject, projectId, getProjects, getEmployees} = this.props;
@@ -267,11 +282,10 @@ class ProjectTeamPage extends Component {
     }
   };
   render() {
-    const {project: {team, name, description, files, skills}} = this.props;
+    const {project: {id, team, name, description, files, skills}, user} = this.props;
     const {hideDialog, projectFileToDelete, group, groups, dropzoneActive, projectToEdit} = this.state;
     return (
       <div className={'page-container'} key={'employeeProjects'}>
-        <PrivatePageRedirect/>
         <CreateProjectModal project={projectToEdit}/>
         <AddTeamModal project={projectToEdit} employees={this.props.employees && this.props.employees.filter(e => team && !team.map(e => e.employeeId).includes(e.id))}/>
         <span
@@ -281,15 +295,15 @@ class ProjectTeamPage extends Component {
           style={this.styles.icon}
           onClick={() => this.editProject(this.props.project)}
         /></span>
-        <p className={'page-description'}>{description ? description : <b>Project has no description!</b>}</p>
-        <p className={'page-description'}>Skills: {skills && skills.map(({name}) => name).join(', ')}</p>
+        {id && <p className={'page-description'}>{description ? description : <b>Project has no description!</b>}</p>}
+        {id && <p className={'page-description'}>Skills: {skills && skills.map(({name}) => name).join(', ')}</p>}
         <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>
           Project Team
-          <Icon
+          {user && user.isStaff && <Icon
             iconName={'Add'}
             style={{...this.styles.icon, fontSize: 1 + 'rem'}}
             onClick={() => this.addTeammates(this.props.project)}
-          />
+          /> }
         </h3>
         {
           team ?
@@ -301,7 +315,7 @@ class ProjectTeamPage extends Component {
             /> :
             <Loader title="Loading project team..."/>
         }
-        <Dropzone
+        {user && user.isStaff &&  <Dropzone
           disableClick
           style={{position: 'relative'}}
           onDrop={this.onDrop}
@@ -330,7 +344,7 @@ class ProjectTeamPage extends Component {
               /> :
               <Loader title="Loading project team..."/>
           }
-        </Dropzone>
+        </Dropzone> }
         <Dialog
           hidden={hideDialog}
           onDismiss={this._closeDialog}
@@ -385,6 +399,7 @@ const mapDispatchToProps = (dispatch) => {
     addProjectFile: (projectId, data) => dispatch(createProjectFile(projectId, data)),
     deleteProjectFile: (projectId) => dispatch(deleteProjectFile(projectId)),
     getEmployees: () => dispatch(getEmployees()),
+    setProject: (project) => dispatch(setProject(project)),
   };
 };
 

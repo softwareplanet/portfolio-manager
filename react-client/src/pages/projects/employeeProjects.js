@@ -20,6 +20,7 @@ import {getSkills} from "../../actions/skills";
 import {getEmployee} from "../../actions/user";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
+import { Link } from 'react-router-dom';
 
 class ProjectsPage extends Component {
 
@@ -54,8 +55,11 @@ class ProjectsPage extends Component {
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({project}) => {
-        return <span>{project.name}</span>;
+      onRender: ({ project = {} }) => {
+        return <Link
+          to={`/home/projects/${project.id}`}
+          className="table-link"
+        >{project.name}</Link>;
       },
     },
     {
