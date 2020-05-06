@@ -722,6 +722,14 @@ a {
   }
 }
 
+.skills-picker {
+  &.hide-skills-picker {
+    .ms-BasePicker {
+      display: none;
+    }
+  }
+}
+
 @media print {
 
   .spg-logo {

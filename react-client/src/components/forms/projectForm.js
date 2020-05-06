@@ -1,6 +1,15 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {BasePickerListBelow, Checkbox, DatePicker, Label, TagPicker, TextField} from "office-ui-fabric-react";
+import {
+  BasePickerListBelow,
+  Checkbox,
+  DatePicker, Dropdown,
+  Label,
+  TagPicker,
+  TextField,
+  Toggle,
+  DropdownMenuItemType,
+} from 'office-ui-fabric-react';
 import {CreateNew} from "../projectCommon/suggestions/createNewSuggestion";
 import {NumberTextField} from "../common/numberTextField";
 import {SelectedItem} from "../projectCommon/suggestions/selectedItem";
@@ -65,7 +74,7 @@ class ProjectFormComponent extends Component {
 
   render() {
     const {projects, skills, createSkill, createProject, onClose, loading} = this.props;
-    const {duration, startDate, selectedSkills, selectedProject, errors, edit, description, isFinished} = this.state;
+    const {duration, startDate, selectedSkills, selectedProject, errors, edit, description, isFinished, isSkillsSelect} = this.state;
 
     const numberTextField = isFinished ?
       <NumberTextField
@@ -124,22 +133,37 @@ class ProjectFormComponent extends Component {
         />
         <br/>
         <Label>Skills</Label>
-        <DocumentPicker
-          onRenderSuggestionsItem={SuggestionsItem}
-          items={skills}
-          getTextFromItem={({name}) => name}
-          onResolveSuggestions={this._onFilterChange(skills)}
-          selectedItems={selectedSkills}
-          onRenderItem={SelectedItem}
-          onChange={this._onChange(selectedSkills, 'selectedSkills')}
-          pickerSuggestionsProps={{
-            onRenderNoResultFound: () =>
-              <CreateNew
-                onClick={() => createSkill()}
-                text={'No such skills yet...'}
-              />
-          }}
-        />
+        <div className={ `skills-picker ${ isSkillsSelect ? 'hide-skills-picker' : '' }` }>
+          <Toggle
+            label="Switch to multiselect"
+            inlineLabel
+            value={isSkillsSelect}
+            onChanged={(isSkillsSelect) => this.setState({ isSkillsSelect })}
+          />
+          { isSkillsSelect && <Dropdown
+            placeholder="Select skills"
+            selectedKeys={selectedSkills.map(({id}) => id)}
+            options={this._generateSkillsListForDropdown(skills)}
+            onChanged={this._onDropdownChange}
+            multiSelect
+          /> }
+          <DocumentPicker
+            onRenderSuggestionsItem={SuggestionsItem}
+            items={skills}
+            getTextFromItem={({name}) => name}
+            onResolveSuggestions={this._onFilterChange(skills)}
+            selectedItems={selectedSkills}
+            onRenderItem={SelectedItem}
+            onChange={this._onChange(selectedSkills, 'selectedSkills')}
+            pickerSuggestionsProps={{
+              onRenderNoResultFound: () =>
+                <CreateNew
+                  onClick={() => createSkill()}
+                  text={'No such skills yet...'}
+                />
+            }}
+          />
+        </div>
         <ErrorLabel title={(errors.skills || []).join('\r\n')}/>
         <br/>
         <ErrorLabel title={(errors.non_field_errors || []).join('\r\n')}/>
@@ -175,6 +199,33 @@ class ProjectFormComponent extends Component {
     return valid ? project : null;
   }
 
+  _generateSkillsListForDropdown = (skills) => {
+    const groupedSkills = skills.reduce((acc, { id, name, category: { name: categoryName } }) => {
+      acc[categoryName] = [ ...(acc[categoryName] || []), { key: id, text: name } ];
+      return acc;
+    }, {});
+    return Object.keys(groupedSkills).reduce((acc, key) => {
+      groupedSkills[key] = groupedSkills[key].sort(({ text: a }, { text: b }) =>
+        a.toLowerCase() > b.toLowerCase() ? 1 : b.toLowerCase() > a.toLowerCase() ? -1 : 0);
+      return [
+        ...acc,
+        { key, text: key, itemType: DropdownMenuItemType.Header },
+        ...groupedSkills[key],
+      ]
+    }, []);
+  };
+
+  _onDropdownChange = ({ key, selected }) => {
+    const { skills } = this.props;
+    const { selectedSkills } = this.state;
+    if (selected) {
+      const skill = skills.find(({ id }) => id === key);
+      this.setState({ selectedSkills: [...selectedSkills, skill] })
+    } else {
+      this.setState({ selectedSkills: selectedSkills.filter(({id}) => id !== key) })
+    }
+  };
+
   _onChange(selectedItems, name) {
     return (items) => {
       const itemsWithoutDuplicates = items.filter((item, pos, self) => self.indexOf(item) === pos);
@@ -189,8 +240,8 @@ class ProjectFormComponent extends Component {
   }
 }
 
-const mapStateToProps = ({employee: user, skills = [], projects = [], newUserProjectLoading, createUserProjectErrors}) => {
-  return {user, skills, projects, loading: newUserProjectLoading, errors: createUserProjectErrors};
+const mapStateToProps = ({ employee: user, skills = [], projects = [], newUserProjectLoading, createUserProjectErrors, skillCategories }) => {
+  return { user, skills, projects, loading: newUserProjectLoading, errors: createUserProjectErrors, skillCategories };
 };
 
 const mapDispatchToProps = (dispatch) => {

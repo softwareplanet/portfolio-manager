@@ -500,6 +500,9 @@ a {
     background-size: contain;
     line-height: 1.2cm; }
 
+.skills-picker.hide-skills-picker .ms-BasePicker {
+  display: none; }
+
 @media print {
   .spg-logo {
     display: flex !important; }
