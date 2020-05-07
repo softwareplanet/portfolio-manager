@@ -6,11 +6,17 @@ import {
   Loader,
   PrivatePageRedirect,
   ProfileInfoLine,
-  SummaryTable,
+  SummaryTable, Tooltip,
   UserAvatar,
-  UserForm
-} from "../../components";
-import {Icon, Panel, PanelType, Rating} from "office-ui-fabric-react";
+  UserForm,
+} from '../../components';
+import {
+  DirectionalHint,
+  Icon,
+  Panel,
+  PanelType,
+  Rating,
+} from 'office-ui-fabric-react';
 import {getEmployee, updateUserPhoto} from "../../actions/user";
 import {getUserProjects} from "../../actions/userProjects";
 import {getUserSkills} from "../../actions/userSkills";
@@ -85,24 +91,31 @@ class ProfilePage extends Component {
             <div className={'navigation-container'}>
               {(this._shouldShowElement()) && isStaff &&
                 isStaff &&
-                <Icon iconName={'ContactCard'}
+                <Tooltip text="Open Candidate Presentation">
+                  <Icon iconName={'ContactCard'}
+                        style={this.styles.icon}
+                        onClick={() => this.props.history.push(`/home/${user.id}/presentation`)}
+                  />
+                </Tooltip>}
+
+              <Tooltip text="Open Skills of the User">
+                <Icon iconName={ 'UserEvent' }
+                      style={ this.styles.icon }
+                      onClick={ () => this.props.history.push(`/home/${ user.id }/skills`) }
+                />
+              </Tooltip>
+              <Tooltip text="Open Projects of the User" directionalHint={DirectionalHint.topCenter}>
+                <Icon iconName={'ProjectLogo32'}
                       style={this.styles.icon}
-                      onClick={() => this.props.history.push(`/home/${user.id}/presentation`)}
-                />}
-
-              <Icon iconName={'UserEvent'}
-                    style={this.styles.icon}
-                    onClick={() => this.props.history.push(`/home/${user.id}/skills`)}
-              />
-              <Icon iconName={'ProjectLogo32'}
-                    style={this.styles.icon}
-                    onClick={() => this.props.history.push(`/home/${user.id}/projects`)}
-              />
-
-              <Icon iconName={'Education'}
-                    style={this.styles.icon}
-                    onClick={() => this.props.history.push(`/home/${user.id}/schools`)}
-              />
+                      onClick={() => this.props.history.push(`/home/${user.id}/projects`)}
+                />
+              </Tooltip>
+              <Tooltip text="Open Schools of the User" directionalHint={DirectionalHint.rightCenter}>
+                <Icon iconName={'Education'}
+                      style={this.styles.icon}
+                      onClick={() => this.props.history.push(`/home/${user.id}/schools`)}
+                />
+              </Tooltip>
             </div>
           </div>
           <div className={'info-container'}>
