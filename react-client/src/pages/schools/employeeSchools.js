@@ -50,7 +50,7 @@ class SchoolsPage extends Component {
       key: 'startDate',
       name: 'Start Date',
       fieldName: 'startDate',
-      minWidth: 70,
+      minWidth: 100,
       maxWidth: 100,
       isResizable: true,
       isPadded: true,
@@ -62,8 +62,8 @@ class SchoolsPage extends Component {
       key: 'duration',
       name: 'Duration',
       fieldName: 'durationYears',
-      minWidth: 30,
-      maxWidth: 55,
+      minWidth: 65,
+      maxWidth: 65,
       data: 'string',
       onRender: ({durationYears}) => {
         return <span>{durationYears + ` Year${durationYears > 1 ? 's' : ''}`}</span>;
