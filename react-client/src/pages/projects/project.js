@@ -30,6 +30,7 @@ import {setProjectModal, setTeamModal} from "../../actions/modals";
 import {AddTeamModal} from "../../components/forms/addTeamModal";
 import {getEmployees} from "../../actions/user";
 import { Link } from 'react-router-dom';
+import { groupBy, linkify } from '../../service/utils';
 
 class ProjectTeamPage extends Component {
 
@@ -295,8 +296,8 @@ class ProjectTeamPage extends Component {
           style={this.styles.icon}
           onClick={() => this.editProject(this.props.project)}
         /></span>
-        {id && <p className={'page-description'}>{description ? description : <b>Project has no description!</b>}</p>}
-        {id && <p className={'page-description'}>Skills: {skills && skills.map(({name}) => name).join(', ')}</p>}
+        {id && <p className={'page-description'} dangerouslySetInnerHTML={{ __html: description ? linkify(description) : <b>Project has no description!</b>}}/>}
+        {id && <div className={'page-description'}>{this.renderSkills(skills)}</div>}
         <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>
           Project Team
           {user && user.isStaff && <Icon
@@ -370,6 +371,19 @@ class ProjectTeamPage extends Component {
       </div>
     );
   }
+
+  renderSkills = (skills = []) => {
+    const groupedSkills = groupBy(skills, ({category}) => category && category.name);
+    return groupedSkills.sort((a, b) => a[1][0].category.id - b[1][0].category.id).map(([category, skills], index) => {
+      const skillNames = skills.map((skill) => skill.name);
+      return (
+        <div key={'category' + index}>
+          <span style={{ fontWeight: 400 }}>{category}: </span>
+          <span>{skillNames && (skillNames.length ? skillNames.join(', ') : 'No skills yet...')}</span>
+        </div>
+      )
+    })
+  };
 
   _openDeleteDialog(projectFile) {
     this.setState({projectFileToDelete: projectFile, hideDialog: false})

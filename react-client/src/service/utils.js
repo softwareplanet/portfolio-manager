@@ -41,3 +41,10 @@ export class Paginator {
     return this.array ? this.array.slice(pageNumber * this.pageSize, (pageNumber + 1) * this.pageSize) : [];
   }
 }
+
+export const linkify = (text) => {
+  const urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
+  return text.replace(urlRegex, function(url) {
+    return '<a href="' + url + '" target="_blank">' + url + '</a>';
+  });
+};
