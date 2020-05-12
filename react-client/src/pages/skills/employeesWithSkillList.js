@@ -199,13 +199,14 @@ class EmployeesWithSkillPage extends Component {
   }
 
   render() {
-    const {skill: {employees, name, url}, projects, skillId} = this.props;
+    const {skill: {employees, name, url, category}, projects, skillId} = this.props;
     return (
       <div className={'page-container'}>
         <PrivatePageRedirect/>
         <span
           className={'page-title'}>Skill: {name ? name : ''}</span>
-        <p className={'page-description'}>{'    ' + url}</p>
+        {category && category.name && <div className={'page-description'}>Category: {category.name}</div>}
+        {url && <p className={'page-description'} dangerouslySetInnerHTML={{ __html: linkify(url)}}/>}
         <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Projects with skill</h3>
         {
           projects ?
