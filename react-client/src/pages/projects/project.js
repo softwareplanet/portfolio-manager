@@ -284,21 +284,23 @@ class ProjectTeamPage extends Component {
     }
   };
   render() {
-    const {project: {id, team, name, description, files, skills}, user} = this.props;
+    const {project: {id, team, name, description, files, skills, url}, user} = this.props;
     const {hideDialog, projectFileToDelete, group, groups, dropzoneActive, projectToEdit} = this.state;
     return (
       <div className={'page-container'} key={'employeeProjects'}>
         <CreateProjectModal project={projectToEdit}/>
         <AddTeamModal project={projectToEdit} employees={this.props.employees && this.props.employees.filter(e => team && !team.map(e => e.employeeId).includes(e.id))}/>
-        <span
-          className={'page-title'}>{'Project ' + (name ? name : '')}
-          <Icon
-          iconName={'Edit'}
-          style={this.styles.icon}
-          onClick={() => this.editProject(this.props.project)}
-        /></span>
+        <span className={'page-title'}>
+          {'Project ' + (name ? name : '')}
+          { user && user.isStaff && <Icon
+            iconName={'Edit'}
+            style={this.styles.icon}
+            onClick={() => this.editProject(this.props.project)}
+          />}
+        </span>
         {id && <p className={'page-description'} dangerouslySetInnerHTML={{ __html: description ? linkify(description) : <b>Project has no description!</b>}}/>}
         {id && <div className={'page-description'}>{this.renderSkills(skills)}</div>}
+        {id && <p className={'page-description'} dangerouslySetInnerHTML={{ __html: url ? 'Link: ' + linkify(url) : 'The project has no links added'}}/>}
         <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>
           Project Team
           {user && user.isStaff && <Icon
