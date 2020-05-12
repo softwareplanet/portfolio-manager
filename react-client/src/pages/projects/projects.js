@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {CreateProjectModal, Loader, Tooltip} from "../../components";
+import {CreateProjectModal, Loader} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DefaultButton,
@@ -18,6 +18,8 @@ import {setProjectModal} from "../../actions/modals";
 import {getSkills} from "../../actions/skills";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
+import { Link } from 'react-router-dom';
+import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
 
 class ProjectsPage extends Component {
 
@@ -95,9 +97,7 @@ class ProjectsPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({description}) => {
-        return (
-          <Tooltip text={description}>{description}</Tooltip>
-        );
+        return (<TableProjectDescription description={description}/>);
       },
     },
     {

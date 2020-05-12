@@ -21,6 +21,7 @@ import {getEmployee} from "../../actions/user";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
 import { Link } from 'react-router-dom';
+import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
 
 class ProjectsPage extends Component {
 
@@ -95,7 +96,7 @@ class ProjectsPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({description}) => {
-        return <Tooltip text={description}>{description}</Tooltip>;
+        return (<TableProjectDescription description={description}/>);
       },
     },
     {

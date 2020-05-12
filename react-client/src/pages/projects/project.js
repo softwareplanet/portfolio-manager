@@ -31,6 +31,7 @@ import {AddTeamModal} from "../../components/forms/addTeamModal";
 import {getEmployees} from "../../actions/user";
 import { Link } from 'react-router-dom';
 import { groupBy, linkify } from '../../service/utils';
+import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
 
 class ProjectTeamPage extends Component {
 
@@ -101,7 +102,7 @@ class ProjectTeamPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({description}) => {
-        return <Tooltip text={description}>{description}</Tooltip>;
+        return (<TableProjectDescription description={description}/>);
       },
     },
     {

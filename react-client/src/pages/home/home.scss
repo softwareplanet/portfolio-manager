@@ -778,3 +778,14 @@ a {
 
 }
 
+.table-project-description {
+  display: flex;
+  flex-direction: column;
+
+  i {
+    font-size: 1rem;
+    cursor: pointer;
+    color: $theme-color-primary;
+    align-self: flex-end;
+  }
+}
