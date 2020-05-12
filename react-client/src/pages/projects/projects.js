@@ -56,12 +56,10 @@ class ProjectsPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: (item) => {
-        return <span
+        return <Link
+          to={`/home/projects/${item.id}`}
           className="table-link"
-          onClick={() => {
-          this.props.setProject(item);
-          this.props.history.push(`/home/projects/${item.id}`)
-        }}>{item.name}</span>;
+        >{item.name}</Link>;
       },
     },
     {

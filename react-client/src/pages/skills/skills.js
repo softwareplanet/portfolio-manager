@@ -16,6 +16,7 @@ import {deleteSkill, getSkills, setSkill} from "../../actions/skills";
 import {setSkillModal} from "../../actions/modals";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
+import { Link } from 'react-router-dom';
 
 class SkillsPage extends Component {
 
@@ -52,13 +53,10 @@ class SkillsPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: (item) => {
-        return <span
-          onClick={() => {
-            this.props.setSkill(item);
-            this.props.history.push(`/home/skills/${item.id}`)
-          }}
+        return <Link
+          to={`/home/skills/${item.id}`}
           className="table-link"
-        >{item.name}</span>;
+        >{item.name}</Link>;
       },
     },
     {

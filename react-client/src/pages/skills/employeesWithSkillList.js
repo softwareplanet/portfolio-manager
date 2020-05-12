@@ -5,6 +5,8 @@ import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/De
 import {IconButton, Rating, SelectionMode} from "office-ui-fabric-react";
 import {getSkill} from "../../actions/skills";
 import {getProjects, setProject} from "../../actions/projects";
+import { Link } from 'react-router-dom';
+import { linkify } from '../../service/utils';
 
 class EmployeesWithSkillPage extends Component {
 
@@ -19,7 +21,10 @@ class EmployeesWithSkillPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({employeeName, employeeId}) => {
-        return <span onClick={() => this._openEmployeeProfile(employeeId)} className="table-link">{employeeName}</span>;
+        return <Link
+          to={`/home/${employeeId}/profile`}
+          className="table-link"
+        >{employeeName}</Link>;
       },
     },
     {
@@ -114,12 +119,10 @@ class EmployeesWithSkillPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: (item) => {
-        return <span
+        return <Link
+          to={`/home/projects/${item.id}`}
           className="table-link"
-          onClick={() => {
-            this.props.setProject(item);
-            this.props.history.push(`/home/projects/${item.id}`)
-          }}>{item.name}</span>;
+        >{item.name}</Link>;
       },
     },
     {
