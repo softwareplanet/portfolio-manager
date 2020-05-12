@@ -22,6 +22,7 @@ import {getUserProjects} from "../../actions/userProjects";
 import {getUserSkills} from "../../actions/userSkills";
 import {setPasswordModal} from "../../actions/modals";
 import {EmployeeFiles} from "../../components/projectCommon/employeeFiles";
+import { Link } from 'react-router-dom';
 
 class ProfilePage extends Component {
 
@@ -131,16 +132,20 @@ class ProfilePage extends Component {
               </span>
                     {(isStaff || user.id === currentUser.id) &&
                     <div>
-                      <Icon
-                        iconName={'Edit'}
-                        style={this.styles.icon}
-                        onClick={() => this.setState({showPanel: true})}
-                      />
-                      <Icon
-                        iconName={'AzureKeyVault'}
-                        style={this.styles.icon}
-                        onClick={() => this.props.openPasswordModal()}
-                      />
+                      <Tooltip text="Edit" directionalHint={DirectionalHint.topCenter}>
+                        <Icon
+                          iconName={'Edit'}
+                          style={this.styles.icon}
+                          onClick={() => this.setState({showPanel: true})}
+                        />
+                      </Tooltip>
+                      <Tooltip text="Change Password" directionalHint={DirectionalHint.topCenter}>
+                        <Icon
+                          iconName={'AzureKeyVault'}
+                          style={this.styles.icon}
+                          onClick={() => this.props.openPasswordModal()}
+                        />
+                      </Tooltip>
                     </div>
                     }
                   </div>
@@ -154,8 +159,8 @@ class ProfilePage extends Component {
                 </div>
                 {(this._shouldShowElement()) && isStaff &&
                 <div className={'profile-description'}>
-                <span className={'table-title'}
-                      onClick={() => this.props.history.push(`/home/${user.id}/presentation`)}
+                <Link className={'table-title'}
+                      to={`/home/${user.id}/presentation`}
                 >
                   <Icon iconName={'ContactCard'}
                         style={{
@@ -163,7 +168,7 @@ class ProfilePage extends Component {
                           margin: 0.5 + 'rem'
                         }}/>
                   Summary
-                </span>
+                </Link>
                   <p>{user.description || "Here will be your description"}</p>
                 </div>}
               </div>) :
@@ -184,7 +189,7 @@ class ProfilePage extends Component {
                               </tr>}
                             title="Skills"
                             iconName="UserEvent"
-                            onTitleClick={() => this.props.history.push(`/home/${user.id}/skills`)}
+                            link={`/home/${user.id}/skills`}
               />
               <SummaryTable items={userProjects}
                             renderRow={({name, duration, id}) =>
@@ -195,7 +200,7 @@ class ProfilePage extends Component {
                               </tr>}
                             title="Projects"
                             iconName="ProjectLogo32"
-                            onTitleClick={() => this.props.history.push(`/home/${user.id}/projects`)}
+                            link={`/home/${user.id}/projects`}
               />
             </div>}
           </div>
@@ -214,7 +219,8 @@ class ProfilePage extends Component {
       fontSize: 1.5 + 'rem',
       marginLeft: 0.6 + 'rem',
       marginBottom: 0.6 + 'rem',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      color: '#0178d4',
     }
   };
 

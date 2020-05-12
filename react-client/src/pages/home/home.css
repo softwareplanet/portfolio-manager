@@ -232,7 +232,7 @@ ul.pagination {
       margin-bottom: 1rem;
       cursor: pointer; }
       .flex .profile-container .table-title:hover {
-        color: rgba(0, 0, 0, 0.85); }
+        color: #0198ff; }
     .flex .profile-container .profile-photo-container {
       display: flex;
       flex-direction: column;

@@ -344,7 +344,7 @@ ul.pagination  {
       cursor: pointer;
 
       &:hover {
-        color: rgba(0, 0, 0, 0.85);
+        color: $theme-color-secondary;
       }
     }
 
