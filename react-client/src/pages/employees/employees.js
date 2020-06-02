@@ -232,7 +232,7 @@ class EmployeesPage extends Component {
           onDismiss={this._closeDialog}
           dialogContentProps={{
             type: DialogType.normal,
-            title: `Delete employee ${employeeToDelete && (employeeToDelete.firstName + ' ' + employeeToDelete.lastName)}`,
+            title: `Disable employee ${employeeToDelete && (employeeToDelete.firstName + ' ' + employeeToDelete.lastName)}`,
             subText:
               'Employee will be disabled, but can be enabled again.'
           }}
@@ -247,7 +247,7 @@ class EmployeesPage extends Component {
               iconProps={{iconName: 'Delete'}}
               onClick={() => {
                 this.deleteEmployee(employeeToDelete.id);
-              }} text="Delete"/>
+              }} text="Disable"/>
             <DefaultButton onClick={this._closeDialog} text="Cancel"/>
           </DialogFooter>
         </Dialog>
