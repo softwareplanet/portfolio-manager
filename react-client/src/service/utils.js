@@ -24,7 +24,7 @@ export const groupBy = (list, keyGetter) => {
 };
 
 export class Paginator {
-  constructor(array, pageSize = 10) {
+  constructor(array, pageSize = 15) {
     this.array = array;
     this.pageSize = pageSize;
   }
