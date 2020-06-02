@@ -107,7 +107,7 @@ class ProjectsPage extends Component {
       isResizable: true,
       data: 'string',
       onRender: ({url}) => {
-        return <span>{url}</span>;
+        return url ? <Link to={url}>{ url }</Link> : <span>{url}</span>;
       },
       isPadded: true
     },

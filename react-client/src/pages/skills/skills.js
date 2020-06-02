@@ -82,9 +82,7 @@ class SkillsPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({url}) => {
-        return (<div>
-          {url}
-        </div>);
+        return (url ? <Link to={url}>{ url }</Link> : <span>{url}</span>);
       },
     },
     {
