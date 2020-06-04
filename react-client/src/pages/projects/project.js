@@ -32,6 +32,7 @@ import {getEmployees} from "../../actions/user";
 import { Link } from 'react-router-dom';
 import { groupBy, linkify } from '../../service/utils';
 import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
+import { Attachment } from '../../components/projectCommon/attachment';
 
 class ProjectTeamPage extends Component {
 
@@ -340,12 +341,12 @@ class ProjectTeamPage extends Component {
           </div>
           {
             files ?
-              <DetailsList
-                items={group ? files.filter(({group: {id}}) => id === group) : files}
-                columns={this._files_columns}
-                selectionMode={SelectionMode.none}
-                layoutMode={DetailsListLayoutMode.justified}
-              /> :
+              <div className="attachments-container">
+                { (group ? files.filter(({group: {id}}) => id === group) : files).map(file => (
+                  <Attachment key={file.id} file={file} onDeleteFile={(file) => this._openDeleteDialog(file)}/>
+                )) }
+              </div>
+               :
               <Loader title="Loading project team..."/>
           }
         </Dropzone> }
