@@ -128,7 +128,7 @@ class ProfilePage extends Component {
                 <Icon iconName="Contact" style={{
                   fontSize: 1.5 + 'rem',
                   margin: 0.5 + 'rem'
-                }}/>{ !user.isActive && '(Deactivated) ' }{user.firstName + ' ' + user.lastName}
+                }}/>{ !user.isActive && user.isStaff && '(Deactivated) ' }{user.firstName + ' ' + user.lastName}
               </span>
                     {(isStaff || user.id === currentUser.id) &&
                     <div>

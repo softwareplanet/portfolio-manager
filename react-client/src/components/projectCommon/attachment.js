@@ -152,6 +152,15 @@ export const Attachment = ({ file, onDeleteFile }) => {
         </div>
         <Icon iconName="delete" className="attachment-delete" onClick={() => onDeleteFile(file)}/>
       </div>
+      {
+       file.comment && <div className="attachment-footer">
+          <div>
+            <div className="attachment-footer-text">
+              { file.comment }
+            </div>
+          </div>
+        </div>
+      }
     </div>
   );
 };
