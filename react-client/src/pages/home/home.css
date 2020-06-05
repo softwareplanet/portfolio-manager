@@ -605,3 +605,14 @@ a {
       text-overflow: ellipsis;
       overflow: hidden;
       display: block; }
+
+.project-logo {
+  border: 1px solid lightslategrey;
+  border-radius: 20%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .project-logo img {
+    height: 100%;
+    width: 100%; }
