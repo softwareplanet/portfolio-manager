@@ -16,6 +16,7 @@ import {createProject, editProject} from "../../actions/projects";
 import {NumberTextField} from "../common/numberTextField";
 import {formatDate} from "../../service/utils";
 import {ErrorLabel} from "..";
+import axios from 'axios';
 
 class CreateProject extends Component {
 
@@ -27,6 +28,7 @@ class CreateProject extends Component {
     durationMonths: '',
     isFinished: false,
     image: '',
+    localImage: '',
   };
 
   state = {...this.initialState};
@@ -41,10 +43,24 @@ class CreateProject extends Component {
     if (!nextProps.project) this.setState({...this.initialState});
   }
 
+  handleLogoChange(image) {
+    if (!(image instanceof Blob)) return;
+    let reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = evt => {
+      let img = new Image();
+      img.onload = () => {
+        this.setState({ localImage: img.src, image })
+      };
+      img.onerror = () => {};
+      img.src = evt.target.result;
+    }
+  }
+
   render() {
     const {opened, closeModal, loading, errors, createProject, project, editProject} = this.props;
-    const {name, url, description, durationMonths, startDate, isFinished, image} = this.state;
-
+    const {name, url, description, durationMonths, startDate, isFinished, image, localImage} = this.state;
+    const imagePreview = localImage ? localImage : image ? axios.defaults.baseURL + image : '/missing-logo.svg';
     const durationMonthsForSave = durationMonths === '' ? null : durationMonths;
 
     const numberTextField = isFinished ?
@@ -86,6 +102,19 @@ class CreateProject extends Component {
               image
             });
         }}>
+          <div className="project-modal-logo">
+            <div className="project-modal-logo-img-container">
+              <img src={imagePreview} alt="project-logo-img"/>  
+            </div>
+            <label htmlFor="project-logo-image" className={'upload-user-photo'}>
+              <Icon iconName={'Upload'} style={{marginRight: 4}}/>
+              Upload logo
+            </label>
+            <input type="file" id="project-logo-image" style={{display: 'none'}}
+                   onChange={(e) => this.handleLogoChange(e.target.files[0])}
+            />
+            <ErrorLabel title={(errors.image || []).join('\r\n')}/>
+          </div>
           <TextField
             label="Name:" value={name}
             onChange={(e) => this.setState({name: e.target.value})}
@@ -94,16 +123,6 @@ class CreateProject extends Component {
             placeholder="Project name..."
             required
           />
-          <div>
-            <ErrorLabel title={(errors.image || []).join('\r\n')}/>
-            <input type="file" id="project-logo" style={{display: 'block'}}
-                   onChange={(e) => this.setState({image: e.target.files[0]})}
-            />
-            <label htmlFor="project-logo" className={'upload-user-photo'}>
-              <Icon iconName={'Upload'} style={{marginRight: 4}}/>
-              Upload logo
-            </label>
-          </div>
           <TextField
             label="Description:" value={description}
             onChange={(e) => this.setState({description: e.target.value})}

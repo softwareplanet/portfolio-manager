@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './home.css';
-import {CreateProjectModal, CreateSchoolModal, CreateSkillModal, Header, NavBar, NoPermission} from "../../components";
+import {CreateSchoolModal, CreateSkillModal, Header, NavBar, NoPermission} from "../../components";
 import {Route, Switch} from "react-router-dom";
 import {
   EmployeeProjects,
@@ -36,7 +36,6 @@ class HomePage extends Component {
       <div className={'full-frame'}>
         <CreateSkillModal/>
         <CreateSchoolModal/>
-        <CreateProjectModal/>
         <Header/>
         <SPGLogo/>
         <div className={'flex'}>

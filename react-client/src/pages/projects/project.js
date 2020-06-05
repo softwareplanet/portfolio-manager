@@ -233,7 +233,7 @@ class ProjectTeamPage extends Component {
     }
   };
   render() {
-    const {project: {id, team, name, description, files, skills, url}, user} = this.props;
+    const {project: {id, team, name, description, files, skills, url, image}, user} = this.props;
     const {hideDialog, projectFileToDelete, group, groups, dropzoneActive, projectToEdit, attachmentModalOpened, files: filesToUpload} = this.state;
 
     return (
@@ -248,16 +248,25 @@ class ProjectTeamPage extends Component {
         />
         <CreateProjectModal project={projectToEdit}/>
         <AddTeamModal project={projectToEdit} employees={this.props.employees && this.props.employees.filter(e => team && !team.map(e => e.employeeId).includes(e.id))}/>
-        <span className={'page-title'}>
-          {'Project ' + (name ? name : '')}
-          { user && user.isStaff && <Icon
-            iconName={'Edit'}
-            style={this.styles.icon}
-            onClick={() => this.editProject(this.props.project)}
-          />}
-        </span>
+        <div className="project-head-container">
+          { image && <div className="project-page-logo">
+            <img src={(image ? axios.defaults.baseURL + image : '/missing-logo.svg')} alt="project-logo"/>
+          </div>}
+          <div>
+          <p className={'page-title'}>
+            {'Project ' + (name ? name : '')}
+            { user && user.isStaff && <Icon
+              iconName={'Edit'}
+              style={this.styles.icon}
+              onClick={() => this.editProject(this.props.project)}
+            />}
+          </p>
+            {id && <div className={'page-description'}>{this.renderSkills(skills)}</div>}
+          </div>
+        </div>
+
+
         {id && <p className={'page-description'} dangerouslySetInnerHTML={{ __html: description ? linkify(description) : <b>Project has no description!</b>}}/>}
-        {id && <div className={'page-description'}>{this.renderSkills(skills)}</div>}
         {id && <p className={'page-description'} dangerouslySetInnerHTML={{ __html: url ? 'Link: ' + linkify(url) : 'The project has no links added'}}/>}
         <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>
           Project Team

@@ -51,13 +51,13 @@ class ProjectsPage extends Component {
       key: 'image',
       name: 'Logo',
       fieldName: 'image',
-      minWidth: 90,
-      maxWidth: 90,
+      minWidth: 10,
+      maxWidth: 10,
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
       onRender: ({image}) => {
-        return <ProjectLogo url={image}/>
+        return <div className="project-table-logo"><ProjectLogo url={image}/></div>
       },
     },
     {

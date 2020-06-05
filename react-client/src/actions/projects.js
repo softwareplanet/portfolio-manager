@@ -214,11 +214,11 @@ export const deleteProjectFile = (projectFileId) => {
 
 export const getFormDataFromProject = (project) => {
   const formData = new FormData();
-  formData.append('image', project.image);
+  project.image instanceof Blob && formData.append('image', project.image);
   formData.append('name', project.name);
   formData.append('url', project.url);
   formData.append('description', project.description);
-  formData.append('durationMonths', project.durationMonths);
+  formData.append('durationMonths', project.durationMonths ? project.durationMonths : 0);
   formData.append('isFinished', project.isFinished);
   formData.append('startDate', project.startDate);
   return formData;

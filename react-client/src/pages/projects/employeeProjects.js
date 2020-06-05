@@ -1,6 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {AddButton, Loader, PageTitle, PrivatePageRedirect, ProjectsForm, Tooltip} from "../../components";
+import {
+  AddButton,
+  CreateProjectModal,
+  Loader,
+  PageTitle,
+  PrivatePageRedirect,
+  ProjectsForm,
+  Tooltip,
+} from '../../components';
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserProject, getUserProjects} from "../../actions/userProjects";
 import {
@@ -53,13 +61,13 @@ class ProjectsPage extends Component {
       key: 'image',
       name: 'Logo',
       fieldName: 'image',
-      minWidth: 90,
-      maxWidth: 90,
+      minWidth: 10,
+      maxWidth: 10,
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({project: {image}}) => {
-        return <ProjectLogo url={image}/>
+      onRender: ({image}) => {
+        return <div className="project-table-logo"><ProjectLogo url={image}/></div>
       },
     },
     {
@@ -218,6 +226,7 @@ class ProjectsPage extends Component {
     return (
       <div className={'page-container'} key={'employeeProjects'}>
         <PrivatePageRedirect employeeId={this.props.employeeId}/>
+        <CreateProjectModal/>
         <PageTitle title="Projects"/>
         <div className={'add-button'}>
           <AddButton disabled={showPanel} title="Add a Project" onClick={this._setShowPanel(true)}/>
