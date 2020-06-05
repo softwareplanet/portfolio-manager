@@ -32,7 +32,9 @@ export class ChoiceEmployeesPicker extends React.Component {
           text: `${e.firstName} ${e.lastName}`,
           secondaryText: e.position, id: e.id,
           user: e,
-          imageUrl: axios.defaults.baseURL + e.image
+          imageUrl: axios.defaults.baseURL + e.image,
+          firstName: e.firstName,
+          lastName: e.lastName
         };
       });
       this.setState({peopleList: people});
@@ -100,7 +102,6 @@ export class ChoiceEmployeesPicker extends React.Component {
       let filteredPersons = this._filterPersonsByText(filterText);
       filteredPersons = this._removeDuplicates(filteredPersons, currentPersons);
       filteredPersons = filteredPersons.slice(0, 5);
-      console.log(this.state);
       return filteredPersons;
     } else {
       return [];
@@ -122,7 +123,9 @@ export class ChoiceEmployeesPicker extends React.Component {
 
 
   _filterPersonsByText(filterText) {
-    return this.state.peopleList.filter(item => this._doesTextStartWith(item.text, filterText));
+    return this.state.peopleList.filter(item =>{
+      return this._doesTextStartWith(item.user.firstName, filterText) || this._doesTextStartWith(item.user.lastName, filterText)
+    });
   }
 
   _doesTextStartWith(text, filterText) {

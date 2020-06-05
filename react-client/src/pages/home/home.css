@@ -75,7 +75,9 @@ ul.pagination {
   flex: 1 1 0;
   margin-top: 3rem; }
   .flex .table-link {
-    cursor: pointer; }
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none; }
     .flex .table-link:hover {
       font-weight: 500;
       text-decoration: underline; }
@@ -230,7 +232,7 @@ ul.pagination {
       margin-bottom: 1rem;
       cursor: pointer; }
       .flex .profile-container .table-title:hover {
-        color: rgba(0, 0, 0, 0.85); }
+        color: #0198ff; }
     .flex .profile-container .profile-photo-container {
       display: flex;
       flex-direction: column;
@@ -252,6 +254,10 @@ ul.pagination {
         display: flex;
         align-items: center;
         justify-content: center; }
+      .flex .profile-container .profile-photo-container .navigation-container {
+        margin-top: 0.75rem; }
+        .flex .profile-container .profile-photo-container .navigation-container Icon {
+          margin: 0 0.5rem 0 0.5rem; }
     .flex .profile-container .profile-info-line {
       margin: 0.5rem 0;
       display: flex;
@@ -456,6 +462,7 @@ a {
     padding: 0 1rem; }
 
 .dropzone-active {
+  cursor: pointer;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -494,6 +501,9 @@ a {
     background-size: contain;
     line-height: 1.2cm; }
 
+.skills-picker.hide-skills-picker .ms-BasePicker {
+  display: none; }
+
 @media print {
   .spg-logo {
     display: flex !important; }
@@ -519,13 +529,79 @@ a {
   .nav-bar {
     display: none; } }
 
-.project-logo {
-  border: 1px solid lightslategrey;
-  border-radius: 20%;
-  overflow: hidden;
+.table-project-description {
   display: flex;
-  align-items: center;
-  justify-content: center; }
-  .project-logo img {
-    height: 100%;
-    width: 100%; }
+  flex-direction: column; }
+  .table-project-description i {
+    font-size: 1rem;
+    cursor: pointer;
+    color: #0178d4;
+    align-self: flex-end; }
+
+.attachments-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; }
+  .attachments-container .attachment {
+    width: 15rem;
+    height: 15rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px solid #f4f4f4;
+    border-radius: 3px;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1); }
+    .attachments-container .attachment-image {
+      width: 100%;
+      height: 12rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid #f4f4f4; }
+      .attachments-container .attachment-image-img {
+        max-width: 100%;
+        max-height: 100%; }
+      .attachments-container .attachment-image svg {
+        height: 5rem;
+        width: 5rem;
+        font-size: 3rem;
+        color: #767676; }
+    .attachments-container .attachment-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 13rem;
+      height: 3rem; }
+      .attachments-container .attachment-footer-text {
+        width: 11rem;
+        font-size: 0.85rem;
+        display: flex;
+        flex-direction: column; }
+        .attachments-container .attachment-footer-text a {
+          font-size: 1rem;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          display: block; }
+    .attachments-container .attachment-delete {
+      cursor: pointer; }
+      .attachments-container .attachment-delete:hover {
+        color: red; }
+
+.attachment-modal-container {
+  width: 40rem; }
+  .attachment-modal-container .file-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    justify-content: space-between; }
+    .attachment-modal-container .file-row .file-name {
+      width: 20rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: block; }

@@ -4,94 +4,28 @@ import Dropzone from "react-dropzone";
 import {DropZone, Loader} from "..";
 import {
   DefaultButton,
-  DetailsList,
-  DetailsListLayoutMode,
   Dialog,
   DialogFooter,
   DialogType,
   Dropdown,
-  IconButton,
   PrimaryButton,
-  SelectionMode,
-  TextField
 } from "office-ui-fabric-react";
 import axios from "axios";
 import {createEmployeeFile, deleteEmployeeFile, getEmployeeFiles} from "../../actions/user";
+import { Attachment } from './attachment';
+import { UploadAttachmentModal } from '../forms/uploadAttachmentForm';
 
 class EmployeeFilesComponent extends Component {
 
   state = {
-    comment: '',
     hideDialog: true,
     group: 0,
     groups: [{key: 0, text: 'All groups'}],
     dropzoneActive: false,
-    files: []
+    files: [],
+    attachmentModalOpened: false,
   };
 
-  _files_columns = [
-    {
-      key: 'fileName',
-      name: 'Name',
-      fieldName: 'fileName',
-      minWidth: 110,
-      maxWidth: 540,
-      isRowHeader: true,
-      isResizable: true,
-      isPadded: true,
-      onRender: ({file}) => {
-        return <a href={axios.defaults.baseURL + file} download target="_blank">{file.split('/').slice(-1)[0]}</a>;
-      },
-    },
-    {
-      key: 'comment',
-      name: 'Comment',
-      fieldName: 'comment',
-      minWidth: 400,
-      maxWidth: 700,
-      isPadded: true,
-      onRender: ({comment}) => {
-        return <span>{comment}</span>;
-      },
-    },
-    {
-      key: 'group',
-      name: 'Group',
-      fieldName: 'group',
-      minWidth: 70,
-      maxWidth: 100,
-      isPadded: true,
-      onRender: ({group: {name}}) => {
-        return <span>{name}</span>;
-      },
-    },
-    {
-      key: 'actions',
-      name: 'Actions',
-      minWidth: 50,
-      maxWidth: 50,
-      onRender: (item) => {
-        return (<IconButton
-          style={{height: 'auto'}}
-          allowDisabledFocus={true}
-          menuIcon={{iconName: 'MoreVertical'}}
-          menuProps={{
-            items: [
-              {
-                key: 'delete',
-                text: 'Delete',
-                iconProps: {iconName: 'Trash', style: {color: '#000'}},
-                onClick: () => this._openDeleteDialog(item)
-              }
-            ],
-            directionalHintFixed: true
-          }
-          }
-          split={false}
-        />);
-      },
-      isPadded: true
-    }];
 
   componentWillReceiveProps(nextProps) {
     const {user, getEmployeeFiles, employeeId} = this.props;
@@ -135,25 +69,25 @@ class EmployeeFilesComponent extends Component {
     this.mounted = false;
   }
 
-  uploadFiles = () => {
-    const {group, comment, files} = this.state;
-    files.map(file => this.props.addEmployeeFile(this.props.employeeId, {
-      file,
-      group: group ? group.toString() : '1',
-      comment
-    }));
-    this.setState({comment: '', files: []});
-  };
-
   onDrop = (files) => {
-    this.setState({dropzoneActive: false, files});
+    this.setState({dropzoneActive: false, files, attachmentModalOpened: true});
   };
 
   render() {
     const {employeeFiles: files} = this.props;
-    const {hideDialog, employeeFileToDelete, group, groups, dropzoneActive, comment, files: localFiles} = this.state;
+    const {hideDialog, employeeFileToDelete, group, groups, dropzoneActive, files: localFiles, attachmentModalOpened} = this.state;
+
     return (
       <div>
+        <UploadAttachmentModal
+          opened={attachmentModalOpened}
+          closeModal={() => this.setState({ attachmentModalOpened: false, files: [] })}
+          groups={groups}
+          group={group}
+          files={localFiles}
+          enableComments
+          uploadAttachment={(attachment) => this.props.addEmployeeFile(this.props.employeeId, attachment)}
+        />
         <Dropzone
           disableClick
           style={{position: 'relative'}}
@@ -163,22 +97,16 @@ class EmployeeFilesComponent extends Component {
         >
           {dropzoneActive && <DropZone/>}
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-            <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Attached files</h3>
-            <div className="employee-attachments-comment">
-              <TextField
-                value={comment}
-                onChange={(e) => this.setState({comment: e.target.value})}
-                placeholder="Comment to attachments..."
+            <div  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem', marginRight: 1 + 'rem'}}>Attached files</h3>
+              <PrimaryButton
+                iconProps={{iconName: 'Save'}}
+                onClick={() => {
+                  this.setState({ attachmentModalOpened: true })
+                }}
+                text="Upload"
               />
             </div>
-            <PrimaryButton
-              iconProps={{iconName: 'Save'}}
-              onClick={() => {
-                this.uploadFiles();
-              }}
-              disabled={!localFiles.length}
-              text="Upload"
-            />
             <div style={{width: 10 + 'rem', marginLeft: '1rem'}}>
               <Dropdown
                 selectedKey={group}
@@ -194,12 +122,12 @@ class EmployeeFilesComponent extends Component {
           </div>)}
           {
             files ?
-              <DetailsList
-                items={group ? files.filter(({group: {id}}) => id === group) : files}
-                columns={this._files_columns}
-                selectionMode={SelectionMode.none}
-                layoutMode={DetailsListLayoutMode.justified}
-              /> :
+              <div className="attachments-container">
+                { (group ? files.filter(({group: {id}}) => id === group) : files || []).map(file => (
+                  <Attachment key={file.id} file={file} onDeleteFile={(file) => this._openDeleteDialog(file)}/>
+                )) }
+              </div>
+                  :
               <Loader title="Loading employee attached files..."/>
           }
         </Dropzone>

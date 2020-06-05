@@ -10,6 +10,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     careerStartDate = serializers.CharField(source='career_start_date', required=False)
     password = serializers.CharField(write_only=True, required=True)
     isStaff = serializers.BooleanField(source='is_staff', required=False)
+    isActive = serializers.BooleanField(source='is_active', read_only=False)
     skills = serializers.SerializerMethodField(read_only=True)
     projects = serializers.SerializerMethodField()
 
@@ -51,7 +52,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         model = Employee
         fields = (
             'id', 'username', 'email', 'password', 'firstName', 'lastName', 'dob',
-            'isStaff', 'image', 'description', 'skills', 'projects', 'careerStartDate', 'position'
+            'isStaff', 'image', 'description', 'skills', 'projects', 'careerStartDate', 'position', 'isActive'
         )
 
 
@@ -66,7 +67,7 @@ class EmployeeForUserSerializer(EmployeeSerializer):
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-    durationMonths = serializers.IntegerField(source='duration_months')
+    durationMonths = serializers.IntegerField(source='duration_months', allow_null=True)
     startDate = serializers.DateField(source='start_date')
     isFinished = serializers.BooleanField(source='is_finished')
     skills = serializers.SerializerMethodField()
@@ -143,7 +144,7 @@ class EmployeeSkillSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EmployeeProjectSerializer(serializers.ModelSerializer):
-    durationMonths = serializers.IntegerField(source='duration_months')
+    durationMonths = serializers.IntegerField(source='duration_months', allow_null=True)
     startDate = serializers.DateField(source='start_date')
     project = ProjectSerializer(read_only=True, source='project_id')
     skills = SkillSerializer(many=True, read_only=True)
@@ -202,6 +203,7 @@ class EmployeeOnProjectSerializer(EmployeeProjectSerializer):
     employeeName = serializers.SerializerMethodField(method_name='get_employee_name')
     employeeId = serializers.SerializerMethodField(method_name='get_employee_id')
     image = serializers.SerializerMethodField()
+    isFinished = serializers.BooleanField(source='is_finished')
 
     @staticmethod
     def get_image(obj):
@@ -219,7 +221,7 @@ class EmployeeOnProjectSerializer(EmployeeProjectSerializer):
         return obj.employee_id.id
 
     class Meta(EmployeeProjectSerializer.Meta):
-        fields = ('id', 'startDate', 'durationMonths', 'skills', 'description', 'employeeName', 'employeeId', 'image')
+        fields = ('id', 'startDate', 'durationMonths', 'skills', 'description', 'employeeName', 'employeeId', 'image', 'isFinished')
 
 
 class FilesGroupSerializer(serializers.HyperlinkedModelSerializer):

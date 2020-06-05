@@ -5,7 +5,6 @@ import {
   CreateProjectModal,
   DropZone,
   Loader,
-  PrivatePageRedirect,
   Tooltip,
 } from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
@@ -19,11 +18,22 @@ import {
   PrimaryButton,
   SelectionMode
 } from "office-ui-fabric-react";
-import {createProjectFile, deleteProjectFile, getProject, getProjects} from "../../actions/projects";
+import {
+  createProjectFile,
+  deleteProjectFile,
+  getProject,
+  getProjects,
+  setProject,
+} from '../../actions/projects';
 import axios from "axios";
 import {setProjectModal, setTeamModal} from "../../actions/modals";
 import {AddTeamModal} from "../../components/forms/addTeamModal";
 import {getEmployees} from "../../actions/user";
+import { Link } from 'react-router-dom';
+import { groupBy, linkify } from '../../service/utils';
+import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
+import { Attachment } from '../../components/projectCommon/attachment';
+import { UploadAttachmentModal } from '../../components/forms/uploadAttachmentForm';
 
 class ProjectTeamPage extends Component {
 
@@ -33,6 +43,8 @@ class ProjectTeamPage extends Component {
     groups: [{key: 0, text: 'All groups'}],
     dropzoneActive: false,
     projectToEdit: null,
+    attachmentModalOpened: false,
+    files: [],
   };
 
   _team_columns = [
@@ -46,17 +58,20 @@ class ProjectTeamPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({employeeName, employeeId}) => {
-        return <span
-          onClick={() => this._openEmployeeProfile(employeeId)}
-          className="table-link"
-        >{employeeName}</span>;
+        const { isStaff } = this.props.user || {};
+        return isStaff
+         ? <Link
+            to={`/home/${employeeId}/profile`}
+            className="table-link"
+          >{employeeName}</Link>
+         : <span>{employeeName}</span>;
       },
     },
     {
       key: 'startDate',
       name: 'Start Date',
       fieldName: 'startDate',
-      minWidth: 70,
+      minWidth: 100,
       maxWidth: 100,
       isResizable: true,
       isPadded: true,
@@ -68,11 +83,17 @@ class ProjectTeamPage extends Component {
       key: 'duration',
       name: 'Duration',
       fieldName: 'durationMonths',
-      minWidth: 30,
-      maxWidth: 55,
+      minWidth: 65,
+      maxWidth: 65,
       data: 'string',
-      onRender: ({durationMonths}) => {
-        return <span>{durationMonths + ` Month${durationMonths > 1 ? 's' : ''}`}</span>;
+      onRender: ({durationMonths, isFinished, startDate}) => {
+        let durations;
+        if (isFinished) {
+          durations = durationMonths;
+        } else {
+          durations = Math.floor((new Date() - new Date(startDate))/1000/60/60/24/30)
+        }
+        return <span>{durations + ` Month${durations > 1 ? 's' : ''}`}</span>;
       },
       isPadded: true
     },
@@ -85,7 +106,7 @@ class ProjectTeamPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({description}) => {
-        return <Tooltip text={description}>{description}</Tooltip>;
+        return (<TableProjectDescription description={description}/>);
       },
     },
     {
@@ -108,7 +129,8 @@ class ProjectTeamPage extends Component {
       minWidth: 50,
       maxWidth: 50,
       onRender: (item) => {
-        return (<IconButton
+        const { isStaff } = this.props.user || {};
+        return isStaff ? (<IconButton
           style={{height: 'auto'}}
           allowDisabledFocus={true}
           menuIcon={{iconName: 'MoreVertical'}}
@@ -131,64 +153,12 @@ class ProjectTeamPage extends Component {
           }
           }
           split={false}
-        />);
+        />)
+      : <div/>;
       },
       isPadded: true
     }
   ];
-
-  _files_columns = [
-    {
-      key: 'fileName',
-      name: 'Name',
-      fieldName: 'fileName',
-      minWidth: 110,
-      maxWidth: 1040,
-      isRowHeader: true,
-      isResizable: true,
-      isPadded: true,
-      onRender: ({file}) => {
-        return <a href={axios.defaults.baseURL + file} download target="_blank">{file.split('/').slice(-1)[0]}</a>;
-      },
-    },
-    {
-      key: 'group',
-      name: 'Group',
-      fieldName: 'group',
-      minWidth: 70,
-      maxWidth: 100,
-      isPadded: true,
-      onRender: ({group: {name}}) => {
-        return <span>{name}</span>;
-      },
-    },
-    {
-      key: 'actions',
-      name: 'Actions',
-      minWidth: 50,
-      maxWidth: 50,
-      onRender: (item) => {
-        return (<IconButton
-          style={{height: 'auto'}}
-          allowDisabledFocus={true}
-          menuIcon={{iconName: 'MoreVertical'}}
-          menuProps={{
-            items: [
-              {
-                key: 'delete',
-                text: 'Delete',
-                iconProps: {iconName: 'Trash', style: {color: '#000'}},
-                onClick: () => this._openDeleteDialog(item)
-              }
-            ],
-            directionalHintFixed: true
-          }
-          }
-          split={false}
-        />);
-      },
-      isPadded: true
-    }];
 
   editProject(project) {
     this.props.createProject();
@@ -198,6 +168,10 @@ class ProjectTeamPage extends Component {
   addTeammates(project) {
     this.props.addTeam();
     this.setState({projectToEdit: project});
+  }
+
+  componentWillMount() {
+    this.props.setProject(null);
   }
 
   componentDidMount() {
@@ -248,9 +222,7 @@ class ProjectTeamPage extends Component {
   }
 
   onDrop = (files) => {
-    const {group} = this.state;
-    this.setState({dropzoneActive: false});
-    files.map(file => this.props.addProjectFile(this.props.projectId, {file, group: group ? group.toString() : '1'}));
+    this.setState({dropzoneActive: false, files, attachmentModalOpened: true});
   };
   styles = {
     icon: {
@@ -261,29 +233,39 @@ class ProjectTeamPage extends Component {
     }
   };
   render() {
-    const {project: {team, name, description, files, skills}} = this.props;
-    const {hideDialog, projectFileToDelete, group, groups, dropzoneActive, projectToEdit} = this.state;
+    const {project: {id, team, name, description, files, skills, url}, user} = this.props;
+    const {hideDialog, projectFileToDelete, group, groups, dropzoneActive, projectToEdit, attachmentModalOpened, files: filesToUpload} = this.state;
+
     return (
       <div className={'page-container'} key={'employeeProjects'}>
-        <PrivatePageRedirect/>
+        <UploadAttachmentModal
+          opened={attachmentModalOpened}
+          closeModal={() => this.setState({ attachmentModalOpened: false, files: [] })}
+          groups={groups}
+          group={group}
+          files={filesToUpload}
+          uploadAttachment={(attachment) => this.props.addProjectFile(this.props.projectId, attachment)}
+        />
         <CreateProjectModal project={projectToEdit}/>
         <AddTeamModal project={projectToEdit} employees={this.props.employees && this.props.employees.filter(e => team && !team.map(e => e.employeeId).includes(e.id))}/>
-        <span
-          className={'page-title'}>{'Project ' + (name ? name : '')}
-          <Icon
-          iconName={'Edit'}
-          style={this.styles.icon}
-          onClick={() => this.editProject(this.props.project)}
-        /></span>
-        <p className={'page-description'}>{description ? description : <b>Project has no description!</b>}</p>
-        <p className={'page-description'}>Skills: {skills && skills.map(({name}) => name).join(', ')}</p>
+        <span className={'page-title'}>
+          {'Project ' + (name ? name : '')}
+          { user && user.isStaff && <Icon
+            iconName={'Edit'}
+            style={this.styles.icon}
+            onClick={() => this.editProject(this.props.project)}
+          />}
+        </span>
+        {id && <p className={'page-description'} dangerouslySetInnerHTML={{ __html: description ? linkify(description) : <b>Project has no description!</b>}}/>}
+        {id && <div className={'page-description'}>{this.renderSkills(skills)}</div>}
+        {id && <p className={'page-description'} dangerouslySetInnerHTML={{ __html: url ? 'Link: ' + linkify(url) : 'The project has no links added'}}/>}
         <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>
           Project Team
-          <Icon
+          {user && user.isStaff && <Icon
             iconName={'Add'}
             style={{...this.styles.icon, fontSize: 1 + 'rem'}}
             onClick={() => this.addTeammates(this.props.project)}
-          />
+          /> }
         </h3>
         {
           team ?
@@ -295,7 +277,7 @@ class ProjectTeamPage extends Component {
             /> :
             <Loader title="Loading project team..."/>
         }
-        <Dropzone
+        {user && user.isStaff &&  <Dropzone
           disableClick
           style={{position: 'relative'}}
           onDrop={this.onDrop}
@@ -304,7 +286,17 @@ class ProjectTeamPage extends Component {
         >
           {dropzoneActive && <DropZone/>}
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-            <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem'}}>Project Files</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{fontWeight: 200, marginLeft: 1 + 'rem', marginRight: 1 + 'rem'}}>Project Files</h3>
+              <PrimaryButton
+                iconProps={{iconName: 'Save'}}
+                onClick={() => {
+                  this.setState({ attachmentModalOpened: true })
+                }}
+                text="Upload"
+              />
+            </div>
+
             <div style={{width: 10 + 'rem'}}>
               <Dropdown
                 selectedKey={group}
@@ -316,15 +308,15 @@ class ProjectTeamPage extends Component {
           </div>
           {
             files ?
-              <DetailsList
-                items={group ? files.filter(({group: {id}}) => id === group) : files}
-                columns={this._files_columns}
-                selectionMode={SelectionMode.none}
-                layoutMode={DetailsListLayoutMode.justified}
-              /> :
+              <div className="attachments-container">
+                { (group ? files.filter(({group: {id}}) => id === group) : files).map(file => (
+                  <Attachment key={file.id} file={file} onDeleteFile={(file) => this._openDeleteDialog(file)}/>
+                )) }
+              </div>
+               :
               <Loader title="Loading project team..."/>
           }
-        </Dropzone>
+        </Dropzone> }
         <Dialog
           hidden={hideDialog}
           onDismiss={this._closeDialog}
@@ -350,6 +342,19 @@ class ProjectTeamPage extends Component {
       </div>
     );
   }
+
+  renderSkills = (skills = []) => {
+    const groupedSkills = groupBy(skills, ({category}) => category && category.name);
+    return groupedSkills.sort((a, b) => a[1][0].category.id - b[1][0].category.id).map(([category, skills], index) => {
+      const skillNames = skills.map((skill) => skill.name);
+      return (
+        <div key={'category' + index}>
+          <span style={{ fontWeight: 400 }}>{category}: </span>
+          <span>{skillNames && (skillNames.length ? skillNames.join(', ') : 'No skills yet...')}</span>
+        </div>
+      )
+    })
+  };
 
   _openDeleteDialog(projectFile) {
     this.setState({projectFileToDelete: projectFile, hideDialog: false})
@@ -379,6 +384,7 @@ const mapDispatchToProps = (dispatch) => {
     addProjectFile: (projectId, data) => dispatch(createProjectFile(projectId, data)),
     deleteProjectFile: (projectId) => dispatch(deleteProjectFile(projectId)),
     getEmployees: () => dispatch(getEmployees()),
+    setProject: (project) => dispatch(setProject(project)),
   };
 };
 

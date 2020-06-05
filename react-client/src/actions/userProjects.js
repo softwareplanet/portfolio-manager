@@ -136,6 +136,9 @@ export const createUserProject = (userId, project) => {
   return (dispatch) => {
     dispatch(newUserProjectLoading(true));
     dispatch(createUserProjectErrors({}));
+    if (!project.durationMonths) {
+      project.durationMonths = null;
+    }
     axios.post(`/api/v1/employee/${userId}/project`, project)
       .then(res => {
 
@@ -157,6 +160,7 @@ export const createTeamMembers = (users, project) => {
   return (dispatch) => {
     dispatch(createTeamMembersLoading(true));
     dispatch(createTeamMemberErrors({}));
+    project.isFinished = false;
     Promise.all(
       users.map(
         user => axios.post(`/api/v1/employee/${user.id}/project`, project)

@@ -17,6 +17,7 @@ import {disableEmployee, getEmployees} from "../../actions/user";
 import axios from "axios";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
+import { Link } from 'react-router-dom';
 
 class EmployeesPage extends Component {
 
@@ -54,9 +55,9 @@ class EmployeesPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({firstName, lastName, image, id}) => {
-        return <span
+        return <Link
           style={{display: 'flex'}}
-          onClick={() => this._openEmployeeProfile(id)}
+          to={`./${id}/profile`}
           className="table-link"
         >
           <div className={`employee-image ${image ? '' : 'missing-img'}`}
@@ -65,7 +66,7 @@ class EmployeesPage extends Component {
                  marginRight: 1 + 'rem'
                }}
           />
-          {`${firstName} ${lastName}`}</span>;
+          {`${firstName} ${lastName}`}</Link>;
       },
     },
     {
@@ -231,7 +232,7 @@ class EmployeesPage extends Component {
           onDismiss={this._closeDialog}
           dialogContentProps={{
             type: DialogType.normal,
-            title: `Delete employee ${employeeToDelete && (employeeToDelete.firstName + ' ' + employeeToDelete.lastName)}`,
+            title: `Disable employee ${employeeToDelete && (employeeToDelete.firstName + ' ' + employeeToDelete.lastName)}`,
             subText:
               'Employee will be disabled, but can be enabled again.'
           }}
@@ -246,7 +247,7 @@ class EmployeesPage extends Component {
               iconProps={{iconName: 'Delete'}}
               onClick={() => {
                 this.deleteEmployee(employeeToDelete.id);
-              }} text="Delete"/>
+              }} text="Disable"/>
             <DefaultButton onClick={this._closeDialog} text="Cancel"/>
           </DialogFooter>
         </Dialog>

@@ -45,7 +45,7 @@ class CreateProject extends Component {
     const {opened, closeModal, loading, errors, createProject, project, editProject} = this.props;
     const {name, url, description, durationMonths, startDate, isFinished, image} = this.state;
 
-    const durationMonthsForSave = durationMonths === '' ? -1 : durationMonths;
+    const durationMonthsForSave = durationMonths === '' ? null : durationMonths;
 
     const numberTextField = isFinished ?
       <NumberTextField
@@ -130,6 +130,7 @@ class CreateProject extends Component {
             this.setState({isFinished: isChecked});
           }}/>
           {numberTextField}
+          <br/>
           <TextField
             label="Url:" value={url}
             onChange={(e) => this.setState({url: e.target.value})}

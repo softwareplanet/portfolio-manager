@@ -58,9 +58,9 @@ class Project(models.Model):
     start_date = models.DateField()
     name = models.CharField(max_length=30)
     description = models.TextField(blank=True)
-    duration_months = models.IntegerField(blank=True, null=True)
+    duration_months = models.PositiveIntegerField(blank=True, null=True)
     url = models.CharField(max_length=255, blank=True)
-    is_finished = models.BooleanField()
+    is_finished = models.BooleanField(default=True)
     image = models.ImageField(upload_to='project_image', null=True)
 
     class Meta:
@@ -69,7 +69,7 @@ class Project(models.Model):
 
 class EmployeeProject(models.Model):
     start_date = models.DateField()
-    duration_months = models.PositiveIntegerField()
+    duration_months = models.PositiveIntegerField(blank=True, null=True)
     employee_id = models.ForeignKey('Employee', on_delete=models.CASCADE)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     skills = models.ManyToManyField(Skill)
