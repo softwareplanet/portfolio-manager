@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {CreateProjectModal, Loader, Tooltip} from "../../components";
+import {CreateProjectModal, Loader} from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DefaultButton,
@@ -18,6 +18,8 @@ import {setProjectModal} from "../../actions/modals";
 import {getSkills} from "../../actions/skills";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
+import { Link } from 'react-router-dom';
+import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
 
 class ProjectsPage extends Component {
 
@@ -54,19 +56,17 @@ class ProjectsPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: (item) => {
-        return <span
+        return <Link
+          to={`/home/projects/${item.id}`}
           className="table-link"
-          onClick={() => {
-          this.props.setProject(item);
-          this.props.history.push(`/home/projects/${item.id}`)
-        }}>{item.name}</span>;
+        >{item.name}</Link>;
       },
     },
     {
       key: 'startDate',
       name: 'Start Date',
       fieldName: 'startDate',
-      minWidth: 70,
+      minWidth: 100,
       maxWidth: 100,
       isResizable: true,
       isPadded: true,
@@ -78,7 +78,7 @@ class ProjectsPage extends Component {
       key: 'duration',
       name: 'Duration',
       fieldName: 'durationMonths',
-      minWidth: 30,
+      minWidth: 65,
       maxWidth: 65,
       data: 'string',
       onRender: ({durationMonths}) => {
@@ -95,9 +95,7 @@ class ProjectsPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({description}) => {
-        return (
-          <Tooltip text={description}>{description}</Tooltip>
-        );
+        return (<TableProjectDescription description={description}/>);
       },
     },
     {
@@ -109,7 +107,7 @@ class ProjectsPage extends Component {
       isResizable: true,
       data: 'string',
       onRender: ({url}) => {
-        return <span>{url}</span>;
+        return url ? <Link to={url}>{ url }</Link> : <span>{url}</span>;
       },
       isPadded: true
     },

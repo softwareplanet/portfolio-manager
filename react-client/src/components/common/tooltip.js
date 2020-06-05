@@ -7,7 +7,7 @@ export const Tooltip = ({text, ...props}) => {
       <TooltipHost content={text}
                    calloutProps={{gapSpace: 0}}
                    closeDelay={100}
-                   directionalHint={DirectionalHint.leftBottomEdge}>
+                   directionalHint={props.directionalHint || DirectionalHint.leftBottomEdge}>
         {props.children}
       </TooltipHost>
     </span>

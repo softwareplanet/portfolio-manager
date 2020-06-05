@@ -297,7 +297,7 @@ class ListSearch(APIView):
                 many=True).data)
             result.extend(SearchProjectSerializer(
                 Project.objects.filter(
-                    Q(name__istartswith=data) | Q(description__icontains=(' ' + data))),
+                    Q(name__istartswith=data) | Q(description__icontains=(' ' + data)) | Q(name__icontains=(' ' + data))),
                 many=True).data)
             result.extend(SearchSkillSerializer(
                 Skill.objects.filter(

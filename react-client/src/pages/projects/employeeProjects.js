@@ -20,6 +20,8 @@ import {getSkills} from "../../actions/skills";
 import {getEmployee} from "../../actions/user";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
+import { Link } from 'react-router-dom';
+import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
 
 class ProjectsPage extends Component {
 
@@ -54,15 +56,18 @@ class ProjectsPage extends Component {
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({project}) => {
-        return <span>{project.name}</span>;
+      onRender: ({ project = {} }) => {
+        return <Link
+          to={`/home/projects/${project.id}`}
+          className="table-link"
+        >{project.name}</Link>;
       },
     },
     {
       key: 'startDate',
       name: 'Start Date',
       fieldName: 'startDate',
-      minWidth: 70,
+      minWidth: 100,
       maxWidth: 100,
       isResizable: true,
       isPadded: true,
@@ -74,8 +79,8 @@ class ProjectsPage extends Component {
       key: 'duration',
       name: 'Duration',
       fieldName: 'durationMonths',
-      minWidth: 30,
-      maxWidth: 55,
+      minWidth: 65,
+      maxWidth: 65,
       data: 'string',
       onRender: ({durationMonths}) => {
         return <span>{durationMonths + ` Month${durationMonths > 1 ? 's' : ''}`}</span>;
@@ -91,7 +96,7 @@ class ProjectsPage extends Component {
       isResizable: true,
       isPadded: true,
       onRender: ({description}) => {
-        return <Tooltip text={description}>{description}</Tooltip>;
+        return (<TableProjectDescription description={description}/>);
       },
     },
     {

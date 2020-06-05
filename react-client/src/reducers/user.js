@@ -47,7 +47,7 @@ export const employee = (state = {}, action) => {
   }
 };
 
-export const employeeFiles = (state = {}, action) => {
+export const employeeFiles = (state = [], action) => {
   switch (action.type) {
     case SET_EMPLOYEE_FILES:
       return action.payload;

@@ -186,7 +186,7 @@ export const createProjectFile = (projectId, data) => {
     let formData = new FormData();
     formData.append('file', data.file);
     formData.append('groupId', data.group);
-    axios.post(`/api/v1/project/${projectId}/files`, formData)
+    return axios.post(`/api/v1/project/${projectId}/files`, formData)
       .then(res => {
         dispatch(addProjectFile(res.data));
       })
