@@ -18,17 +18,6 @@ export class SearchResultsComponent extends Component {
     selectedKey: 'all'
   };
 
-  componentWillReceiveProps({url}, nextContext) {
-    if(url !== this.props.url) {
-      (url.match('employee') || url.match('profile')) ?
-        this.setState({selectedKey: 'employee'}) :
-        (url.match('project')) ?
-          this.setState({selectedKey: 'project'}) :
-          (url.match('skill')) ?
-            this.setState({selectedKey: 'skill'}) : this.setState({selectedKey: 'all'})
-    }
-  }
-
   drawItems = (items) => {
     if (items.length) {
       return items.map(item => {
