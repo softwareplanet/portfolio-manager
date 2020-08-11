@@ -20,6 +20,7 @@ import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
 import { Link } from 'react-router-dom';
 import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
+import {ProjectLogo} from "../../components/common/projectLogo";
 
 class ProjectsPage extends Component {
 
@@ -46,6 +47,19 @@ class ProjectsPage extends Component {
   }
 
   _columns = [
+    {
+      key: 'image',
+      name: 'Logo',
+      fieldName: 'image',
+      minWidth: 10,
+      maxWidth: 10,
+      isRowHeader: true,
+      isResizable: true,
+      isPadded: true,
+      onRender: ({image}) => {
+        return <div className="project-table-logo"><ProjectLogo url={image}/></div>
+      },
+    },
     {
       key: 'name',
       name: 'Project Name',

@@ -1,6 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {AddButton, Loader, PageTitle, PrivatePageRedirect, ProjectsForm, Tooltip} from "../../components";
+import {
+  AddButton,
+  CreateProjectModal,
+  Loader,
+  PageTitle,
+  PrivatePageRedirect,
+  ProjectsForm,
+  Tooltip,
+} from '../../components';
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
 import {deleteUserProject, getUserProjects} from "../../actions/userProjects";
 import {
@@ -20,6 +28,8 @@ import {getSkills} from "../../actions/skills";
 import {getEmployee} from "../../actions/user";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
+import {ProjectLogo} from "../../components/common/projectLogo";
+import {project} from "../../reducers/projects";
 import { Link } from 'react-router-dom';
 import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
 
@@ -47,6 +57,19 @@ class ProjectsPage extends Component {
   }
 
   _columns = [
+    {
+      key: 'image',
+      name: 'Logo',
+      fieldName: 'image',
+      minWidth: 10,
+      maxWidth: 10,
+      isRowHeader: true,
+      isResizable: true,
+      isPadded: true,
+      onRender: ({image}) => {
+        return <div className="project-table-logo"><ProjectLogo url={image}/></div>
+      },
+    },
     {
       key: 'projectName',
       name: 'Project Name',
@@ -203,6 +226,7 @@ class ProjectsPage extends Component {
     return (
       <div className={'page-container'} key={'employeeProjects'}>
         <PrivatePageRedirect employeeId={this.props.employeeId}/>
+        <CreateProjectModal/>
         <PageTitle title="Projects"/>
         <div className={'add-button'}>
           <AddButton disabled={showPanel} title="Add a Project" onClick={this._setShowPanel(true)}/>

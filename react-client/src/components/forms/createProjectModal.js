@@ -3,6 +3,7 @@ import {
   ActionButton,
   Checkbox,
   DatePicker,
+  Icon,
   Modal,
   PrimaryButton,
   Spinner,
@@ -14,6 +15,8 @@ import {setProjectModal} from "../../actions/modals";
 import {createProject, editProject} from "../../actions/projects";
 import {NumberTextField} from "../common/numberTextField";
 import {formatDate} from "../../service/utils";
+import {ErrorLabel} from "..";
+import axios from 'axios';
 
 class CreateProject extends Component {
 
@@ -23,7 +26,9 @@ class CreateProject extends Component {
     description: '',
     startDate: new Date(),
     durationMonths: '',
-    isFinished: false
+    isFinished: false,
+    image: '',
+    localImage: '',
   };
 
   state = {...this.initialState};
@@ -38,10 +43,24 @@ class CreateProject extends Component {
     if (!nextProps.project) this.setState({...this.initialState});
   }
 
+  handleLogoChange(image) {
+    if (!(image instanceof Blob)) return;
+    let reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = evt => {
+      let img = new Image();
+      img.onload = () => {
+        this.setState({ localImage: img.src, image })
+      };
+      img.onerror = () => {};
+      img.src = evt.target.result;
+    }
+  }
+
   render() {
     const {opened, closeModal, loading, errors, createProject, project, editProject} = this.props;
-    const {name, url, description, durationMonths, startDate, isFinished} = this.state;
-
+    const {name, url, description, durationMonths, startDate, isFinished, image, localImage} = this.state;
+    const imagePreview = localImage ? localImage : image ? axios.defaults.baseURL + image : '/missing-logo.svg';
     const durationMonthsForSave = durationMonths === '' ? null : durationMonths;
 
     const numberTextField = isFinished ?
@@ -69,7 +88,8 @@ class CreateProject extends Component {
               description,
               durationMonths: durationMonthsForSave,
               startDate: formatDate(startDate),
-              isFinished
+              isFinished,
+              image
             }) :
             editProject({
               name,
@@ -78,9 +98,23 @@ class CreateProject extends Component {
               durationMonths: durationMonthsForSave,
               startDate: formatDate(startDate),
               id: project.id,
-              isFinished
+              isFinished,
+              image
             });
         }}>
+          <div className="project-modal-logo">
+            <div className="project-modal-logo-img-container">
+              <img src={imagePreview} alt="project-logo-img"/>  
+            </div>
+            <label htmlFor="project-logo-image" className={'upload-user-photo'}>
+              <Icon iconName={'Upload'} style={{marginRight: 4}}/>
+              Upload logo
+            </label>
+            <input type="file" id="project-logo-image" style={{display: 'none'}}
+                   onChange={(e) => this.handleLogoChange(e.target.files[0])}
+            />
+            <ErrorLabel title={(errors.image || []).join('\r\n')}/>
+          </div>
           <TextField
             label="Name:" value={name}
             onChange={(e) => this.setState({name: e.target.value})}
@@ -112,7 +146,8 @@ class CreateProject extends Component {
           />
           <br/>
           <Checkbox label="Project is finished now?" defaultChecked={isFinished} onChange={(ev, isChecked) => {
-            this.setState({isFinished: isChecked})}}/>
+            this.setState({isFinished: isChecked});
+          }}/>
           {numberTextField}
           <br/>
           <TextField
@@ -139,6 +174,8 @@ class CreateProject extends Component {
       </Modal>
     );
   }
+
+
 }
 
 const mapStateToProps = ({projectModal, newProjectLoading, createProjectErrors}) => {
