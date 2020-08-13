@@ -50,10 +50,10 @@ class ProjectFormComponent extends Component {
   };
 
   editProject = () => {
-    const {user, editUserProject, userProject} = this.props;
+    const {user, editUserProject, userProject, afterSaveAction} = this.props;
     const project = this._generateProjectObject();
     if (project)
-      editUserProject(user.id, {...project, id: userProject.id});
+      editUserProject(userProject.employeeId || user.id, {...project, id: userProject.id}).then(() => afterSaveAction && afterSaveAction());
   };
 
   componentWillMount() {

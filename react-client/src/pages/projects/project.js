@@ -4,7 +4,7 @@ import Dropzone from 'react-dropzone';
 import {
   CreateProjectModal,
   DropZone,
-  Loader,
+  Loader, ProjectsForm,
   Tooltip,
 } from "../../components";
 import {DetailsList, DetailsListLayoutMode,} from 'office-ui-fabric-react/lib/DetailsList';
@@ -14,7 +14,7 @@ import {
   DialogFooter,
   DialogType,
   Dropdown, Icon,
-  IconButton,
+  IconButton, Panel, PanelType,
   PrimaryButton,
   SelectionMode
 } from "office-ui-fabric-react";
@@ -45,6 +45,8 @@ class ProjectTeamPage extends Component {
     projectToEdit: null,
     attachmentModalOpened: false,
     files: [],
+    showPanel: false,
+    userProjectToEdit: null,
   };
 
   _team_columns = [
@@ -137,6 +139,12 @@ class ProjectTeamPage extends Component {
           menuProps={{
             items: [
               {
+                key: 'edit',
+                text: 'Edit',
+                iconProps: {iconName: 'Edit', style: {color: '#000'}},
+                onClick: () => this.editUserProject(item)
+              },
+              {
                 key: 'open',
                 text: 'Open profile',
                 iconProps: {iconName: 'Contact', style: {color: '#000'}},
@@ -159,6 +167,10 @@ class ProjectTeamPage extends Component {
       isPadded: true
     }
   ];
+
+  editUserProject(project) {
+    this.setState({userProjectToEdit: { project: this.props.project, ...project }, showPanel: true})
+  }
 
   editProject(project) {
     this.props.createProject();
@@ -234,10 +246,27 @@ class ProjectTeamPage extends Component {
   };
   render() {
     const {project: {id, team, name, description, files, skills, url, image}, user} = this.props;
-    const {hideDialog, projectFileToDelete, group, groups, dropzoneActive, projectToEdit, attachmentModalOpened, files: filesToUpload} = this.state;
+    const {hideDialog, projectFileToDelete, group, groups, dropzoneActive, projectToEdit, attachmentModalOpened, files: filesToUpload, showPanel, userProjectToEdit} = this.state;
 
     return (
       <div className={'page-container'} key={'employeeProjects'}>
+        <Panel
+            isBlocking={false}
+            isOpen={showPanel}
+            onDismiss={this._setShowPanel(false)}
+            type={PanelType.smallFixedFar}
+            headerText={'Edit a project'}
+            hasCloseButton={false}
+        >
+          <ProjectsForm
+              onClose={this._setShowPanel(false)}
+              userProject={userProjectToEdit}
+              afterSaveAction={() => {
+                this.props.getProject(id);
+                this.setState({projectToEdit: null, showPanel: false});
+              }}
+          />
+        </Panel>
         <UploadAttachmentModal
           opened={attachmentModalOpened}
           closeModal={() => this.setState({ attachmentModalOpened: false, files: [] })}
@@ -377,6 +406,11 @@ class ProjectTeamPage extends Component {
   };
   _openEmployeeProjects = (employeeId) => {
     this.props.history.push(`/home/${employeeId}/projects`);
+  };
+  _setShowPanel = (showPanel) => {
+    return () => {
+      this.setState({projectToEdit: null, showPanel});
+    };
   };
 }
 

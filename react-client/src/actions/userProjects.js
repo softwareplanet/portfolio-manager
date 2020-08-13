@@ -113,7 +113,7 @@ export const editUserProject = (userId, project) => {
   return (dispatch) => {
     dispatch(newUserProjectLoading(true));
     dispatch(createUserProjectErrors({}));
-    axios.patch(`/api/v1/employee/${userId}/project/${project.id}`, project)
+    return axios.patch(`/api/v1/employee/${userId}/project/${project.id}`, project)
       .then(res => {
         dispatch(successfulEditUserProject(res.data.id));
 
