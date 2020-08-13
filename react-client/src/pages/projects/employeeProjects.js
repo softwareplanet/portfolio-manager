@@ -29,7 +29,6 @@ import {getEmployee} from "../../actions/user";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
 import {ProjectLogo} from "../../components/common/projectLogo";
-import {project} from "../../reducers/projects";
 import { Link } from 'react-router-dom';
 import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
 
@@ -66,7 +65,7 @@ class ProjectsPage extends Component {
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({image}) => {
+      onRender: ({project: { image }}) => {
         return <div className="project-table-logo"><ProjectLogo url={image}/></div>
       },
     },
