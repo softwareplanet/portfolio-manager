@@ -34,7 +34,7 @@ export class UploadAttachmentModal extends Component {
   });
 
   render() {
-    const { opened, closeModal, groups: [_, ...groups], enableComments } = this.props;
+    const { opened, closeModal, groups: [, ...groups], enableComments } = this.props;
     const { files, loading } = this.state;
 
     return (

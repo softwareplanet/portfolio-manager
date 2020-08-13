@@ -20,6 +20,7 @@ import {getSkills} from "../../actions/skills";
 import {getEmployee} from "../../actions/user";
 import ReactPaginate from 'react-paginate';
 import { Paginator } from '../../service/utils';
+import {Link} from "react-router-dom";
 
 class SkillsPage extends Component {
 
@@ -44,6 +45,16 @@ class SkillsPage extends Component {
     this._setSkillsToShow(selected)
   }
 
+  renderSkillName = ({skill}) => {
+    const { user } = this.props;
+    return user && user.isStaff
+        ? <Link
+            to={`/home/skills/${skill.id}`}
+            className="table-link"
+        >{skill.name}</Link>
+        : <span>{skill.name}</span>;
+  };
+
   _columns = [
     {
       key: 'skillName',
@@ -54,9 +65,7 @@ class SkillsPage extends Component {
       isRowHeader: true,
       isResizable: true,
       isPadded: true,
-      onRender: ({skill}) => {
-        return <span>{skill.name}</span>;
-      },
+      onRender: this.renderSkillName,
     },
     {
       key: 'level',

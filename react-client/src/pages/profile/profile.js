@@ -177,9 +177,18 @@ class ProfilePage extends Component {
             {(this._shouldShowElement()) &&
             <div className={'summary-tables-container'}>
               <SummaryTable items={userSkills}
-                            renderRow={({name, level, id}) =>
+                            renderRow={({name, level, id, skillId}) =>
                               <tr key={`skill${id}`}>
-                                <td width="200px">{name}</td>
+                                <td width="200px">
+                                  {
+                                    isStaff
+                                        ? <Link
+                                            to={`/home/skills/${skillId}`}
+                                            className="table-link"
+                                        >{name}</Link>
+                                        : name
+                                  }
+                                </td>
                                 <td className={'summary-table-second-col'}><Rating
                                   min={1}
                                   max={5}
@@ -192,9 +201,14 @@ class ProfilePage extends Component {
                             link={`/home/${user.id}/skills`}
               />
               <SummaryTable items={userProjects}
-                            renderRow={({name, duration, id}) =>
+                            renderRow={({name, duration, id, projectId}) =>
                               <tr key={`project${id}`}>
-                                <td width="200px" className={'summary-table-first-col'}>{name}</td>
+                                <td width="200px" className={'summary-table-first-col'}>
+                                  <Link
+                                    to={`/home/projects/${projectId}`}
+                                    className="table-link"
+                                  >{name}</Link>
+                                </td>
                                 <td
                                   className={'summary-table-second-col'}>{duration + ` Month${duration > 1 ? 's' : ''}`}</td>
                               </tr>}
@@ -246,15 +260,17 @@ const mapStateToProps = ({user, userSkills, userProjects, editUserPhotoLoading, 
     isStaff,
     photoLoading: editUserPhotoLoading,
     photoErrors: image,
-    userSkills: userSkills && userSkills.slice().sort((a, b) => a.level - b.level).slice(-numOfItemsToShowInSummaryTables).reverse().map(({skill: {name}, level, id}) => ({
+    userSkills: userSkills && userSkills.slice().sort((a, b) => a.level - b.level).slice(-numOfItemsToShowInSummaryTables).reverse().map(({skill: {name, id: skillId}, level, id}) => ({
       id,
       name,
-      level
+      level,
+      skillId,
     })),
-    userProjects: userProjects && userProjects.slice().sort((a, b) => a.durationMonths - b.durationMonths).slice(-numOfItemsToShowInSummaryTables).reverse().map(({project: {name}, durationMonths, id}) => ({
+    userProjects: userProjects && userProjects.slice().sort((a, b) => a.durationMonths - b.durationMonths).slice(-numOfItemsToShowInSummaryTables).reverse().map(({project: {name, id: projectId}, durationMonths, id}) => ({
       id,
       name,
-      duration: durationMonths
+      duration: durationMonths,
+      projectId,
     })),
   };
 };
