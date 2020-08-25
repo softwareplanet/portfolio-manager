@@ -34,6 +34,7 @@ import { groupBy, linkify } from '../../service/utils';
 import { TableProjectDescription } from '../../components/projectCommon/tableProjectDescription';
 import { Attachment } from '../../components/projectCommon/attachment';
 import { UploadAttachmentModal } from '../../components/forms/uploadAttachmentForm';
+import { getSkills } from '../../actions/skills';
 
 class ProjectTeamPage extends Component {
 
@@ -188,11 +189,13 @@ class ProjectTeamPage extends Component {
 
   componentDidMount() {
     this.mounted = true;
-    const {user, getProject, projectId, getProjects, getEmployees} = this.props;
+    const {user, getProject, projectId, getProjects, getEmployees, getSkills, skills} = this.props;
     if (user) {
       getProject(projectId);
       getProjects();
       getEmployees();
+      if (!skills)
+        getSkills();
     }
     this.getFileGroups();
   }
@@ -414,8 +417,8 @@ class ProjectTeamPage extends Component {
   };
 }
 
-const mapStateToProps = ({user, project, projectModal, employees}, {match: {params: {projectId}}}) => {
-  return {user, projectId, project, projectModal, employees};
+const mapStateToProps = ({user, project, projectModal, employees, skills}, {match: {params: {projectId}}}) => {
+  return {user, projectId, project, projectModal, employees, skills};
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -424,6 +427,7 @@ const mapDispatchToProps = (dispatch) => {
     addTeam: () => dispatch(setTeamModal(true)),
     getProject: (projectId) => dispatch(getProject(projectId)),
     getProjects: () => dispatch(getProjects()),
+    getSkills: () => dispatch(getSkills()),
     addProjectFile: (projectId, data) => dispatch(createProjectFile(projectId, data)),
     deleteProjectFile: (projectId) => dispatch(deleteProjectFile(projectId)),
     getEmployees: () => dispatch(getEmployees()),
