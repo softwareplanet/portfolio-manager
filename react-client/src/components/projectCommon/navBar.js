@@ -27,24 +27,29 @@ export const NavBar = ({history, sideBarOpened, isStaff, userId}) => {
 
   return (
     <aside className={`nav-bar ${sideBarOpened ? '' : 'none'}`}>
-      {isStaff && <Search/>}
-      <div className={'navbar-content'}>
-        {isStaff &&
-        <div>
+      <div>
+        {isStaff && <Search/>}
+        <div className={'navbar-content'}>
+          {isStaff &&
+          <div>
         <span className={'list-title'}>
           Management
         </span>
-          <ul className={'links-container'}>
-            {staffRoutes.map((route, index) => <Link key={index} history={history} {...route}/>)}
-          </ul>
-        </div>
-        }
-        <span className={'list-title'}>
+            <ul className={'links-container'}>
+              {staffRoutes.map((route, index) => <Link key={index} history={history} {...route}/>)}
+            </ul>
+          </div>
+          }
+          <span className={'list-title'}>
           Portfolio
         </span>
-        <ul className={'links-container'}>
-          {employeeRoutes.map((route, index) => <Link key={index} history={history} {...route}/>)}
-        </ul>
+          <ul className={'links-container'}>
+            {employeeRoutes.map((route, index) => <Link key={index} history={history} {...route}/>)}
+          </ul>
+        </div>
+      </div>
+      <div className="feedback-link">
+        <a href="https://forms.gle/2251DWoZMXftWP7d6" target="_blank">Leave a feedback</a>
       </div>
     </aside>
   );

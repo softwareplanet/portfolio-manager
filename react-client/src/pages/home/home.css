@@ -156,12 +156,17 @@ ul.pagination {
   .flex .nav-bar {
     flex: 1 2;
     width: 21rem;
-    height: 100%;
+    height: calc(100% - 4rem);
     padding: 0.5rem;
     border-right: 2px solid #f1f1f1;
     min-width: 21rem;
     position: fixed;
-    overflow-y: auto; }
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; }
+    .flex .nav-bar .feedback-link {
+      margin: 1rem 2.5rem; }
     .flex .nav-bar .navbar-content {
       margin: 1rem 2.5rem; }
     .flex .nav-bar .list-title {
@@ -303,6 +308,9 @@ ul.pagination {
     font-size: 2rem;
     font-weight: 200;
     margin-bottom: 2rem; }
+  .page-container .page-controls {
+    display: flex;
+    justify-content: space-between; }
 
 .filter-picker {
   font-size: 14px;
@@ -363,7 +371,7 @@ ul.pagination {
     margin-right: 1rem; }
 
 .none {
-  display: none; }
+  display: none !important; }
 
 .error-label {
   color: #a80000;
@@ -527,7 +535,7 @@ a {
       .content-container .page-container .profile-container {
         padding-top: 0 !important; }
   .nav-bar {
-    display: none; } }
+    display: none !important; } }
 
 .table-project-description {
   display: flex;

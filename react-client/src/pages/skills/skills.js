@@ -10,8 +10,8 @@ import {
   IconButton,
   PrimaryButton,
   SelectionMode,
-  Icon,
-} from "office-ui-fabric-react";
+  Icon, Dropdown,
+} from 'office-ui-fabric-react';
 import {deleteSkill, getSkills, setSkill} from "../../actions/skills";
 import {setSkillModal} from "../../actions/modals";
 import ReactPaginate from 'react-paginate';
@@ -136,6 +136,7 @@ class SkillsPage extends Component {
     skillToEdit: null,
     skillsToShow: [],
     pageNumber: 0,
+    categoryId: 0,
   };
 
   Paginator = new Paginator(this.props.skills);
@@ -158,20 +159,48 @@ class SkillsPage extends Component {
       const {hideDialog} = this.state;
       !hideDialog && this._closeDialog();
     }
-    if (!nextProps.skillModal) this.setState({skillToEdit: null});
+    if (!nextProps.skillModal) this.setState(
+      {skillToEdit: null});
+  }
+
+  filterSkills(selectedCategory) {
+    const {skills} = this.props;
+    if (skills) {
+      const pr = skills.filter(({ category }) => !selectedCategory || selectedCategory === category.id);
+      this.Paginator.array = pr;
+      this.setState({
+        skills: pr,
+        pageNumber: 0,
+        skillsToShow: this.Paginator.getCurrentPage(0),
+      })
+    }
   }
 
   render() {
-    const {skillToEdit, hideDialog, skillToDelete} = this.state;
+    const {skillToEdit, hideDialog, skillToDelete, categoryId} = this.state;
+    const {skillCategories} = this.props;
     return (
       <div className={'page-container'}>
         <CreateSkillModal skill={skillToEdit}/>
         <span className={'page-title'}>Skills</span>
-        <div className={'add-button'}>
-          <PrimaryButton
-            text={'Add a Skill'}
-            onClick={this.props.createSkill}
-          />
+        <div className="page-controls">
+          <div className={'add-button'}>
+            <PrimaryButton
+              text={'Add a Skill'}
+              onClick={this.props.createSkill}
+            />
+          </div>
+          <div style={{ width: '15rem' }}>
+            <Dropdown
+              placeHolder="Select a category"
+              options={[{key: 0, text: 'All Categories'}, ...skillCategories.map(({id, name}) => ({key: id, text: name}))]}
+              onChanged={({key}) => {
+                this.setState({categoryId: key});
+                this.filterSkills(key);
+              }}
+              selectedKey={categoryId}
+            />
+          </div>
         </div>
         {
           this.props.skills ?
@@ -230,8 +259,8 @@ class SkillsPage extends Component {
   };
 }
 
-const mapStateToProps = ({user, skills, isStaff, skillModal}) => {
-  return {user, skills, isStaff, skillModal};
+const mapStateToProps = ({user, skills, isStaff, skillModal, skillCategories}) => {
+  return {user, skills, isStaff, skillModal, skillCategories};
 };
 
 const mapDispatchToProps = (dispatch) => {

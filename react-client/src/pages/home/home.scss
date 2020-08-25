@@ -233,12 +233,19 @@ ul.pagination  {
   .nav-bar {
     flex: 1 2;
     width: 21rem;
-    height: 100%;
+    height: calc(100% - 4rem);
     padding: 0.5rem;
     border-right: 2px solid #f1f1f1;
     min-width: 21rem;
     position: fixed;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .feedback-link {
+      margin: 1rem 2.5rem;
+    }
 
     .navbar-content {
       margin: 1rem 2.5rem;
@@ -449,6 +456,11 @@ ul.pagination  {
     font-weight: 200;
     margin-bottom: 2rem;
   }
+
+  .page-controls {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 $selected-item-height: 2rem;
@@ -536,7 +548,7 @@ $selected-item-height: 2rem;
 }
 
 .none {
-  display: none;
+  display: none !important;
 }
 
 .error-label {
@@ -774,7 +786,7 @@ a {
   }
 
   .nav-bar {
-    display: none;
+    display: none !important;
   }
 
 }
