@@ -642,6 +642,9 @@ a {
     .project-head-container .project-page-logo img {
       max-height: 100%;
       max-width: 100%; }
+  .project-head-container .project-page-description-section {
+    max-width: calc(100% - 16rem);
+    min-width: 20rem; }
 
 .project-modal-logo {
   display: flex;

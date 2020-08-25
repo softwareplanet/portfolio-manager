@@ -931,6 +931,11 @@ a {
       max-width: 100%;
     }
   }
+
+  .project-page-description-section {
+    max-width: calc(100% - 16rem);
+    min-width: 20rem;
+  }
 }
 
 .project-modal-logo {

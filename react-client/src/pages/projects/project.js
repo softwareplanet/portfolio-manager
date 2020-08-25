@@ -284,7 +284,7 @@ class ProjectTeamPage extends Component {
           { image && <div className="project-page-logo">
             <img src={(image ? axios.defaults.baseURL + image : '/missing-logo.svg')} alt="project-logo"/>
           </div>}
-          <div>
+          <div className="project-page-description-section">
           <p className={'page-title'}>
             {'Project ' + (name ? name : '')}
             { user && user.isStaff && <Icon
