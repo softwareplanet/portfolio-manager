@@ -7,7 +7,7 @@
     "@microsoft/load-themed-styles": "^1.7.81",
     "@uifabric/icons": "^6.0.3",
     "@uifabric/styling": "latest",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "connected-react-router": "^4.4.1",
     "copy-to-clipboard": "^3.3.1",
     "history": "^4.7.2",
